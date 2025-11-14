@@ -303,14 +303,15 @@ const Home = () => {
               <FileText size={16} />
               <span>About Me</span>
             </Link>
-            <Link
-              to="/resume"
+            <a
+              href="/Aryan_Jain.pdf"
+              download="Aryan_Jain_Resume.pdf"
               className="flex items-center gap-2 px-4 py-2 text-sm rounded-md border border-vscode-border hover:border-vscode-accent bg-vscode-sidebar transition-colors"
-              aria-label="View my resume"
+              aria-label="Download my resume"
             >
               <FileText size={16} />
               <span>Resume</span>
-            </Link>
+            </a>
           </div>
         </div>
       </div>
