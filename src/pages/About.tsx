@@ -1,17 +1,39 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
-import { Github, Linkedin, Mail, ExternalLink, Award, Briefcase, GraduationCap, Code, Monitor, Headphones, Cpu, Keyboard, Terminal, Clock, MailIcon, CodeSquareIcon, InstagramIcon } from 'lucide-react';
+import { Github, Linkedin, Mail, ExternalLink, Award, Briefcase, GraduationCap, Code, Monitor, Headphones, Cpu, Keyboard, Terminal, Clock, MailIcon, CodeSquareIcon, Instagram } from 'lucide-react';
+import { resumeData } from '@/data/resumeData';
+import { devpostService } from '@/services/DevpostService';
+import { toast } from 'sonner';
 
 const About: React.FC = () => {
+  const [hackathonCount, setHackathonCount] = useState<number | null>(null);
+  const [loadingDevpost, setLoadingDevpost] = useState(false);
+
+  useEffect(() => {
+    const fetchDevpostData = async () => {
+      setLoadingDevpost(true);
+      try {
+        const data = await devpostService.fetchProjects(resumeData.personalInfo.devpost);
+        setHackathonCount(data.hackathonCount);
+      } catch (error) {
+        console.error('Error fetching Devpost data:', error);
+      } finally {
+        setLoadingDevpost(false);
+      }
+    };
+
+    fetchDevpostData();
+  }, []);
+
   return (
     <div className="max-w-4xl mx-auto animate-fade-in">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
         <div className="col-span-2">
-          <h1 className="text-4xl font-bold mb-6 text-gradient">About Me</h1>
+          <h1 className="text-4xl font-bold mb-6 text-gradient">About {resumeData.personalInfo.name}</h1>
           
           <div className="mb-8">
             <p className="text-lg mb-5">
@@ -545,7 +567,7 @@ const About: React.FC = () => {
                     rel="noopener noreferrer" 
                     className="flex items-center gap-2 text-vscode-text hover:text-vscode-accent transition-colors duration-300"
                   >
-                    <InstagramIcon size={16} />
+                    <Instagram size={16} />
                     <span>arien_jain</span>
                   </a>
                   <a 
