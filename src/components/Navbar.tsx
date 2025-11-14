@@ -26,7 +26,6 @@ const Navbar: React.FC = () => {
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center space-x-2">
-              <span className="text-lg w-[40px]"><img src="/img/astro.png" alt="" /></span>
               <span className="text-white font-mono font-bold text-xl underline">arien.dev</span>
             </Link>
           </div>
@@ -42,7 +41,7 @@ const Navbar: React.FC = () => {
             </Link>
             <Link to="/blog" className="nav-link flex items-center space-x-1 text-vscode-text hover:text-white">
               <BookOpen size={18} />
-              <span>Blogs</span>
+              <span>Stories</span>
             </Link>
 
             <a

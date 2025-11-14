@@ -1,8 +1,10 @@
 
-import React, { memo, useEffect, useState } from 'react';
+import * as React from 'react';
+import { memo, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Github, GitPullRequest } from 'lucide-react';
+import { Github, GitPullRequest, Linkedin, Globe, Mail, FileText, Code, Twitter } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { resumeData } from "@/data/resumeData";
 
 // Fallback mock profile data in case API fails
 const fallbackProfileData = {
@@ -202,105 +204,198 @@ const Home = () => {
     fetchProfileData();
   }, []);
 
+  // Social links derived from resume data
+  const socials = [
+    {
+      id: 'github',
+      href: `https://github.com/${resumeData.personalInfo.github}`,
+      label: 'GitHub',
+      icon: Github
+    },
+    {
+      id: 'linkedin',
+      href: `https://www.linkedin.com/in/${resumeData.personalInfo.linkedin}`,
+      label: 'LinkedIn',
+      icon: Linkedin
+    },
+    {
+      id: 'twitter',
+      href: `https://twitter.com/${resumeData.personalInfo.github}`,
+      label: 'Twitter',
+      icon: Twitter
+    },
+    {
+      id: 'devpost',
+      href: `https://devpost.com/${resumeData.personalInfo.devpost}`,
+      label: 'Devpost',
+      icon: Code
+    },
+    {
+      id: 'leetcode',
+      href: `https://leetcode.com/${resumeData.personalInfo.leetcode}`,
+      label: 'LeetCode',
+      icon: Code
+    },
+    {
+      id: 'website',
+      href: resumeData.personalInfo.website,
+      label: 'Website',
+      icon: Globe
+    },
+    {
+      id: 'email',
+      href: `mailto:${resumeData.personalInfo.email}`,
+      label: 'Email',
+      icon: Mail
+    }
+  ];
+
+  const orgHandles: string[] = [
+    'CircuitVerse',
+    'INCF',
+    'sugarlabs',
+    'hyperledger',
+    'genn-team',
+    'lightningnetwork',
+    'PalisadoesFoundation',
+    'kubeedge',
+    'OSIPI',
+    'antrea-io',
+    'LeetCode-Feedback',
+    'pipe-cd',
+    'ruxailab',
+    'community',
+    'kubeslice',
+    'project-copacetic',
+    'RoboSats',
+    'arkade-os',
+    'bitcoin-dev-project',
+    'p2poolv2'
+  ];
+
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-        Hey, I'm Arien!
+    <div className="max-w-4xl mx-auto px-4 sm:px-6">
+      <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-2">
+        Hey, I'm
       </h1>
+      <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 text-vscode-accent">
+        {resumeData?.personalInfo?.name || 'Aryan Jain'}.
+      </h2>
+      <p className="text-xl md:text-2xl font-medium mb-6 text-vscode-text leading-relaxed">
+        <span className="text-vscode-accent font-semibold">Fullstack Developer</span> • <span className="text-vscode-accent font-semibold">SoB'25</span> Lightning Protocols • <span className="text-vscode-accent font-semibold">GoQuant</span> Eng. Fellow'25 • <span className="text-vscode-accent font-semibold">Amazon ML School'25</span> • <span className="text-vscode-accent font-semibold">NASA Navigator '25</span>• <span className="text-vscode-accent font-semibold">GDSC Lead'24</span>
+      </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mt-8">
-        <div className="md:col-span-3">
-          <p className="text-lg mb-4">
-            I'm a Full Stack Developer, Google Summer of Code '25 contributor, and open-source enthusiast.
-            Selected among the top 2% of contributors at Summer of Bitcoin, I've worked on Bitcoin protocol and Lightning Network development.
-            I've contributed to CircuitVerse, PalisaDoes Foundation, GeNN, and GitLab.
+      <div className="grid grid-cols-1 gap-8 mt-8">
+        <div>
+          <p className="text-lg mb-4 leading-relaxed">
+       A full-stack engineer and AI/ML practitioner with experience across protocol engineering, exchange systems, and open-source infrastructure. I've contributed to <span className="text-vscode-accent font-medium">Summer of Bitcoin</span> (Lightning Protocols), <span className="text-vscode-accent font-medium">Google Summer of Code</span>, <span className="text-vscode-accent font-medium">NASA Space Apps</span>, and multiple global OSS ecosystems.
+          </p>
+          <p className="text-lg mb-6 leading-relaxed">
+            As a <span className="text-vscode-accent font-medium">GoQuant Engineering Fellow</span>, <span className="text-vscode-accent font-medium">Amazon ML School</span> participant, and <span className="text-vscode-accent font-medium">NASA Navigator</span>, I focus on building scalable full-stack systems, ML-powered features, and production-ready architectures. I love open source, rapid prototyping, solving challenging engineering problems, and continuously learning to build things that create real impact.
           </p>
 
-          <p className="text-lg mb-4">
-            I'm passionate about building scalable web applications, contributing to open source, and mentoring aspiring developers.
-            Currently working as a Backend Engineer Trainee at GoQuant, developing high-performance trading systems.
-          </p>
-
-          <div className="flex space-x-4 mt-8">
+          <div className="flex flex-wrap gap-3 mb-8">
             <Link
               to="/about"
-              className="px-4 py-2 bg-vscode-accent hover:bg-opacity-80 text-white rounded-md transition-colors"
-              aria-label="Learn more about Arien"
+              className="flex items-center gap-2 px-4 py-2 text-sm rounded-md bg-vscode-accent hover:bg-opacity-80 text-white transition-colors"
+              aria-label="Learn more about me"
             >
-              About Me
+              <FileText size={16} />
+              <span>About Me</span>
             </Link>
             <Link
-              to="/newsletter"
-              className="px-4 py-2 border border-vscode-border hover:border-vscode-accent text-white rounded-md transition-colors"
-              aria-label="Subscribe to Arien's newsletter"
+              to="/resume"
+              className="flex items-center gap-2 px-4 py-2 text-sm rounded-md border border-vscode-border hover:border-vscode-accent bg-vscode-sidebar transition-colors"
+              aria-label="View my resume"
             >
-              Newsletter
+              <FileText size={16} />
+              <span>Resume</span>
             </Link>
           </div>
         </div>
-        <div className="md:col-span-2 flex items-start md:items-center justify-center">
-          <img
-            src="/img/ironman.png"
-            alt="Illustration of Arien"
-            className="w-full max-w-[260px] sm:max-w-[320px] md:max-w-[360px] lg:max-w-[420px] rounded-lg object-cover shadow-lg"
-            loading="lazy"
-          />
+      </div>
+      {/* Organizations Section */}
+      <div className="mt-16">
+        <h2 className="text-2xl font-bold mb-6">Organizations I Contributed In.</h2>
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-6">
+          {orgHandles.map(handle => (
+            <a
+              key={handle}
+              href={`https://github.com/${handle}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center group"
+              aria-label={`View ${handle} on GitHub`}
+            >
+              <img
+                src={`https://github.com/${handle}.png?size=96`}
+                alt={`${handle} avatar`}
+                loading="lazy"
+                className="w-16 h-16 rounded-full border border-vscode-border group-hover:border-vscode-accent transition-colors"
+              />
+              <span className="mt-2 text-xs text-vscode-text group-hover:text-white truncate max-w-16">@{handle}</span>
+            </a>
+          ))}
         </div>
       </div>
 
-      {/* Open Source Contributions Section */}
+
+      {/* Graphs Section */}
       <div className="mt-16">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold flex items-center">
-            <Github size={24} className="mr-2" />
-            Open Source Contributions
-          </h2>
+        <h2 className="text-2xl font-bold mb-6 flex items-center"><Github size={24} className="mr-2" />Activity & Stats</h2>
+        <div className="flex flex-col gap-6 max-w-2xl mx-auto">
+          <div className="w-full bg-[#0d1117] rounded-lg p-3 border border-vscode-border">
+            <h3 className="text-base font-semibold mb-2 text-white">GitHub Contributions</h3>
+            <img
+              src={`https://ghchart.rshah.org/${profileData.username}`}
+              alt={`GitHub contribution graph for ${profileData.username}`}
+              className="block mx-auto w-full"
+              loading="lazy"
+            />
+          </div>
+          <div className="w-full bg-[#0d1117] rounded-lg p-3 border border-vscode-border">
+            <h3 className="text-base font-semibold mb-2 text-white">LeetCode Progress</h3>
+            <img
+              src={`https://leetcard.jacoblin.cool/${resumeData.personalInfo.leetcode}?theme=dark&font=Source%20Sans%20Pro&ext=heatmap`}
+              alt={`LeetCode stats for ${resumeData.personalInfo.leetcode}`}
+              className="block mx-auto w-full"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Get In Touch Section */}
+      <div className="mt-16 mb-8">
+        <h2 className="text-2xl font-bold mb-4">Get In Touch</h2>
+        <p className="text-lg mb-6 text-vscode-text">
+          Feel free to reach out if you'd like to collaborate, discuss opportunities, or just chat about tech!
+        </p>
+        <div className="flex flex-wrap gap-3">
           <a
-            href={`https://github.com/${profileData.username}`}
+            href={`https://www.linkedin.com/in/${resumeData.personalInfo.linkedin}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-vscode-accent hover:underline"
-            aria-label="View Arien's GitHub profile"
+            className="flex items-center gap-2 px-4 py-2 text-sm rounded-md bg-vscode-accent hover:bg-opacity-80 text-white transition-colors"
+            aria-label="Connect on LinkedIn"
           >
-            View GitHub Profile
+            <Linkedin size={16} />
+            <span>LinkedIn</span>
+          </a>
+          <a
+            href={`mailto:${resumeData.personalInfo.email}`}
+            className="flex items-center gap-2 px-4 py-2 text-sm rounded-md border border-vscode-border hover:border-vscode-accent bg-vscode-sidebar transition-colors"
+            aria-label="Send an email"
+          >
+            <Mail size={16} />
+            <span>Email</span>
           </a>
         </div>
-
-        <ProfileCard profile={profileData} />
-
-        <div className="w-full bg-[#0d1117] rounded-lg p-4 mb-8 border border-vscode-border">
-          <h3 className="text-xl font-semibold mb-2 text-white">GitHub Contribution Graph</h3>
-          <img
-            src={`https://ghchart.rshah.org/${profileData.username}`}
-            alt={`GitHub contribution graph for ${profileData.username}`}
-            className="block mx-auto w-full max-w-3xl"
-            loading="lazy"
-          />
-        </div>
-
-        {/* <div className="mb-8">
-          <h3 className="text-xl font-semibold mb-4 flex items-center">
-            <GitPullRequest size={20} className="mr-2" />
-            Recent Pull Requests
-          </h3>
-          <div className="space-y-3">
-            {pullRequests.map((pr, index) => (
-              <div key={index} className="p-4 bg-vscode-sidebar border border-vscode-border rounded-lg">
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center">
-                    <div className={`w-3 h-3 rounded-full mr-3 ${pr.status === 'merged' ? 'bg-purple-500' : 'bg-green-500'}`}></div>
-                    <span className="font-medium text-white">{pr.title}</span>
-                  </div>
-                  <span className="text-sm text-vscode-text">{formatDate(pr.date)}</span>
-                </div>
-                <div className="mt-2 text-sm text-vscode-text">{pr.repo}</div>
-              </div>
-            ))}
-          </div>
-        </div> */}
       </div>
 
-      {/* Featured Projects Section */}
+  
+
+      {/* Featured Projects Section
       <div className="mt-16">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">Featured Projects</h2>
@@ -313,8 +408,8 @@ const Home = () => {
           {featuredProjects.map(project => (
             <ProjectCard key={project.id} project={project} />
           ))}
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
     </div>
   );
 };

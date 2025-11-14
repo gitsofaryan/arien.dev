@@ -18,28 +18,42 @@ const About: React.FC = () => {
             <p className="text-base mb-6 flex items-start gap-4 leading-relaxed">
               <Rocket className="text-vscode-accent mt-1 flex-shrink-0" size={20} />
               <span>
-                So you stumbled upon my corner of the internet. Congrats. I'm <span className="text-vscode-variable font-medium">Aryan Jain</span> — a developer who's convinced that writing code at 3 AM is a lifestyle choice, not a cry for help. Currently juggling open source contributions, hackathons, and the eternal quest to explain to my relatives that "I fix computers" is a gross oversimplification.
+                I'm <span className="text-vscode-variable font-medium">Aryan Jain</span>, a final-year student from <span className="text-vscode-accent">Jabalpur, Madhya Pradesh</span>, passionate about full-stack development and machine learning. I've contributed to Google Summer of Code and Selected for Summer of Bitcoin 2025, working on impactful open-source projects.
+              </span>
+            </p>
+
+            <p className="mb-6 flex items-start gap-4 leading-relaxed">
+              <Trophy className="text-vscode-accent mt-1 flex-shrink-0" size={20} />
+              <span>
+                Selected among the <span className="text-vscode-accent font-medium">top 2% contributors worldwide</span> for Summer of Bitcoin 2025, contributing to Bitcoin protocol and Lightning Network. Also worked with NASA as a Citizen Scientist on astronomical data analysis and planetary science projects through Zooniverse.
+              </span>
+            </p>
+
+            <p className="mb-6 flex items-start gap-4 leading-relaxed">
+              <Users className="text-vscode-accent mt-1 flex-shrink-0" size={20} />
+              <span>
+                Lead Coordinator at Google Developers Group, organizing hackathons and DevFests reaching 500+ participants. Former UiPath Student Developer Champion promoting RPA and automation literacy. I love building things that reach people, which is why I actively participate in hackathons.
               </span>
             </p>
 
             <p className="mb-6 flex items-start gap-4 leading-relaxed">
               <Coffee className="text-vscode-accent mt-1 flex-shrink-0" size={20} />
               <span>
-                I've survived Google Summer of Code, Summer of Bitcoin, and more caffeine-fueled coding sessions than I care to admit. When I'm not pushing commits or breaking production (kidding... mostly), I'm probably lifting weights, debugging someone else's code, or pretending I understand blockchain while nodding confidently in meetings.
+                When I'm not pushing commits or breaking production (kidding... mostly), I'm probably lifting weights, debugging someone else's code, or pretending I understand blockchain while nodding confidently in meetings. Writing code at 3 AM is a lifestyle choice, not a cry for help.
               </span>
             </p>
 
             <p className="mb-6 flex items-start gap-4 leading-relaxed">
               <Briefcase className="text-vscode-accent mt-1 flex-shrink-0" size={20} />
               <span>
-                I'm currently on the hunt for full-stack, AI/ML, data science, blockchain, or product management roles where I can grow, learn, and make an impact. If your team is looking for someone who brings both technical skill and a questionable sense of humor to the table, we should talk.
+                Actively seeking full-stack, AI/ML, data science, blockchain, or product management roles where I can grow, learn, and make an impact.
               </span>
             </p>
 
             <p className="flex items-start gap-4 leading-relaxed">
               <Sparkles className="text-vscode-accent mt-1 flex-shrink-0" size={20} />
               <span>
-                This site is mercifully free of ads, tracking scripts, "sponsored content," and other digital nonsense. Just pure, unfiltered tech rambling from someone who's debugged enough segmentation faults to question their life choices. You're welcome.
+                This site is mercifully free of ads, tracking scripts, "sponsored content," and other digital nonsense. Just pure, unfiltered tech rambling from someone who's debugged enough segmentation faults to question their life choices.
               </span>
             </p>
 
@@ -163,7 +177,7 @@ const About: React.FC = () => {
               </CollapsibleTrigger>
               <CollapsibleContent className="mt-2 space-y-2">
                 <div className="flex flex-wrap gap-2 p-3 bg-[#161616] rounded-md">
-                  {['MERN Stack', 'Data Structures & Algorithms', 'Algorithm Design', 'OOP', 'API Design', 'Microservices', 'Agile Development', 'Open Source'].map((skill) => (
+                  {['Low Latency Trading', 'Backend Operations', 'MERN Stack', 'Data Structures & Algorithms', 'OOP', 'API Design', 'Microservices', 'Agile Development', 'Open Source', 'Data Annotation'].map((skill) => (
                     <span key={skill} className="px-3 py-1.5 bg-vscode-highlight rounded-full text-sm transition-all duration-300 hover:bg-opacity-80">
                       {skill}
                     </span>
