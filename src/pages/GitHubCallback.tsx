@@ -15,14 +15,14 @@ const GitHubCallback: React.FC = () => {
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
         const error = urlParams.get('error');
-        
+
         if (error) {
           toast.error("Authentication error: " + error);
           setStatus("Authentication failed: " + error);
           setTimeout(() => navigate('/'), 2000);
           return;
         }
-        
+
         if (!code) {
           toast.error("No authorization code received");
           setStatus("Authentication failed: No code received");
@@ -31,15 +31,50 @@ const GitHubCallback: React.FC = () => {
         }
 
         setStatus("Authorization successful! Processing...");
-        
-        // In a full implementation, this would make a server call
-        // For demo purposes, we'll simulate with localStorage
-        const mockToken = `gh_mock_${code.substring(0, 8)}`;
-        githubService.setCredentials(mockToken, 'gitsofaryan', 'code-scribe-website');
-        
-        toast.success("GitHub authentication successful!");
+
+        // Exchange code for access token
+        const clientId = import.meta.env.VITE_GITHUB_CLIENT_ID;
+        const clientSecret = import.meta.env.VITE_GITHUB_CLIENT_SECRET;
+
+        const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify({
+            client_id: clientId,
+            client_secret: clientSecret,
+            code: code,
+          }),
+        });
+
+        const tokenData = await tokenResponse.json();
+
+        if (tokenData.error) {
+          throw new Error(tokenData.error_description || tokenData.error);
+        }
+
+        if (!tokenData.access_token) {
+          throw new Error('No access token received');
+        }
+
+        // Get authenticated user info
+        const userResponse = await fetch('https://api.github.com/user', {
+          headers: {
+            'Authorization': `Bearer ${tokenData.access_token}`,
+            'Accept': 'application/json',
+          },
+        });
+
+        const userData = await userResponse.json();
+
+        // Store token and user info
+        githubService.setCredentials(tokenData.access_token, userData.login, 'arien.dev');
+
+        toast.success(`GitHub authentication successful! Welcome ${userData.login}`);
         setStatus("Authentication complete! Redirecting...");
-        
+
         // Redirect back to the previous page or home
         setTimeout(() => navigate('/'), 1500);
       } catch (error) {
@@ -49,7 +84,7 @@ const GitHubCallback: React.FC = () => {
         setTimeout(() => navigate('/'), 2000);
       }
     };
-    
+
     handleCallback();
   }, [navigate]);
 

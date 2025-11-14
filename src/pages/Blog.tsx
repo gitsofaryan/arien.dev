@@ -30,28 +30,14 @@ const BlogPage: React.FC = () => {
   const [blogPosts, setBlogPosts] = useState<BlogPostsCollection>({});
   const [selectedPost, setSelectedPost] = useState<BlogPostItem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  
+
 
   useEffect(() => {
     const fetchBlogPosts = async () => {
       setIsLoading(true);
-      
+
       try {
-        // Get local blog posts
-        const localContentStr = localStorage.getItem('content') || '[]';
-        const localContent = JSON.parse(localContentStr);
-        const localBlogPosts = localContent
-          .filter((item: any) => item.type === 'blog')
-          .map((item: any) => ({
-            id: item.id,
-            title: item.title,
-            date: new Date(item.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric' }),
-            content: item.content,
-            isNew: new Date(item.date) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-            source: 'local' as const
-          }));
-          
-        // Get GitHub blog posts - no authentication required for public repositories
+        // Get GitHub blog posts only
         let githubBlogPosts: BlogPostItem[] = [];
         try {
           const githubIssues = await githubService.getIssues(['blog']);
@@ -68,10 +54,10 @@ const BlogPage: React.FC = () => {
           console.error('Error fetching GitHub issues:', error);
           toast.error('Failed to fetch GitHub blogs');
         }
-        
-        // Combine all blog posts
-        const allPosts = [...localBlogPosts, ...githubBlogPosts];
-        
+
+        // Use only GitHub posts
+        const allPosts = githubBlogPosts;
+
         // Organize by year
         const postsByYear: BlogPostsCollection = {};
         allPosts.forEach(post => {
@@ -81,14 +67,14 @@ const BlogPage: React.FC = () => {
           }
           postsByYear[year].push(post);
         });
-        
+
         // Sort posts within each year
         Object.keys(postsByYear).forEach(year => {
-          postsByYear[year].sort((a, b) => 
+          postsByYear[year].sort((a, b) =>
             new Date(b.date).getTime() - new Date(a.date).getTime()
           );
         });
-        
+
         // Sort years newest first
         const sortedPostsByYear: BlogPostsCollection = {};
         Object.keys(postsByYear)
@@ -96,7 +82,7 @@ const BlogPage: React.FC = () => {
           .forEach(year => {
             sortedPostsByYear[year] = postsByYear[year];
           });
-          
+
         setBlogPosts(sortedPostsByYear);
       } catch (error) {
         console.error('Error fetching blog posts:', error);
@@ -105,15 +91,15 @@ const BlogPage: React.FC = () => {
         setIsLoading(false);
       }
     };
-    
+
     fetchBlogPosts();
   }, []);
-  
+
   useEffect(() => {
     const findSelectedPost = async () => {
       if (!selectedPostId) return;
-      
-      // Check if post is from GitHub
+
+      // All posts are from GitHub now
       if (selectedPostId.startsWith('github-')) {
         const issueNumber = parseInt(selectedPostId.replace('github-', ''));
         try {
@@ -134,48 +120,30 @@ const BlogPage: React.FC = () => {
           return;
         }
       }
-      
-      // Check if post is from local storage
-      const localContentStr = localStorage.getItem('content') || '[]';
-      const localContent = JSON.parse(localContentStr);
-      const post = localContent.find((item: any) => item.id === selectedPostId && item.type === 'blog');
-      
-      if (post) {
-        setSelectedPost({
-          id: post.id,
-          title: post.title,
-          date: new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-          content: post.content,
-          source: 'local'
-        });
-      } else {
-        setSelectedPostId(null);
-        toast.error('Post not found');
-      }
     };
-    
+
     findSelectedPost();
   }, [selectedPostId]);
 
   // Filter posts based on search query
   const getFilteredPosts = (): BlogPostsCollection => {
     if (!searchQuery.trim()) return blogPosts;
-    
+
     const filtered: BlogPostsCollection = {};
-    
+
     Object.keys(blogPosts).forEach(year => {
-      const matchingPosts = blogPosts[year].filter(post => 
+      const matchingPosts = blogPosts[year].filter(post =>
         post.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
-      
+
       if (matchingPosts.length > 0) {
         filtered[year] = matchingPosts;
       }
     });
-    
+
     return filtered;
   };
-  
+
   const filteredPosts = getFilteredPosts();
 
   return (
@@ -186,8 +154,8 @@ const BlogPage: React.FC = () => {
             <h1 className="text-4xl font-bold">Blog</h1>
             <div className="flex gap-2">
               <GitHubAuth />
-              <Link 
-                to="/write" 
+              <Link
+                to="/write"
                 className="px-6 py-3 bg-vscode-accent hover:bg-opacity-90 rounded-md transition-colors flex items-center"
               >
                 <Edit size={18} className="mr-2" />
@@ -258,14 +226,14 @@ const BlogPage: React.FC = () => {
       ) : (
         <>
           <div className="mb-6">
-            <button 
+            <button
               onClick={() => setSelectedPostId(null)}
               className="flex items-center text-vscode-accent hover:underline"
             >
               ← Back to Blog
             </button>
           </div>
-          
+
           {selectedPost && (
             <>
               {selectedPost.source === 'github' && (
@@ -277,14 +245,14 @@ const BlogPage: React.FC = () => {
               <BlogPost
                 title={selectedPost.title}
                 date={selectedPost.date}
-                content={typeof selectedPost.content === 'string' 
+                content={typeof selectedPost.content === 'string'
                   ? <div dangerouslySetInnerHTML={{ __html: selectedPost.content.replace(/\n/g, '<br>') }} />
                   : selectedPost.content}
                 tags={[]}
               />
-              <CommentSection 
-                comments={[]} 
-                postId={selectedPostId} 
+              <CommentSection
+                comments={[]}
+                postId={selectedPostId}
                 postType="blog"
                 issueNumber={selectedPost.githubIssueNumber}
               />

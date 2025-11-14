@@ -1,12 +1,11 @@
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Edit, Pencil, FileText, Eye, Github, Save } from 'lucide-react';
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { githubService } from '../services/GithubService';
 import { useNavigate } from 'react-router-dom';
-import GithubSettings from '../components/GithubSettings';
 
 const Write: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -15,7 +14,6 @@ const Write: React.FC = () => {
   const [tags, setTags] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [viewMode, setViewMode] = useState<'edit' | 'preview'>('edit');
-  const [publishToGithub, setPublishToGithub] = useState(true); // Default to true for public posting
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -24,62 +22,61 @@ const Write: React.FC = () => {
       toast.error("Please provide both title and content");
       return;
     }
-    
+
     setIsSaving(true);
-    
+
     try {
-      const contentData = {
-        type: isNoteType ? 'note' : 'blog',
-        title,
-        content,
-        tags: tags.split(',').map(tag => tag.trim()).filter(tag => tag),
-        date: new Date().toISOString(),
-      };
+      // Check if admin token is configured
+      const adminToken = import.meta.env.VITE_ADMIN_GITHUB_TOKEN;
       
-      // Save locally
-      const existingContent = JSON.parse(localStorage.getItem('content') || '[]');
-      const newId = `${Date.now()}`;
-      const newContent = [...existingContent, { id: newId, ...contentData }];
-      localStorage.setItem('content', JSON.stringify(newContent));
-      
-      let githubIssueNumber: number | null = null;
-      
-      // Publish to GitHub if option is selected
-      if (publishToGithub) {
-        try {
-          // Check if GitHub settings are configured
-          const credentials = githubService.getCredentials();
-          if (!credentials.username || !credentials.repo) {
-            toast.error("GitHub repository is not configured. Please set up GitHub settings first.");
-            
-            // Prompt user to configure GitHub
-            document.getElementById('github-settings-trigger')?.click();
-            setIsSaving(false);
-            return;
-          }
-          
-          const response = await githubService.createIssue({
-            title,
-            body: content,
-            labels: [isNoteType ? 'note' : 'blog', ...contentData.tags],
-          });
-          
-          if (response && response.number) {
-            githubIssueNumber = response.number;
-            toast.success("Successfully published to GitHub");
-          }
-        } catch (error) {
-          console.error("GitHub publish error:", error);
-          toast.error("Failed to publish to GitHub");
-        }
+      if (!adminToken || adminToken.includes('YOUR_PERSONAL_ACCESS_TOKEN_HERE')) {
+        toast.error("Admin token not configured. Please set VITE_ADMIN_GITHUB_TOKEN in .env.local");
+        setIsSaving(false);
+        return;
       }
       
+      // Set admin credentials for publishing
+      githubService.setCredentials(adminToken, 'gitsofaryan', 'arien.dev');
+
+      const tagList = tags.split(',').map(tag => tag.trim()).filter(tag => tag);
+
+      // Format content with date and metadata
+      const today = new Date();
+      const formattedDate = today.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+      
+      const formattedBody = `**Published:** ${formattedDate}\n\n---\n\n${content}`;
+
+      // Publish to GitHub as Issue
+      try {
+        const response = isNoteType
+          ? await githubService.createNote({
+            title,
+            body: formattedBody,
+            labels: tagList,
+          })
+          : await githubService.createBlogPost({
+            title,
+            body: formattedBody,
+            labels: tagList,
+          });
+
+        if (response && response.number) {
+          toast.success(`Successfully published ${isNoteType ? 'note' : 'blog post'} to GitHub as Issue #${response.number}`);
+
+          // Redirect to the appropriate page
+          navigate(isNoteType ? '/notes' : '/blog');
+        }
+      } catch (error) {
+        console.error("GitHub publish error:", error);
+        toast.error("Failed to publish to GitHub. Please check your authentication and repository settings.");
+      }
+
       setIsSaving(false);
-      toast.success(`Your ${isNoteType ? 'note' : 'blog post'} has been saved`);
-      
-      // Redirect to the appropriate page
-      navigate(isNoteType ? '/notes' : '/blog');
-      
+
     } catch (error) {
       console.error("Save error:", error);
       setIsSaving(false);
@@ -90,7 +87,7 @@ const Write: React.FC = () => {
   // Simple markdown preview renderer
   const renderMarkdown = (markdown: string) => {
     // This is a very basic markdown renderer for preview purposes
-    let html = markdown
+    const html = markdown
       // Headers
       .replace(/^### (.*$)/gim, '<h3>$1</h3>')
       .replace(/^## (.*$)/gim, '<h2>$1</h2>')
@@ -112,7 +109,7 @@ const Write: React.FC = () => {
 
     return { __html: html };
   };
-  
+
   return (
     <div className="max-w-4xl mx-auto">
       <div className="flex justify-between items-center mb-6">
@@ -120,24 +117,22 @@ const Write: React.FC = () => {
           <Edit className="mr-3" size={32} />
           Write
         </h1>
-        <GithubSettings />
       </div>
-      
+
       <p className="text-lg mb-8">
-        Create a new note or blog post to share your thoughts and ideas. All posts are public.
+        Create a new note or blog post. Content is automatically published as GitHub Issues.
       </p>
-      
+
       <form onSubmit={handleSubmit}>
         <div className="mb-6">
           <div className="flex space-x-4 mb-6">
             <button
               type="button"
               onClick={() => setIsNoteType(true)}
-              className={`px-4 py-2 rounded-md transition-colors ${
-                isNoteType 
-                ? 'bg-vscode-accent text-white' 
+              className={`px-4 py-2 rounded-md transition-colors ${isNoteType
+                ? 'bg-vscode-accent text-white'
                 : 'bg-vscode-sidebar border border-vscode-border text-vscode-text'
-              }`}
+                }`}
             >
               <div className="flex items-center">
                 <Pencil size={16} className="mr-2" />
@@ -147,11 +142,10 @@ const Write: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsNoteType(false)}
-              className={`px-4 py-2 rounded-md transition-colors ${
-                !isNoteType 
-                ? 'bg-vscode-accent text-white' 
+              className={`px-4 py-2 rounded-md transition-colors ${!isNoteType
+                ? 'bg-vscode-accent text-white'
                 : 'bg-vscode-sidebar border border-vscode-border text-vscode-text'
-              }`}
+                }`}
             >
               <div className="flex items-center">
                 <FileText size={16} className="mr-2" />
@@ -159,7 +153,7 @@ const Write: React.FC = () => {
               </div>
             </button>
           </div>
-          
+
           <label htmlFor="title" className="block text-white font-medium mb-2">
             Title
           </label>
@@ -173,7 +167,7 @@ const Write: React.FC = () => {
             required
           />
         </div>
-        
+
         {!isNoteType && (
           <div className="mb-6">
             <label htmlFor="tags" className="block text-white font-medium mb-2">
@@ -189,12 +183,12 @@ const Write: React.FC = () => {
             />
           </div>
         )}
-        
+
         <div className="mb-8">
           <label htmlFor="content" className="block text-white font-medium mb-2">
             Content
           </label>
-          
+
           <Tabs defaultValue="edit" className="w-full">
             <TabsList className="mb-2">
               <TabsTrigger value="edit" onClick={() => setViewMode('edit')}>
@@ -234,29 +228,15 @@ const Write: React.FC = () => {
             </TabsContent>
           </Tabs>
         </div>
-        
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <label className="flex items-center space-x-2 text-sm">
-              <input
-                type="checkbox"
-                checked={publishToGithub}
-                onChange={(e) => setPublishToGithub(e.target.checked)}
-                className="rounded border-vscode-border"
-              />
-              <span className="flex items-center">
-                <Github size={16} className="mr-1" />
-                Publish as GitHub Issue (Public)
-              </span>
-            </label>
-          </div>
+
+        <div className="flex justify-end">
           <button
             type="submit"
             disabled={isSaving}
             className="px-6 py-3 bg-vscode-accent hover:bg-opacity-90 rounded-md transition-colors disabled:opacity-70 flex items-center"
           >
-            <Save size={16} className="mr-2" />
-            {isSaving ? 'Saving...' : `Save ${isNoteType ? 'Note' : 'Blog Post'}`}
+            <Github size={16} className="mr-2" />
+            {isSaving ? 'Publishing...' : `Publish ${isNoteType ? 'Note' : 'Blog Post'}`}
           </button>
         </div>
       </form>

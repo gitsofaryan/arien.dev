@@ -14,39 +14,32 @@ interface ProjectCard {
 const Projects: React.FC = () => {
   const projects: ProjectCard[] = [
     {
-      id: 'keyboard-accordion',
-      title: 'Keyboard Accordion',
-      description: 'A virtual accordion instrument playable with your computer keyboard, built with Web Audio API.',
-      tags: ['JavaScript', 'Web Audio', 'UI Design'],
-      link: '/projects/keyboard-accordion'
+      id: 'finlitera',
+      title: 'FinLitera - AI Financial Assistant',
+      description: 'Built an AI platform providing financial guidance, investment tips, budgeting advice, and interactive learning. Implemented real-time portfolio analysis and AI recommendations.',
+      tags: ['Next.js', 'Supabase', 'OpenAI API', 'Prisma', 'NextAuth'],
+      link: 'https://github.com/gitsofaryan/finlitera'
     },
     {
-      id: 'snes-memory-game',
-      title: 'SNES Memory Game',
-      description: 'A memory matching game with SNES game covers as cards, built with React.',
-      tags: ['React', 'TypeScript', 'Game'],
-      link: '/projects/snes-memory-game'
+      id: 'ats100',
+      title: 'ATS100 - AI Resume Analyzer',
+      description: 'Built a web app that analyzes resumes, gives ATS scores, and provides feedback on strengths, weaknesses, and improvements.',
+      tags: ['React.js', 'TypeScript', 'PDF.js', 'Vite', 'AI'],
+      link: 'https://github.com/gitsofaryan/ats100'
     },
     {
-      id: 'chip-8-emulator',
-      title: 'Chip-8 Emulator',
-      description: 'A Chip-8 emulator written in Rust with a web frontend using WebAssembly.',
-      tags: ['Rust', 'WebAssembly', 'Emulation'],
-      link: '/projects/chip-8-emulator'
+      id: 'codespace',
+      title: 'CodeSpace - Realtime Code Editor',
+      description: 'Built a collaborative code editor that allows multiple users to code together in real-time with instant synchronization and integrated chat.',
+      tags: ['React.js', 'TypeScript', 'Socket.io', 'Node.js', 'Express.js'],
+      link: 'https://github.com/gitsofaryan/codespace'
     },
     {
-      id: 'markdown-wiki',
-      title: 'Markdown Wiki',
-      description: 'A personal wiki system built with markdown files and auto-generated navigation.',
-      tags: ['Node.js', 'Express', 'Markdown'],
-      link: '/projects/markdown-wiki'
-    },
-    {
-      id: 'portfolio-generator',
-      title: 'Portfolio Generator',
-      description: 'A command-line tool to generate a developer portfolio site from a config file.',
-      tags: ['CLI Tool', 'Node.js', 'Static Site'],
-      link: '/projects/portfolio-generator'
+      id: 'insignia',
+      title: 'InSignia - Indian Sign Language Translator',
+      description: 'A platform that turns Indian Sign Language (ISL) gestures into text and speech in real-time for easy communication.',
+      tags: ['Python', 'CNN', 'Flask', 'OpenCV', 'Mediapipe'],
+      link: 'https://github.com/gitsofaryan/insignia'
     }
   ];
 
@@ -54,24 +47,24 @@ const Projects: React.FC = () => {
     <div className="max-w-4xl mx-auto">
       <h1 className="text-4xl font-bold mb-6">Projects</h1>
       <p className="text-lg mb-10">
-        A selection of open-source projects I've built and written about.
-        Each project includes a detailed writeup of the development process.
+        A showcase of my featured projects including AI-powered applications, real-time collaborative tools,
+        and accessibility solutions. Each project demonstrates full-stack development skills and problem-solving abilities.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {projects.map(project => (
-          <Link 
-            key={project.id} 
+          <Link
+            key={project.id}
             to={project.link}
             className="block bg-vscode-sidebar border border-vscode-border rounded-lg overflow-hidden hover:border-vscode-accent transition-colors"
           >
             <div className="p-6">
               <h2 className="text-xl font-bold mb-2 text-white">{project.title}</h2>
               <p className="text-vscode-text mb-4">{project.description}</p>
-              
+
               <div className="flex flex-wrap gap-2">
                 {project.tags.map(tag => (
-                  <span 
+                  <span
                     key={`${project.id}-${tag}`}
                     className="text-xs px-2 py-1 bg-vscode-highlight rounded"
                   >

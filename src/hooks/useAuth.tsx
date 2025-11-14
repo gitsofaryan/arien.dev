@@ -1,37 +1,42 @@
 import { useState, useEffect } from 'react';
-import { User, Session } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
+import { githubService } from '@/services/GithubService';
+
+interface GitHubUser {
+  login: string;
+  avatar_url: string;
+  name: string;
+  email: string;
+}
 
 export const useAuth = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<GitHubUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Set up auth state listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        setLoading(false);
+    // Check for GitHub authentication
+    const checkAuth = async () => {
+      setLoading(true);
+      if (githubService.isAuthenticated()) {
+        try {
+          const userData = await githubService.getUserDetails();
+          setUser(userData);
+        } catch (error) {
+          console.error('Failed to get user details:', error);
+          setUser(null);
+        }
       }
-    );
-
-    // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
       setLoading(false);
-    });
+    };
 
-    return () => subscription.unsubscribe();
+    checkAuth();
   }, []);
 
-  const signOut = async () => {
-    await supabase.auth.signOut();
+  const signOut = () => {
+    githubService.clearCredentials();
     setUser(null);
-    setSession(null);
   };
 
-  return { user, session, loading, signOut };
+  const isAuthenticated = githubService.isAuthenticated();
+
+  return { user, loading, signOut, isAuthenticated };
 };

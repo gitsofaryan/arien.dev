@@ -31,7 +31,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments: initialCommen
     if (issueNumber) {
       fetchComments(issueNumber);
     }
-    
+
     // Check authentication status
     setIsAuthenticated(githubService.isAuthenticated());
   }, [issueNumber]);
@@ -59,7 +59,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments: initialCommen
 
   const handleAuthSuccess = () => {
     setIsAuthenticated(true);
-    
+
     // Refresh comments after successful authentication
     if (issueNumber) {
       fetchComments(issueNumber);
@@ -68,23 +68,24 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments: initialCommen
 
   const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!newComment.trim()) return;
+
     if (!isAuthenticated) {
-      toast.error('You need to authenticate with GitHub to comment');
+      toast.error('Please authenticate with GitHub to comment');
       return;
     }
-    
+
     if (!issueNumber) {
       toast.error('Cannot comment: This post is not connected to a GitHub issue');
       return;
     }
-    
+
     setIsLoading(true);
-    
+
     try {
       const response = await githubService.createComment(issueNumber, { body: newComment });
-      
+
       if (response) {
         const newCommentObject: Comment = {
           id: response.id.toString(),
@@ -93,7 +94,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments: initialCommen
           content: response.body,
           timestamp: response.created_at
         };
-        
+
         setDisplayComments([newCommentObject, ...displayComments]);
         setNewComment('');
         toast.success('Comment posted successfully');
@@ -112,7 +113,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments: initialCommen
         <MessageSquare className="mr-2" size={20} />
         Comments ({displayComments.length})
       </h3>
-      
+
       {!isAuthenticated ? (
         <div className="bg-vscode-highlight bg-opacity-20 rounded-lg p-6 mb-8 text-center">
           <p className="mb-4">Sign in with GitHub to join the discussion</p>
@@ -129,7 +130,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments: initialCommen
             disabled={isLoading}
           />
           <div className="mt-2 flex justify-end">
-            <button 
+            <button
               type="submit"
               className="px-4 py-2 bg-vscode-accent hover:bg-opacity-90 rounded-md transition-colors disabled:opacity-70"
               disabled={isLoading}
@@ -139,7 +140,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments: initialCommen
           </div>
         </form>
       )}
-      
+
       {isLoading && displayComments.length === 0 ? (
         <div className="flex justify-center my-6">
           <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-vscode-accent"></div>
@@ -149,9 +150,9 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments: initialCommen
           {displayComments.map((comment) => (
             <div key={comment.id} className="border-b border-vscode-border pb-6">
               <div className="flex items-center mb-2">
-                <img 
-                  src={comment.authorAvatar} 
-                  alt={comment.author} 
+                <img
+                  src={comment.authorAvatar}
+                  alt={comment.author}
                   className="w-8 h-8 rounded-full mr-3"
                 />
                 <div>
@@ -164,7 +165,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments: initialCommen
               </div>
             </div>
           ))}
-          
+
           {displayComments.length === 0 && (
             <div className="text-center py-8 text-vscode-text">
               <p>Be the first to leave a comment!</p>

@@ -18,36 +18,36 @@ const fallbackProfileData = {
 // Mock project data (replace with API calls in production)
 const featuredProjects = [
   {
+    id: "finlitera",
+    title: "FinLitera - AI Financial Assistant",
+    description: "Built an AI platform providing financial guidance, investment tips, budgeting advice, and interactive learning with real-time portfolio analysis.",
+    image: "/lovable-uploads/finlitera.png",
+    link: "https://github.com/gitsofaryan/finlitera",
+    tags: ["Next.js", "Supabase", "OpenAI API", "Prisma"]
+  },
+  {
+    id: "ats100",
+    title: "ATS100 - AI Resume Analyzer",
+    description: "Built a web app that analyzes resumes, gives ATS scores, and provides feedback on strengths, weaknesses, and improvements.",
+    image: "/lovable-uploads/ats100.png",
+    link: "https://github.com/gitsofaryan/ats100",
+    tags: ["React.js", "TypeScript", "PDF.js", "Vite"]
+  },
+  {
     id: "codespace",
-    title: "CodeSpace",
-    description: "A collaborative, real-time code editor where users can seamlessly code together.",
+    title: "CodeSpace - Realtime Code Editor",
+    description: "A collaborative, real-time code editor where users can seamlessly code together with integrated chat and notifications.",
     image: "/lovable-uploads/c1a2980b-0986-4a83-a70e-dc805410acaf.png",
-    link: "/projects/codespace",
-    tags: ["React.js", "TypeScript", "Socket.io"]
+    link: "https://github.com/gitsofaryan/codespace",
+    tags: ["React.js", "TypeScript", "Socket.io", "Node.js"]
   },
   {
-    id: "nexts3ops",
-    title: "NextS3Ops",
-    description: "An innovative architecture designed to seamlessly integrate frontend development with robust DevOps practices.",
-    image: "/lovable-uploads/29040269-5f15-4642-a1ae-03a55b7fc2c6.png",
-    link: "/projects/nexts3ops",
-    tags: ["Next.js", "AWS", "TypeScript"]
-  },
-  {
-    id: "xeditor",
-    title: "Xeditor",
-    description: "UML and Diagram Maker and Editor for Software Engineering Teams and Students.",
-    image: "/lovable-uploads/9b982116-68b8-4c86-8351-6efe18fbd2d6.png",
-    link: "/projects/xeditor",
-    tags: ["TypeScript", "UML", "Diagrams"]
-  },
-  {
-    id: "isl",
-    title: "ISL",
-    description: "A solution that translates Indian Sign Language into text and speech in real-time.",
-    image: "/lovable-uploads/b9dd9476-6872-4e27-8403-30d7c36b3f89.png",
-    link: "/projects/isl",
-    tags: ["AI", "Accessibility", "Python"]
+    id: "insignia",
+    title: "InSignia - Indian Sign Language Translator",
+    description: "A platform that turns Indian Sign Language (ISL) gestures into text and speech in real-time for easy communication.",
+    image: "/lovable-uploads/insignia.png",
+    link: "https://github.com/gitsofaryan/insignia",
+    tags: ["Python", "CNN", "Flask", "OpenCV"]
   }
 ];
 
@@ -211,14 +211,14 @@ const Home = () => {
       <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mt-8">
         <div className="md:col-span-3">
           <p className="text-lg mb-4">
-            I'm a software engineer, open-source creator, and former professional chef.
-            I've been making websites since 1998 and <Link to="/blog" className="text-vscode-accent hover:underline">writing on this blog</Link> for
-            the past decade.
+            I'm a Full Stack Developer, Google Summer of Code '25 contributor, and open-source enthusiast.
+            Selected among the top 2% of contributors at Summer of Bitcoin, I've worked on Bitcoin protocol and Lightning Network development.
+            I've contributed to CircuitVerse, PalisaDoes Foundation, GeNN, and GitLab.
           </p>
 
           <p className="text-lg mb-4">
-            I enjoy weight-lifting, reading sci-fi and fantasy, playing retro video
-            games, and spending time with my partner and friends.
+            I'm passionate about building scalable web applications, contributing to open source, and mentoring aspiring developers.
+            Currently working as a Backend Engineer Trainee at GoQuant, developing high-performance trading systems.
           </p>
 
           <div className="flex space-x-4 mt-8">

@@ -4,9 +4,11 @@ import { Link } from 'react-router-dom';
 import { Book, FileText, Github, Mail, MessageSquare, Edit, LinkedinIcon } from 'lucide-react';
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from './ui/navigation-menu';
 import { cn } from '@/lib/utils';
+import { githubService } from '../services/GithubService';
 
 const Navbar: React.FC = () => {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') as 'dark' | 'light' | null;
@@ -14,6 +16,10 @@ const Navbar: React.FC = () => {
       setTheme(savedTheme);
       document.documentElement.classList.toggle('dark', savedTheme === 'dark');
     }
+
+    // Check if admin token is configured (always show Write link if token exists)
+    const adminToken = import.meta.env.VITE_ADMIN_GITHUB_TOKEN;
+    setIsOwner(!!adminToken && !adminToken.includes('YOUR_PERSONAL_ACCESS_TOKEN_HERE'));
   }, []);
 
   const toggleTheme = () => {
@@ -50,10 +56,12 @@ const Navbar: React.FC = () => {
               <FileText size={18} />
               <span>Blogs</span>
             </Link>
-            <Link to="/write" className="nav-link flex items-center space-x-1 text-vscode-text hover:text-white">
-              <Edit size={18} />
-              <span>Write</span>
-            </Link>
+            {isOwner && (
+              <Link to="/write" className="nav-link flex items-center space-x-1 text-vscode-text hover:text-white">
+                <Edit size={18} />
+                <span>Write</span>
+              </Link>
+            )}
            
             <a 
               href="https://github.com/gitsofaryan" 
