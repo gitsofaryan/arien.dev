@@ -5,9 +5,7 @@ import { toast } from "sonner";
 import { githubService } from '../services/GithubService';
 
 // GitHub OAuth configuration
-// For a real app, you would use your own GitHub OAuth App client ID
-// This is a placeholder - user needs to replace with actual client ID
-const GITHUB_CLIENT_ID = "YOUR_GITHUB_CLIENT_ID"; // Replace this with your GitHub OAuth App client ID
+const GITHUB_CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID || "";
 const REDIRECT_URI = window.location.origin + "/github-callback";
 const GITHUB_AUTH_URL = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=repo user`;
 
@@ -17,8 +15,8 @@ interface GitHubAuthProps {
   className?: string;
 }
 
-const GitHubAuth: React.FC<GitHubAuthProps> = ({ 
-  onSuccess, 
+const GitHubAuth: React.FC<GitHubAuthProps> = ({
+  onSuccess,
   buttonText = "Sign in with GitHub",
   className = ""
 }) => {
@@ -31,33 +29,33 @@ const GitHubAuth: React.FC<GitHubAuthProps> = ({
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     const error = urlParams.get('error');
-    
+
     if (code) {
       // For a real implementation, you would exchange this code for an access token
       // using a backend service to avoid exposing your client secret
       console.log("Got GitHub authorization code:", code);
       toast.info("Processing GitHub authorization...");
-      
+
       // In a real app, you would make an API call to your backend here
       // For this demo, we'll simulate a successful authentication
       simulateTokenExchange(code);
-      
+
       // Remove the code from the URL to prevent refresh issues
       const newUrl = window.location.pathname;
       window.history.pushState({}, document.title, newUrl);
     }
-    
+
     if (error) {
       toast.error("GitHub authentication error");
       console.error("GitHub auth error:", error);
     }
-    
+
     // Check if user is already authenticated
     if (githubService.isAuthenticated()) {
       fetchUserInfo();
     }
   }, []);
-  
+
   // This is a simulation - in a real app, you would exchange the code for a token via a backend
   const simulateTokenExchange = (code: string) => {
     // Simulate network delay
@@ -67,15 +65,15 @@ const GitHubAuth: React.FC<GitHubAuthProps> = ({
       githubService.setCredentials(mockToken, 'gitsofaryan', 'code-scribe-website');
       setIsAuthenticated(true);
       toast.success("GitHub authentication successful!");
-      
+
       fetchUserInfo();
-      
+
       if (onSuccess) {
         onSuccess();
       }
     }, 1000);
   };
-  
+
   const fetchUserInfo = async () => {
     try {
       const userDetails = await githubService.getUserDetails();
@@ -87,12 +85,12 @@ const GitHubAuth: React.FC<GitHubAuthProps> = ({
       console.error("Error fetching user details:", error);
     }
   };
-  
+
   const handleSignIn = () => {
     // Redirect to GitHub OAuth authorization page
     window.location.href = GITHUB_AUTH_URL;
   };
-  
+
   const handleSignOut = () => {
     githubService.clearCredentials();
     setIsAuthenticated(false);
@@ -105,9 +103,9 @@ const GitHubAuth: React.FC<GitHubAuthProps> = ({
     return (
       <div className={`flex items-center gap-2 ${className}`}>
         {userAvatar && (
-          <img 
-            src={userAvatar} 
-            alt={userName} 
+          <img
+            src={userAvatar}
+            alt={userName}
             className="w-6 h-6 rounded-full"
           />
         )}
@@ -120,8 +118,8 @@ const GitHubAuth: React.FC<GitHubAuthProps> = ({
   }
 
   return (
-    <Button 
-      onClick={handleSignIn} 
+    <Button
+      onClick={handleSignIn}
       className={className}
       variant="outline"
     >

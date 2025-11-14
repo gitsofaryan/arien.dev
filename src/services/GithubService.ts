@@ -28,7 +28,7 @@ export class GithubService {
     this.username = "gitsofaryan";
     this.repo = "arien.dev";
     this.userDetails = null;
-    
+
     // Store hardcoded values to localStorage
     localStorage.setItem("github_username", this.username);
     localStorage.setItem("github_repo", this.repo);
@@ -65,7 +65,7 @@ export class GithubService {
   private getHeaders(): Record<string, string> {
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
-      "Accept": "application/vnd.github.v3+json",
+      Accept: "application/vnd.github.v3+json",
     };
 
     // Add authentication token if available
@@ -80,11 +80,11 @@ export class GithubService {
   async createIssue(payload: GithubIssuePayload): Promise<any> {
     try {
       const headers = this.getHeaders();
-      
-      console.log('Creating issue with:', {
+
+      console.log("Creating issue with:", {
         url: `https://api.github.com/repos/${this.username}/${this.repo}/issues`,
         payload,
-        hasToken: !!this.token
+        hasToken: !!this.token,
       });
 
       const response = await axios.post(

@@ -5,7 +5,6 @@ import { Github, Edit } from 'lucide-react';
 import { toast } from "sonner";
 import CommentSection from '../components/CommentSection';
 import { githubService } from '../services/GithubService';
-import GithubSettings from '../components/GithubSettings';
 
 interface Note {
   id: string;
@@ -29,29 +28,19 @@ const Notes: React.FC = () => {
   const [notes, setNotes] = useState<Note[]>([]);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    // Check if admin token is configured
+    const adminToken = import.meta.env.VITE_ADMIN_GITHUB_TOKEN;
+    setIsAdmin(!!adminToken && !adminToken.includes('YOUR_PERSONAL_ACCESS_TOKEN_HERE'));
+  }, []);
   useEffect(() => {
     const fetchNotes = async () => {
       setIsLoading(true);
-      
+
       try {
-        // Get local notes from localStorage
-        const localContentStr = localStorage.getItem('content') || '[]';
-        const localContent = JSON.parse(localContentStr);
-        const localNotes = localContent
-          .filter((item: any) => item.type === 'note')
-          .map((item: any) => ({
-            id: item.id,
-            title: item.title,
-            date: new Date(item.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
-            excerpt: item.content.substring(0, 150) + '...',
-            content: item.content,
-            isNew: new Date(item.date) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-            comments: [],
-            source: 'local' as const
-          }));
-          
-        // Get GitHub notes - no authentication required for public repositories
+        // Get GitHub notes only
         let githubNotes: Note[] = [];
         try {
           const githubIssues = await githubService.getIssues(['note']);
@@ -70,12 +59,12 @@ const Notes: React.FC = () => {
           console.error('Error fetching GitHub issues:', error);
           toast.error('Failed to fetch GitHub notes');
         }
-        
-        // Combine and sort all notes by date (newest first)
-        const allNotes = [...localNotes, ...githubNotes].sort((a, b) => 
+
+        // Sort notes by date (newest first)
+        const allNotes = githubNotes.sort((a, b) =>
           new Date(b.date).getTime() - new Date(a.date).getTime()
         );
-        
+
         setNotes(allNotes);
       } catch (error) {
         console.error('Error fetching notes:', error);
@@ -106,20 +95,18 @@ const Notes: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto">
       {!selectedNote ? (
-        <>
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-4xl font-bold">Notes</h1>
-            <div className="flex gap-2">
-              <GithubSettings />
-              <Link 
-                to="/write" 
-                className="px-4 py-2 bg-vscode-accent hover:bg-opacity-90 rounded-md transition-colors flex items-center"
-              >
-                <Edit size={16} className="mr-2" />
-                New Note
-              </Link>
-            </div>
-          </div>
+        <>          <div className="flex justify-between items-center mb-6">
+          <h1 className="text-4xl font-bold">Notes</h1>
+          {isAdmin && (
+            <Link
+              to="/write"
+              className="px-4 py-2 bg-vscode-accent hover:bg-opacity-90 rounded-md transition-colors flex items-center"
+            >
+              <Edit size={16} className="mr-2" />
+              New Note
+            </Link>
+          )}
+        </div>
           <p className="text-lg mb-10">
             Personal thoughts, reflections, and updates about tech, life, and everything in between.
             All notes are saved as public GitHub issues.
@@ -145,7 +132,7 @@ const Notes: React.FC = () => {
                         GitHub
                       </span>
                     )}
-                    <button 
+                    <button
                       onClick={() => setSelectedNote(note)}
                       className="text-2xl font-bold text-white hover:text-vscode-accent transition-colors text-left"
                     >
@@ -154,7 +141,7 @@ const Notes: React.FC = () => {
                   </div>
                   <p className="text-vscode-comment text-sm mb-3">{note.date}</p>
                   <p className="text-vscode-text">{note.excerpt}</p>
-                  <button 
+                  <button
                     onClick={() => setSelectedNote(note)}
                     className="inline-block mt-4 text-vscode-accent hover:underline"
                   >
@@ -166,8 +153,8 @@ const Notes: React.FC = () => {
           ) : (
             <div className="text-center py-12">
               <p className="text-vscode-comment text-lg mb-4">No notes found</p>
-              <Link 
-                to="/write" 
+              <Link
+                to="/write"
                 className="px-4 py-2 bg-vscode-accent rounded-md hover:bg-opacity-90 transition-colors"
               >
                 Create your first note
@@ -177,13 +164,13 @@ const Notes: React.FC = () => {
         </>
       ) : (
         <>
-          <button 
+          <button
             onClick={() => setSelectedNote(null)}
             className="mb-6 flex items-center text-vscode-accent hover:underline"
           >
             ← Back to Notes
           </button>
-          
+
           <div className="mb-8">
             <div className="flex items-center mb-2">
               {selectedNote.source === 'github' && (
@@ -199,9 +186,9 @@ const Notes: React.FC = () => {
               <p>{selectedNote.content}</p>
             </div>
           </div>
-          
-          <CommentSection 
-            comments={selectedNote.comments} 
+
+          <CommentSection
+            comments={selectedNote.comments}
             postId={selectedNote.id}
             postType="note"
             issueNumber={selectedNote.githubIssueNumber}

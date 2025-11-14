@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import BlogPost from '../components/BlogPost';
 import CommentSection from '../components/CommentSection';
 import { githubService } from '../services/GithubService';
-import GitHubAuth from '../components/GitHubAuth';
 
 // Define the blog post type
 interface BlogPostItem {
@@ -30,8 +29,13 @@ const BlogPage: React.FC = () => {
   const [blogPosts, setBlogPosts] = useState<BlogPostsCollection>({});
   const [selectedPost, setSelectedPost] = useState<BlogPostItem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-
+  useEffect(() => {
+    // Check if admin token is configured
+    const adminToken = import.meta.env.VITE_ADMIN_GITHUB_TOKEN;
+    setIsAdmin(!!adminToken && !adminToken.includes('YOUR_PERSONAL_ACCESS_TOKEN_HERE'));
+  }, []);
   useEffect(() => {
     const fetchBlogPosts = async () => {
       setIsLoading(true);
@@ -152,8 +156,7 @@ const BlogPage: React.FC = () => {
         <div className="max-w-4xl mx-auto">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-4xl font-bold">Blog</h1>
-            <div className="flex gap-2">
-              <GitHubAuth />
+            {isAdmin && (
               <Link
                 to="/write"
                 className="px-6 py-3 bg-vscode-accent hover:bg-opacity-90 rounded-md transition-colors flex items-center"
@@ -161,7 +164,7 @@ const BlogPage: React.FC = () => {
                 <Edit size={18} className="mr-2" />
                 Write New Post
               </Link>
-            </div>
+            )}
           </div>
           <p className="text-lg mb-10">
             Guides, references, and tutorials on programming, web development, and design.

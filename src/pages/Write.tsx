@@ -28,13 +28,13 @@ const Write: React.FC = () => {
     try {
       // Check if admin token is configured
       const adminToken = import.meta.env.VITE_ADMIN_GITHUB_TOKEN;
-      
+
       if (!adminToken || adminToken.includes('YOUR_PERSONAL_ACCESS_TOKEN_HERE')) {
         toast.error("Admin token not configured. Please set VITE_ADMIN_GITHUB_TOKEN in .env.local");
         setIsSaving(false);
         return;
       }
-      
+
       // Set admin credentials for publishing
       githubService.setCredentials(adminToken, 'gitsofaryan', 'arien.dev');
 
@@ -42,12 +42,12 @@ const Write: React.FC = () => {
 
       // Format content with date and metadata
       const today = new Date();
-      const formattedDate = today.toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
+      const formattedDate = today.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
       });
-      
+
       const formattedBody = `**Published:** ${formattedDate}\n\n---\n\n${content}`;
 
       // Publish to GitHub as Issue

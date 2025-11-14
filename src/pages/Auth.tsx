@@ -18,12 +18,12 @@ const Auth: React.FC = () => {
   const handleGitHubAuth = () => {
     // Redirect to GitHub OAuth
     const clientId = import.meta.env.VITE_GITHUB_CLIENT_ID;
-    
+
     if (!clientId) {
       console.error('GitHub Client ID not found in environment variables');
       return;
     }
-    
+
     const redirectUri = `${window.location.origin}/github-callback`;
     const scope = 'repo user';
 

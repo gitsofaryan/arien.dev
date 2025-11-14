@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Github, Star, GitFork, AlertCircle, Users } from 'lucide-react';
 import { githubService } from '../services/GithubService';
-import GithubSettings from './GithubSettings';
 
 interface GithubRepoInfoProps {
   className?: string;
@@ -22,19 +21,19 @@ const GithubRepoInfo: React.FC<GithubRepoInfoProps> = ({ className }) => {
 
   const fetchGithubData = async () => {
     setIsLoading(true);
-    
+
     try {
       const [repo, user] = await Promise.all([
         githubService.getRepoDetails(),
         githubService.getUserDetails()
       ]);
-      
+
       setRepoDetails(repo);
       setUserDetails(user);
     } catch (error) {
       console.error('Error fetching GitHub data:', error);
     }
-    
+
     setIsLoading(false);
   };
 
@@ -72,7 +71,7 @@ const GithubRepoInfo: React.FC<GithubRepoInfoProps> = ({ className }) => {
           <Github size={24} />
           <div>
             <h3 className="text-lg font-medium">GitHub Repository</h3>
-            <a 
+            <a
               href={repoDetails.html_url}
               target="_blank"
               rel="noopener noreferrer"
@@ -82,7 +81,7 @@ const GithubRepoInfo: React.FC<GithubRepoInfoProps> = ({ className }) => {
             </a>
           </div>
         </div>
-        
+
         <div className="flex gap-4 text-sm">
           <div className="flex items-center gap-1">
             <Star size={14} />
@@ -97,10 +96,10 @@ const GithubRepoInfo: React.FC<GithubRepoInfoProps> = ({ className }) => {
             <span>{repoDetails.subscribers_count} watchers</span>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-3 mt-2">
-          <img 
-            src={userDetails.avatar_url} 
+          <img
+            src={userDetails.avatar_url}
             alt={username}
             className="w-8 h-8 rounded-full"
           />
@@ -109,14 +108,13 @@ const GithubRepoInfo: React.FC<GithubRepoInfoProps> = ({ className }) => {
             <p className="text-xs text-vscode-comment">{userDetails.bio || 'GitHub User'}</p>
           </div>
         </div>
-        
+
         <div className="flex justify-between mt-2">
           <Button variant="outline" size="sm" asChild>
             <a href={repoDetails.html_url} target="_blank" rel="noopener noreferrer">
               View Repository
             </a>
           </Button>
-          <GithubSettings />
         </div>
       </div>
     </Card>

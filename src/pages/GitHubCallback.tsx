@@ -30,53 +30,18 @@ const GitHubCallback: React.FC = () => {
           return;
         }
 
-        setStatus("Authorization successful! Processing...");
+        setStatus("Authorization successful! You can now comment on posts.");
 
-        // Exchange code for access token
-        const clientId = import.meta.env.VITE_GITHUB_CLIENT_ID;
-        const clientSecret = import.meta.env.VITE_GITHUB_CLIENT_SECRET;
+        // For commenting, we'll use a simplified flow
+        // Store a flag that user has authenticated via GitHub OAuth
+        localStorage.setItem('github_oauth_code', code);
+        localStorage.setItem('github_authenticated', 'true');
 
-        const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
-          body: JSON.stringify({
-            client_id: clientId,
-            client_secret: clientSecret,
-            code: code,
-          }),
-        });
-
-        const tokenData = await tokenResponse.json();
-
-        if (tokenData.error) {
-          throw new Error(tokenData.error_description || tokenData.error);
-        }
-
-        if (!tokenData.access_token) {
-          throw new Error('No access token received');
-        }
-
-        // Get authenticated user info
-        const userResponse = await fetch('https://api.github.com/user', {
-          headers: {
-            'Authorization': `Bearer ${tokenData.access_token}`,
-            'Accept': 'application/json',
-          },
-        });
-
-        const userData = await userResponse.json();
-
-        // Store token and user info
-        githubService.setCredentials(tokenData.access_token, userData.login, 'arien.dev');
-
-        toast.success(`GitHub authentication successful! Welcome ${userData.login}`);
+        toast.success("GitHub authentication successful! You can now comment.");
         setStatus("Authentication complete! Redirecting...");
 
-        // Redirect back to the previous page or home
-        setTimeout(() => navigate('/'), 1500);
+        // Redirect back to the blog or notes page
+        setTimeout(() => navigate('/blog'), 1500);
       } catch (error) {
         console.error('GitHub auth error:', error);
         toast.error("Authentication failed");

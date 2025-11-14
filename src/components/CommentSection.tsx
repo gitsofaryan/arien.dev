@@ -32,8 +32,10 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments: initialCommen
       fetchComments(issueNumber);
     }
 
-    // Check authentication status
-    setIsAuthenticated(githubService.isAuthenticated());
+    // Check authentication status - check both admin token and OAuth
+    const hasAdminToken = githubService.isAuthenticated();
+    const hasOAuthAuth = localStorage.getItem('github_authenticated') === 'true';
+    setIsAuthenticated(hasAdminToken || hasOAuthAuth);
   }, [issueNumber]);
 
   const fetchComments = async (issueNum: number) => {
@@ -116,7 +118,9 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments: initialCommen
 
       {!isAuthenticated ? (
         <div className="bg-vscode-highlight bg-opacity-20 rounded-lg p-6 mb-8 text-center">
-          <p className="mb-4">Sign in with GitHub to join the discussion</p>
+          <p className="text-vscode-comment mb-4">
+            Sign in with GitHub to join the discussion
+          </p>
           <GitHubAuth onSuccess={handleAuthSuccess} buttonText="Sign in with GitHub" />
         </div>
       ) : (
