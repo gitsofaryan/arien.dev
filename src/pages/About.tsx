@@ -1,68 +1,88 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
-import { Github, Linkedin, Mail, ExternalLink, Award, Briefcase, GraduationCap, Code, Terminal, Clock, CodeSquareIcon, Instagram } from 'lucide-react';
+import { Github, Linkedin, Mail, ExternalLink, Award, Briefcase, GraduationCap, Code, Terminal, Clock, CodeSquareIcon, Instagram, Rocket, Zap, Coffee, PartyPopper, Trophy, Target, Flame, Star, Sparkles, Lightbulb, Bug, Database, Cpu, Brain, Heart, TrendingUp, Shield, Users, Cloud, Music, PenTool, TwitterIcon } from 'lucide-react';
+import { FaTelegramPlane, FaDiscord } from 'react-icons/fa';
 import { resumeData } from '@/data/resumeData';
 
 const About: React.FC = () => {
   return (
-    <div className="max-w-4xl mx-auto animate-fade-in">
+    <div className="max-w-7xl mx-auto animate-fade-in px-4 py-8">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
-        <div className="col-span-2">
+        <div className="col-span-2 space-y-8">
           <h1 className="text-4xl font-bold mb-6 text-gradient">About {resumeData.personalInfo.name}</h1>
 
-          <div className="mb-8">
-            <p className="text-lg mb-5">
-              Hey, I'm <span className="text-vscode-variable font-medium">Aryan Jain</span> — a software developer, open-source creator, and AI enthusiast. I love building tools that solve real problems and make technology more accessible.
+          <div className="mb-12">
+            <p className="text-base mb-6 flex items-start gap-4 leading-relaxed">
+              <Rocket className="text-vscode-accent mt-1 flex-shrink-0" size={20} />
+              <span>
+                So you stumbled upon my corner of the internet. Congrats. I'm <span className="text-vscode-variable font-medium">Aryan Jain</span> — a developer who's convinced that writing code at 3 AM is a lifestyle choice, not a cry for help. Currently juggling open source contributions, hackathons, and the eternal quest to explain to my relatives that "I fix computers" is a gross oversimplification.
+              </span>
             </p>
 
-            <p>
-              Welcome to my personal corner on the web — a space for writing, projects, tutorials, art, and whatever else I’m inspired to share. You’ll find my technical notes, articles, and highlights from my open-source work on the projects page.
+            <p className="mb-6 flex items-start gap-4 leading-relaxed">
+              <Coffee className="text-vscode-accent mt-1 flex-shrink-0" size={20} />
+              <span>
+                I've survived Google Summer of Code, Summer of Bitcoin, and more caffeine-fueled coding sessions than I care to admit. When I'm not pushing commits or breaking production (kidding... mostly), I'm probably lifting weights, debugging someone else's code, or pretending I understand blockchain while nodding confidently in meetings.
+              </span>
             </p>
 
-            <p>
-              This site is free of ads, tracking, affiliate links, sponsored posts, and paywalls. It’s simply a place for creativity, learning, and honest expression. I hope it inspires you to carve out your own meaningful space on the internet, especially in an era where authentic, user-first platforms are becoming increasingly rare.
+            <p className="mb-6 flex items-start gap-4 leading-relaxed">
+              <Briefcase className="text-vscode-accent mt-1 flex-shrink-0" size={20} />
+              <span>
+                I'm currently on the hunt for full-stack, AI/ML, data science, blockchain, or product management roles where I can grow, learn, and make an impact. If your team is looking for someone who brings both technical skill and a questionable sense of humor to the table, we should talk.
+              </span>
+            </p>
+
+            <p className="flex items-start gap-4 leading-relaxed">
+              <Sparkles className="text-vscode-accent mt-1 flex-shrink-0" size={20} />
+              <span>
+                This site is mercifully free of ads, tracking scripts, "sponsored content," and other digital nonsense. Just pure, unfiltered tech rambling from someone who's debugged enough segmentation faults to question their life choices. You're welcome.
+              </span>
             </p>
 
 
-            <div className="flex flex-wrap gap-4 mb-8">
+            <div className="flex flex-wrap gap-4 mb-12 mt-8">
               <a
                 href="https://github.com/gitsofaryan"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-[#1F1F1F] hover:bg-[#2a2a2a] transition-colors duration-300 rounded-lg border border-vscode-border hover:border-vscode-accent"
+                className="group inline-flex items-center gap-2 px-4 py-2 bg-[#1F1F1F] hover:bg-[#2a2a2a] transition-all duration-300 rounded-lg border border-vscode-border hover:border-vscode-accent hover:shadow-lg hover:shadow-vscode-accent/20"
               >
-                <Github size={18} className="text-vscode-accent" />
+                <Github size={18} className="text-vscode-accent group-hover:rotate-12 transition-transform" />
                 <span>GitHub</span>
+                <Star size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
               </a>
               <a
                 href="https://linkedin.com/in/aryan-jain07"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-[#1F1F1F] hover:bg-[#2a2a2a] transition-colors duration-300 rounded-lg border border-vscode-border hover:border-vscode-accent"
+                className="group inline-flex items-center gap-2 px-4 py-2 bg-[#1F1F1F] hover:bg-[#2a2a2a] transition-all duration-300 rounded-lg border border-vscode-border hover:border-vscode-accent hover:shadow-lg hover:shadow-vscode-accent/20"
               >
-                <Linkedin size={18} className="text-vscode-accent" />
+                <Linkedin size={18} className="text-vscode-accent group-hover:scale-110 transition-transform" />
                 <span>LinkedIn</span>
+                <Sparkles size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
               </a>
               <a
                 href="https://devpost.com/gitsofaryan"
                 target='_blank'
-                className="inline-flex items-center gap-2 px-4 py-2 bg-[#1F1F1F] hover:bg-[#2a2a2a] transition-colors duration-300 rounded-lg border border-vscode-border hover:border-vscode-accent"
+                className="group inline-flex items-center gap-2 px-4 py-2 bg-[#1F1F1F] hover:bg-[#2a2a2a] transition-all duration-300 rounded-lg border border-vscode-border hover:border-vscode-accent hover:shadow-lg hover:shadow-vscode-accent/20"
               >
-                <CodeSquareIcon size={18} className="text-vscode-accent" />
+                <Trophy size={18} className="text-vscode-accent group-hover:rotate-12 transition-transform" />
                 <span>Hacks</span>
+                <Flame size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
               </a>
               <a
                 href="https://leetcode.com/u/arien7"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-[#1F1F1F] hover:bg-[#2a2a2a] transition-colors duration-300 rounded-lg border border-vscode-border hover:border-vscode-accent"
+                className="group inline-flex items-center gap-2 px-4 py-2 bg-[#1F1F1F] hover:bg-[#2a2a2a] transition-all duration-300 rounded-lg border border-vscode-border hover:border-vscode-accent hover:shadow-lg hover:shadow-vscode-accent/20"
               >
-                <Code size={18} className="text-vscode-accent" />
+                <Code size={18} className="text-vscode-accent group-hover:scale-110 transition-transform" />
                 <span>LeetCode</span>
+                <Zap size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
               </a>
               <section className="my-4">
                 <h2 className="text-2xl font-semibold mb-4">GitHub</h2>
@@ -89,56 +109,37 @@ const About: React.FC = () => {
           <section className="mb-12">
             <h2 className="text-2xl font-bold mb-6 text-white flex items-center gap-2">
               <Clock size={24} className="text-vscode-accent" />
-              What I'm Doing Now
+              What I'm Focused On
             </h2>
             <Card className="bg-[#1F1F1F] border-vscode-border hover:border-vscode-accent transition-colors duration-300">
               <CardContent className="pt-6">
-                <div className="mb-2">
-                  <p className="text-sm text-vscode-comment">Updated May 2nd, 2025</p>
-                </div>
                 <div className="space-y-4">
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">Contributing to Open Source</h3>
-                    <ul className="list-disc list-inside text-vscode-text space-y-1 pl-4">
-                      <li>CircuitVerse - Vue Simulator enhancements</li>
-                      <li>Preparing for Google Summer of Code</li>
-                      <li>Participating in Summer of Bitcoin program</li>
-                    </ul>
+                    <h3 className="text-xl font-semibold text-white mb-2 flex items-center gap-2">
+                      <Briefcase size={20} className="text-vscode-accent" />
+                      Seeking New Opportunities
+                    </h3>
+                    <p className="text-base text-vscode-text leading-relaxed">
+                      Actively looking for full-stack, AI/ML, data science, blockchain or product management roles where I can grow and learn. I'm eager to tackle complex challenges and contribute to innovative projects that push boundaries.
+                    </p>
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">Exploring Blockchain</h3>
-                    <p className="text-vscode-text">Building dApps and learning smart contract development</p>
+                    <h3 className="text-xl font-semibold text-white mb-2 flex items-center gap-2">
+                      <CodeSquareIcon size={20} className="text-vscode-accent" />
+                      Building & Learning
+                    </h3>
+                    <p className="text-base text-vscode-text leading-relaxed">
+                      Grinding DSA, diving deep into system design, and building countless side projects with AI to bring my 2 AM ideas to life. I'm constantly exploring new tech, participating in online assessments, and learning how the internet actually works under the hood.
+                    </p>
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">College Life</h3>
-                    <p className="text-vscode-text">Currently in 3rd year of Computer Science and Business Systems</p>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">Community Leadership</h3>
-                    <ul className="list-disc list-inside text-vscode-text space-y-1 pl-4">
-                      <li>Leading tech communities on campus</li>
-                      <li>Organizing hackathons and tech events</li>
-                      <li>Participating in various hackathons</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">Hobbies</h3>
-                    <ul className="list-disc list-inside text-vscode-text space-y-1 pl-4">
-                      <li>Building side projects</li>
-                      <li>Watching movies</li>
-                      <li>Exploring astronomy and astrology</li>
-                      <li>Playing Marvel Rivals</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">Lifting</h3>
-                    <ul className="list-disc list-inside text-vscode-text space-y-1 pl-4">
-                      <li>Squat - 3x5 @ 110</li>
-                      <li>Bench Press - 3x5 @ 70</li>
-                      <li>Deadlift - 3x5 @ 145</li>
-                      <li>Bent Over Row - 3x5 @ 75</li>
-                      <li>Overhead Press - 3x5 @ 50</li>
-                    </ul>
+                    <h3 className="text-xl font-semibold text-white mb-2 flex items-center gap-2">
+                      <Github size={20} className="text-vscode-accent" />
+                      Open Source & Networking
+                    </h3>
+                    <p className="text-base text-vscode-text leading-relaxed">
+                      Continuing to contribute to projects like CircuitVerse and others. Also actively connecting and networking in the Web3 space, because it's the future (and because blockchain is still cool, fight me).
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -147,16 +148,22 @@ const About: React.FC = () => {
 
           {/* Technical Skills */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-6 text-white">Technical Skills</h2>
+            <h2 className="text-2xl font-bold mb-6 text-white flex items-center gap-2">
+              <Cpu size={24} className="text-vscode-accent" />
+              Technical Arsenal
+            </h2>
 
             <Collapsible className="mb-4">
               <CollapsibleTrigger className="w-full flex justify-between items-center p-3 bg-[#1F1F1F] hover:bg-[#2a2a2a] rounded-lg border border-vscode-border transition-colors duration-300">
-                <span className="text-lg font-medium">Languages</span>
+                <span className="text-lg font-medium flex items-center gap-2">
+                  <Star size={18} className="text-vscode-accent" />
+                  Core Skills
+                </span>
                 <span className="text-vscode-accent">+</span>
               </CollapsibleTrigger>
               <CollapsibleContent className="mt-2 space-y-2">
                 <div className="flex flex-wrap gap-2 p-3 bg-[#161616] rounded-md">
-                  {['TypeScript', 'JavaScript', 'Python', 'C/C++', 'SQL'].map((skill) => (
+                  {['MERN Stack', 'Data Structures & Algorithms', 'Algorithm Design', 'OOP', 'API Design', 'Microservices', 'Agile Development', 'Open Source'].map((skill) => (
                     <span key={skill} className="px-3 py-1.5 bg-vscode-highlight rounded-full text-sm transition-all duration-300 hover:bg-opacity-80">
                       {skill}
                     </span>
@@ -167,12 +174,15 @@ const About: React.FC = () => {
 
             <Collapsible className="mb-4">
               <CollapsibleTrigger className="w-full flex justify-between items-center p-3 bg-[#1F1F1F] hover:bg-[#2a2a2a] rounded-lg border border-vscode-border transition-colors duration-300">
-                <span className="text-lg font-medium">Libraries & Frameworks</span>
+                <span className="text-lg font-medium flex items-center gap-2">
+                  <Code size={18} className="text-vscode-accent" />
+                  Languages
+                </span>
                 <span className="text-vscode-accent">+</span>
               </CollapsibleTrigger>
               <CollapsibleContent className="mt-2 space-y-2">
                 <div className="flex flex-wrap gap-2 p-3 bg-[#161616] rounded-md">
-                  {['React.js', 'Next.js', 'Vue.js', 'Node.js', 'Express.js', 'Tailwindcss', 'Streamlit'].map((skill) => (
+                  {['TypeScript', 'JavaScript', 'Rust', 'Ruby', 'Python', 'C++', 'C#', 'SQL', 'HTML', 'CSS'].map((skill) => (
                     <span key={skill} className="px-3 py-1.5 bg-vscode-highlight rounded-full text-sm transition-all duration-300 hover:bg-opacity-80">
                       {skill}
                     </span>
@@ -183,12 +193,15 @@ const About: React.FC = () => {
 
             <Collapsible className="mb-4">
               <CollapsibleTrigger className="w-full flex justify-between items-center p-3 bg-[#1F1F1F] hover:bg-[#2a2a2a] rounded-lg border border-vscode-border transition-colors duration-300">
-                <span className="text-lg font-medium">Tools & Platforms</span>
+                <span className="text-lg font-medium flex items-center gap-2">
+                  <Zap size={18} className="text-vscode-accent" />
+                  Libraries & Frameworks
+                </span>
                 <span className="text-vscode-accent">+</span>
               </CollapsibleTrigger>
               <CollapsibleContent className="mt-2 space-y-2">
                 <div className="flex flex-wrap gap-2 p-3 bg-[#161616] rounded-md">
-                  {['Git', 'GitHub', 'MongoDB', 'SupaBase', 'Docker', 'Amazon AWS', 'Google GCP', 'MS AZURE', 'GitLab'].map((skill) => (
+                  {['Next.js', 'React.js', 'React Native', 'Vue.js', 'Node.js', 'Express.js', 'Tailwind CSS', 'Streamlit', 'Ruby on Rails'].map((skill) => (
                     <span key={skill} className="px-3 py-1.5 bg-vscode-highlight rounded-full text-sm transition-all duration-300 hover:bg-opacity-80">
                       {skill}
                     </span>
@@ -196,6 +209,101 @@ const About: React.FC = () => {
                 </div>
               </CollapsibleContent>
             </Collapsible>
+
+            <Collapsible className="mb-4">
+              <CollapsibleTrigger className="w-full flex justify-between items-center p-3 bg-[#1F1F1F] hover:bg-[#2a2a2a] rounded-lg border border-vscode-border transition-colors duration-300">
+                <span className="text-lg font-medium flex items-center gap-2">
+                  <Database size={18} className="text-vscode-accent" />
+                  Databases
+                </span>
+                <span className="text-vscode-accent">+</span>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-2 space-y-2">
+                <div className="flex flex-wrap gap-2 p-3 bg-[#161616] rounded-md">
+                  {['MongoDB', 'PostgreSQL', 'Supabase', 'Firebase', 'MySQL', 'Vector Databases'].map((skill) => (
+                    <span key={skill} className="px-3 py-1.5 bg-vscode-highlight rounded-full text-sm transition-all duration-300 hover:bg-opacity-80">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+
+            <Collapsible className="mb-4">
+              <CollapsibleTrigger className="w-full flex justify-between items-center p-3 bg-[#1F1F1F] hover:bg-[#2a2a2a] rounded-lg border border-vscode-border transition-colors duration-300">
+                <span className="text-lg font-medium flex items-center gap-2">
+                  <Cloud size={18} className="text-vscode-accent" />
+                  Cloud
+                </span>
+                <span className="text-vscode-accent">+</span>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-2 space-y-2">
+                <div className="flex flex-wrap gap-2 p-3 bg-[#161616] rounded-md">
+                  {['Salesforce', 'AWS', 'GCP', 'Azure'].map((skill) => (
+                    <span key={skill} className="px-3 py-1.5 bg-vscode-highlight rounded-full text-sm transition-all duration-300 hover:bg-opacity-80">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+
+            <Collapsible className="mb-4">
+              <CollapsibleTrigger className="w-full flex justify-between items-center p-3 bg-[#1F1F1F] hover:bg-[#2a2a2a] rounded-lg border border-vscode-border transition-colors duration-300">
+                <span className="text-lg font-medium flex items-center gap-2">
+                  <Terminal size={18} className="text-vscode-accent" />
+                  Tools & Platforms
+                </span>
+                <span className="text-vscode-accent">+</span>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-2 space-y-2">
+                <div className="flex flex-wrap gap-2 p-3 bg-[#161616] rounded-md">
+                  {['Git', 'GitHub', 'GitHub Actions', 'GitLab', 'Docker', 'Spline', 'Cursor', 'OpenAI', 'Replit', 'Claude'].map((skill) => (
+                    <span key={skill} className="px-3 py-1.5 bg-vscode-highlight rounded-full text-sm transition-all duration-300 hover:bg-opacity-80">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+
+            <Collapsible className="mb-4">
+              <CollapsibleTrigger className="w-full flex justify-between items-center p-3 bg-[#1F1F1F] hover:bg-[#2a2a2a] rounded-lg border border-vscode-border transition-colors duration-300">
+                <span className="text-lg font-medium flex items-center gap-2">
+                  <Bug size={18} className="text-vscode-accent" />
+                  Testing / QA
+                </span>
+                <span className="text-vscode-accent">+</span>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-2 space-y-2">
+                <div className="flex flex-wrap gap-2 p-3 bg-[#161616] rounded-md">
+                  {['JUnit 5', 'PyTest', 'Rspec'].map((skill) => (
+                    <span key={skill} className="px-3 py-1.5 bg-vscode-highlight rounded-full text-sm transition-all duration-300 hover:bg-opacity-80">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+          </section>
+
+          {/* Hobbies Section */}
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold mb-6 text-white flex items-center gap-2">
+              <PartyPopper size={24} className="text-vscode-accent" />
+              Hobbies & Interests
+            </h2>
+            <Card className="bg-[#1F1F1F] border-vscode-border hover:border-vscode-accent transition-colors duration-300">
+              <CardContent className="pt-6">
+                <div className="space-y-4">
+                  <p className="flex items-start gap-3 text-vscode-text"><Sparkles size={16} className="text-vscode-accent mt-1 flex-shrink-0" /><span>Exploring astrology and the cosmos.</span></p>
+                  <p className="flex items-start gap-3 text-vscode-text"><Music size={16} className="text-vscode-accent mt-1 flex-shrink-0" /><span>Listening to a wide variety of music genres.</span></p>
+                  <p className="flex items-start gap-3 text-vscode-text"><PenTool size={16} className="text-vscode-accent mt-1 flex-shrink-0" /><span>Sketching and drawing in my free time.</span></p>
+                  <p className="flex items-start gap-3 text-vscode-text"><Coffee size={16} className="text-vscode-accent mt-1 flex-shrink-0" /><span>Watching movies at 2 AM (because who needs a functioning sleep schedule anyway?)</span></p>
+                  <p className="flex items-start gap-3 text-vscode-text"><Bug size={16} className="text-vscode-accent mt-1 flex-shrink-0" /><span>Arguing about vim vs emacs in comments (I use VSCode btw)</span></p>
+                </div>
+              </CardContent>
+            </Card>
           </section>
 
           {/* Tools Section */}
@@ -208,25 +316,34 @@ const About: React.FC = () => {
             <div className="space-y-6">
               <Card className="bg-[#1F1F1F] border-vscode-border hover:border-vscode-accent transition-colors duration-300">
                 <CardContent>
-                  <h3 className="text-xl font-semibold text-white mb-4">Software</h3>
-                  <p className="mb-4 text-vscode-text">This website is hosted on Vercel.</p>
-                  <ul className="list-disc list-inside text-vscode-text space-y-2 pl-4">
-                    <li><span className="text-white">OS:</span> Mac, Windows & Linux</li>
-                    <li><span className="text-white">Coding:</span> Visual Studio Code</li>
-                    <li><span className="text-white">Theme:</span> Tokyo, Night dark Enhanced!</li>
-                    <li><span className="text-white">Terminal:</span> wsl, powershell</li>
-                    <li><span className="text-white">Browser:</span> Chrome</li>
+                  <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+                    <Rocket size={20} className="text-vscode-accent" />
+                    Software
+                  </h3>
+                  <p className="mb-4 text-vscode-text italic">This website is hosted on Vercel (because I'm too lazy to manage my own servers).</p>
+                  <ul className="space-y-2">
+                    <li className="flex items-start gap-2 text-vscode-text"><Cpu size={16} className="text-vscode-accent mt-1 flex-shrink-0" /><span><span className="text-white font-semibold">OS:</span> Mac, Windows & Linux (triple booting like it's 2015)</span></li>
+                    <li className="flex items-start gap-2 text-vscode-text"><Code size={16} className="text-vscode-accent mt-1 flex-shrink-0" /><span><span className="text-white font-semibold">Coding:</span> Visual Studio Code (vim keybindings enabled, obviously)</span></li>
+                    <li className="flex items-start gap-2 text-vscode-text"><Sparkles size={16} className="text-vscode-accent mt-1 flex-shrink-0" /><span><span className="text-white font-semibold">Theme:</span> Tokyo Night Dark Enhanced (because aesthetics matter)</span></li>
+                    <li className="flex items-start gap-2 text-vscode-text"><Terminal size={16} className="text-vscode-accent mt-1 flex-shrink-0" /><span><span className="text-white font-semibold">Terminal:</span> WSL, PowerShell (living dangerously)</span></li>
+                    <li className="flex items-start gap-2 text-vscode-text"><Zap size={16} className="text-vscode-accent mt-1 flex-shrink-0" /><span><span className="text-white font-semibold">Browser:</span> Chrome (with 47 tabs open at all times)</span></li>
                   </ul>
                 </CardContent>
               </Card>
 
               <Card className="bg-[#1F1F1F] border-vscode-border hover:border-vscode-accent transition-colors duration-300">
                 <CardContent >
-                  <h3 className="text-xl font-semibold text-white mb-4">Hardware</h3>
+                  <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+                    <Cpu size={20} className="text-vscode-accent" />
+                    Hardware
+                  </h3>
                   <div className="space-y-4">
 
                     <div>
-                      <h4 className="font-medium text-vscode-variable">Coding PC</h4>
+                      <h4 className="font-medium text-vscode-variable mb-2 flex items-center gap-2">
+                        <Flame size={18} className="text-orange-500" />
+                        Coding PC (My RGB gaming rig that I totally use for work)
+                      </h4>
                       <ul className="list-disc list-inside text-vscode-text space-y-1 pl-4">
                         <li><span className="text-white">CPU:</span> AMD Ryzen 7 7700X</li>
                         <li><span className="text-white">Motherboard:</span> ASUS ROG Strix B650-A Gaming WiFi</li>
@@ -263,12 +380,12 @@ const About: React.FC = () => {
                     <span className="text-sm text-vscode-comment">July 2025 – August 2025</span>
                   </div>
                   <div className="mb-3">
-                    <p className="text-vscode-variable">Backend Engineer Trainee – Exchange Developer</p>
+                    <p className="text-base text-vscode-variable">Backend Engineer Trainee – Exchange Developer</p>
                     <p className="text-sm text-vscode-comment">Miami, FL (Remote)</p>
                   </div>
-                  <ul className="list-disc list-inside text-vscode-text space-y-1 pl-2">
-                    <li>Developed and optimized backend modules for the BitGet exchange using C# within an OEMS v4 architecture, focusing on low-latency performance.</li>
-                    <li>Integrated and managed BitGet APIs to process real-time Level 1 and Level 2 market data, enhancing order book efficiency and supporting algorithmic trading operations.</li>
+                  <ul className="space-y-2">
+                    <li className="flex items-start gap-2 text-vscode-text"><span className="text-vscode-accent mt-1">•</span><span>Developed and optimized backend modules for the BitGet exchange using C# within an OEMS v4 architecture, focusing on low latency performance.</span></li>
+                    <li className="flex items-start gap-2 text-vscode-text"><span className="text-vscode-accent mt-1">•</span><span>Integrated and managed BitGet APIs to process real time Level 1 and Level 2 market data, enhancing order book efficiency and supporting algorithmic trading operations.</span></li>
                   </ul>
                 </CardContent>
               </Card>
@@ -280,12 +397,12 @@ const About: React.FC = () => {
                     <span className="text-sm text-vscode-comment">May – August 2025</span>
                   </div>
                   <div className="mb-3">
-                    <p className="text-vscode-variable">Mentee & Contributor</p>
+                    <p className="text-base text-vscode-variable">Mentee & Contributor</p>
                     <p className="text-sm text-vscode-comment">Sheridan, Wyoming (Remote)</p>
                   </div>
-                  <ul className="list-disc list-inside text-vscode-text space-y-1 pl-2">
-                    <li>Selected among the top 2% of contributors worldwide for a competitive open-source program, gaining hands-on experience in Bitcoin protocol and Lightning Network development.</li>
-                    <li>Built a full-stack React + Flask tool to visualize Lightning Network message flows and enhanced LNPrototest with BOLT #1 message support, improving testing accuracy.</li>
+                  <ul className="space-y-2">
+                    <li className="flex items-start gap-2 text-vscode-text"><span className="text-vscode-accent mt-1">•</span><span>Selected among the top 2% of contributors worldwide for a competitive open source program, gaining hands on experience in Bitcoin protocol and Lightning Network development.</span></li>
+                    <li className="flex items-start gap-2 text-vscode-text"><span className="text-vscode-accent mt-1">•</span><span>Built a full stack React + Flask tool to visualize Lightning Network message flows and enhanced LNPrototest with BOLT #1 message support, improving testing accuracy.</span></li>
                   </ul>
                 </CardContent>
               </Card>
@@ -297,13 +414,13 @@ const About: React.FC = () => {
                     <span className="text-sm text-vscode-comment">May – August 2025</span>
                   </div>
                   <div className="mb-3">
-                    <p className="text-vscode-variable">Contributor – CircuitVerse, PalisaDoes Foundation & GeNN</p>
+                    <p className="text-base text-vscode-variable">Contributor – CircuitVerse, PalisaDoes Foundation & GeNN</p>
                     <p className="text-sm text-vscode-comment">OSS (Remote)</p>
                   </div>
-                  <ul className="list-disc list-inside text-vscode-text space-y-1 pl-2">
-                    <li>Contributed to three open-source projects, enhancing testing infrastructure, CI/CD workflows, and refactoring legacy code for improved maintainability and reliability.</li>
-                    <li>CircuitVerse: Merged legacy Ruby and Vue repository, upgraded Node.js to v22, migrated simulator code to TypeScript, and achieved full unit test coverage. Authored 24 PRs.</li>
-                    <li>PalisaDoes Foundation & GeNN: Developed comprehensive unit and end-to-end test suites, reaching 100% code coverage for key modules; assisted in migrating automated testing from Jenkins to GitHub Actions with containerized builds and parallel execution. Authored 13 PRs.</li>
+                  <ul className="space-y-2">
+                    <li className="flex items-start gap-2 text-vscode-text"><span className="text-vscode-accent mt-1">•</span><span>Contributed to three open source projects, enhancing testing infrastructure, CI/CD workflows, and refactoring legacy code for improved maintainability and reliability.</span></li>
+                    <li className="flex items-start gap-2 text-vscode-text"><span className="text-vscode-accent mt-1">•</span><span>CircuitVerse: Merged legacy Ruby and Vue repository, upgraded Node.js to v22, migrated simulator code to TypeScript, and achieved full unit test coverage. Authored 24 PRs.</span></li>
+                    <li className="flex items-start gap-2 text-vscode-text"><span className="text-vscode-accent mt-1">•</span><span>PalisaDoes Foundation & GeNN: Developed comprehensive unit and end to end test suites, reaching 100% code coverage for key modules; assisted in migrating automated testing from Jenkins to GitHub Actions with containerized builds and parallel execution. Authored 13 PRs.</span></li>
                   </ul>
                 </CardContent>
               </Card>
@@ -315,12 +432,71 @@ const About: React.FC = () => {
                     <span className="text-sm text-vscode-comment">March – August 2025</span>
                   </div>
                   <div className="mb-3">
-                    <p className="text-vscode-variable">Open Source Contributor & Technical Writer (Level 2)</p>
+                    <p className="text-base text-vscode-variable">Open Source Contributor & Technical Writer (Level 2)</p>
                     <p className="text-sm text-vscode-comment">OSS (Remote)</p>
                   </div>
-                  <ul className="list-disc list-inside text-vscode-text space-y-1 pl-2">
-                    <li>Top 5 contributor in three consecutive GitLab OSS hackathons; authored and enhanced technical documentation across key repositories, improving readability and developer onboarding.</li>
-                    <li>Developed and maintained unit tests for product teams, increasing test coverage and ensuring release stability.</li>
+                  <ul className="space-y-2">
+                    <li className="flex items-start gap-2 text-vscode-text"><span className="text-vscode-accent mt-1">•</span><span>Top 5 contributor in three consecutive GitLab OSS hackathons; authored and enhanced technical documentation across key repositories, improving readability and developer onboarding.</span></li>
+                    <li className="flex items-start gap-2 text-vscode-text"><span className="text-vscode-accent mt-1">•</span><span>Developed and maintained unit tests for product teams, increasing test coverage and ensuring release stability.</span></li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
+          </section>
+
+          {/* Leadership Experience Section */}
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold mb-6 text-white flex items-center gap-2">
+              <Users size={24} className="text-vscode-accent" />
+              Leadership Experience
+            </h2>
+
+            <div className="space-y-4">
+              <Card className="bg-[#1F1F1F] border-vscode-border hover:border-vscode-accent transition-colors duration-300">
+                <CardContent className="pt-6">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-xl font-semibold text-white">Google Developer Student Clubs</h3>
+                    <span className="text-sm text-vscode-comment">2024</span>
+                  </div>
+                  <div className="mb-3">
+                    <p className="text-base text-vscode-variable">Organizer & Lead</p>
+                    <p className="text-sm text-vscode-comment">Jabalpur, India</p>
+                  </div>
+                  <ul className="space-y-2">
+                    <li className="flex items-start gap-2 text-vscode-text"><span className="text-vscode-accent mt-1">•</span><span>Led a core team of 12, mentoring 1000+ students and scaling the community to 5000+ members across multiple initiatives.</span></li>
+                    <li className="flex items-start gap-2 text-vscode-text"><span className="text-vscode-accent mt-1">•</span><span>Organized workshops, hackathons, and study jams on Google Cloud, Generative AI, Flutter, and Web Development; recognized as a Top 5 GDSC campus club in India.</span></li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-[#1F1F1F] border-vscode-border hover:border-vscode-accent transition-colors duration-300">
+                <CardContent className="pt-6">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-xl font-semibold text-white">Google Cloud Arcade Facilitator</h3>
+                    <span className="text-sm text-vscode-comment">2025</span>
+                  </div>
+                  <div className="mb-3">
+                    <p className="text-base text-vscode-variable">Facilitator (2x Certified)</p>
+                    <p className="text-sm text-vscode-comment">Jabalpur, India</p>
+                  </div>
+                  <ul className="space-y-2">
+                    <li className="flex items-start gap-2 text-vscode-text"><span className="text-vscode-accent mt-1">•</span><span>Facilitated Google Cloud Arcade campaigns twice, helping over 500+ learners gain Google Cloud skills and achieve the Ultimate Milestone badge.</span></li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-[#1F1F1F] border-vscode-border hover:border-vscode-accent transition-colors duration-300">
+                <CardContent className="pt-6">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-xl font-semibold text-white">NASA International Space Apps Challenge</h3>
+                    <span className="text-sm text-vscode-comment">2025</span>
+                  </div>
+                  <div className="mb-3">
+                    <p className="text-base text-vscode-variable">Global Organizing Team & Judge</p>
+                    <p className="text-sm text-vscode-comment">Remote</p>
+                  </div>
+                  <ul className="space-y-2">
+                    <li className="flex items-start gap-2 text-vscode-text"><span className="text-vscode-accent mt-1">•</span><span>Led the global organizing team, designing hackathon workflows, coordinating mentors and participants across time zones, and judging 70+ projects while mentoring teams to refine submissions and achieve awards.</span></li>
                   </ul>
                 </CardContent>
               </Card>
@@ -352,9 +528,9 @@ const About: React.FC = () => {
                       <ExternalLink size={14} />
                     </a>
                   </div>
-                  <ul className="list-disc list-inside text-vscode-text space-y-1">
-                    <li>Upgraded Node.js to version 22 across all configuration files and resolved Ruby deprecation warnings, ensuring smoother operations and improved performance.</li>
-                    <li>Enhanced the Vue Simulator's user experience by migrating code from JavaScript to TypeScript, resulting in increased type safety and maintainability.</li>
+                  <ul className="space-y-2">
+                    <li className="flex items-start gap-2 text-vscode-text"><span className="text-vscode-accent mt-1">•</span><span>Upgraded Node.js to version 22 across all configuration files and resolved Ruby deprecation warnings, ensuring smoother operations and improved performance.</span></li>
+                    <li className="flex items-start gap-2 text-vscode-text"><span className="text-vscode-accent mt-1">•</span><span>Enhanced the Vue Simulator's user experience by migrating code from JavaScript to TypeScript, resulting in increased type safety and maintainability.</span></li>
                   </ul>
                 </CardContent>
               </Card>
@@ -376,9 +552,9 @@ const About: React.FC = () => {
                       <ExternalLink size={14} />
                     </a>
                   </div>
-                  <ul className="list-disc list-inside text-vscode-text space-y-1">
-                    <li>Developed comprehensive unit tests, achieving 100% test coverage to ensure robust software quality.</li>
-                    <li>Resolved critical Flutter bugs and revamped the admin control panel to enhance functionality and user experience.</li>
+                  <ul className="space-y-2">
+                    <li className="flex items-start gap-2 text-vscode-text"><span className="text-vscode-accent mt-1">•</span><span>Developed comprehensive unit tests, achieving 100% test coverage to ensure robust software quality.</span></li>
+                    <li className="flex items-start gap-2 text-vscode-text"><span className="text-vscode-accent mt-1">•</span><span>Resolved critical Flutter bugs and revamped the admin control panel to enhance functionality and user experience.</span></li>
                   </ul>
                 </CardContent>
               </Card>
@@ -396,12 +572,16 @@ const About: React.FC = () => {
               <Card className="bg-[#1F1F1F] border-vscode-border hover:border-vscode-accent transition-colors duration-300 h-full flex flex-col">
                 <CardContent className="pt-6 flex flex-col h-full">
                   <h3 className="text-xl font-semibold text-white mb-2">FinLitera - AI Financial Assistant</h3>
-                  <p className="text-vscode-text mb-4 flex-grow">Built an AI platform providing financial guidance, investment tips, budgeting advice, and interactive learning with real-time portfolio analysis.</p>
+                  <p className="text-vscode-text mb-4 flex-grow">An AI-powered financial guidance platform. Because who needs a financial advisor when you have GPT-4?</p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">Next.js</span>
+                    <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">Tailwind CSS</span>
+                    <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">Shadcn-ui</span>
+                    <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">Magic-ui</span>
                     <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">Supabase</span>
-                    <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">OpenAI API</span>
+                    <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">NextAuth</span>
                     <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">Prisma</span>
+                    <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">OpenAI API</span>
                   </div>
                   <div className="flex flex-wrap gap-3 mt-auto">
                     <a
@@ -413,6 +593,15 @@ const About: React.FC = () => {
                       <Github size={14} />
                       <span>Code</span>
                     </a>
+                    <a
+                      href="https://finlitera.vercel.app/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-vscode-accent hover:underline flex items-center gap-1"
+                    >
+                      <ExternalLink size={14} />
+                      <span>Preview</span>
+                    </a>
                   </div>
                 </CardContent>
               </Card>
@@ -420,11 +609,12 @@ const About: React.FC = () => {
               <Card className="bg-[#1F1F1F] border-vscode-border hover:border-vscode-accent transition-colors duration-300 h-full flex flex-col">
                 <CardContent className="pt-6 flex flex-col h-full">
                   <h3 className="text-xl font-semibold text-white mb-2">ATS100 - AI Resume Analyzer</h3>
-                  <p className="text-vscode-text mb-4 flex-grow">Built a web app that analyzes resumes, gives ATS scores, and provides feedback on strengths, weaknesses, and improvements.</p>
+                  <p className="text-vscode-text mb-4 flex-grow">Tells you why your resume gets rejected. Spoiler: It's not you, it's the ATS. (Okay, maybe it's a little bit you.)</p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">React.js</span>
                     <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">TypeScript</span>
                     <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">PDF.js</span>
+                    <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">Puter.js</span>
                     <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">Vite</span>
                   </div>
                   <div className="flex flex-wrap gap-3 mt-auto">
@@ -436,6 +626,84 @@ const About: React.FC = () => {
                     >
                       <Github size={14} />
                       <span>Code</span>
+                    </a>
+                    <a
+                      href="https://ats100.vercel.app/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-vscode-accent hover:underline flex items-center gap-1"
+                    >
+                      <ExternalLink size={14} />
+                      <span>Preview</span>
+                    </a>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-[#1F1F1F] border-vscode-border hover:border-vscode-accent transition-colors duration-300 h-full flex flex-col">
+                <CardContent className="pt-6 flex flex-col h-full">
+                  <h3 className="text-xl font-semibold text-white mb-2">CodeSpace - Realtime Code Editor</h3>
+                  <p className="text-vscode-text mb-4 flex-grow">Real-time collaborative code editor. Like Google Docs, but for people who argue about tabs vs spaces.</p>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">React.js</span>
+                    <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">TypeScript</span>
+                    <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">Socket.io</span>
+                    <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">Node.js</span>
+                  </div>
+                  <div className="flex flex-wrap gap-3 mt-auto">
+                    <a
+                      href="https://github.com/gitsofaryan/codespace"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-vscode-accent hover:underline flex items-center gap-1"
+                    >
+                      <Github size={14} />
+                      <span>Code</span>
+                    </a>
+                    <a
+                      href="https://codespaces.vercel.app/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-vscode-accent hover:underline flex items-center gap-1"
+                    >
+                      <ExternalLink size={14} />
+                      <span>Preview</span>
+                    </a>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-[#1F1F1F] border-vscode-border hover:border-vscode-accent transition-colors duration-300 h-full flex flex-col">
+                <CardContent className="pt-6 flex flex-col h-full">
+                  <h3 className="text-xl font-semibold text-white mb-2">InSignia - ISL Translator</h3>
+                  <p className="text-vscode-text mb-4 flex-grow">Translates Indian Sign Language to text and speech using CNNs. Making communication barriers a thing of the past.</p>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">Python</span>
+                    <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">CNN</span>
+                    <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">Flask</span>
+                    <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">OpenCV</span>
+                    <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">Mediapipe</span>
+                    <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">pyttsx3</span>
+                    <span className="text-xs bg-vscode-highlight px-2 py-1 rounded">Google TTS</span>
+                  </div>
+                  <div className="flex flex-wrap gap-3 mt-auto">
+                    <a
+                      href="https://github.com/gitsofaryan/insignia"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-vscode-accent hover:underline flex items-center gap-1"
+                    >
+                      <Github size={14} />
+                      <span>Code</span>
+                    </a>
+                    <a
+                      href="https://insignia.vercel.app/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-vscode-accent hover:underline flex items-center gap-1"
+                    >
+                      <ExternalLink size={14} />
+                      <span>Preview</span>
                     </a>
                   </div>
                 </CardContent>
@@ -511,16 +779,29 @@ const About: React.FC = () => {
               Education
             </h2>
 
-            <Card className="bg-[#1F1F1F] border-vscode-border hover:border-vscode-accent transition-colors duration-300">
-              <CardContent className="pt-1">
-                <div className="flex justify-between items-center ">
-                  <h3 className="text-lg font-semibold text-white">Gyan Ganga Institute of Technology and Sciences, Jabalpur</h3>
-                  <span className="text-sm text-vscode-comment">2026</span>
-                </div>
-                <p className="text-vscode-text">Bachelor of Technology in Computer Science and Business System (CSBS)</p>
-                <p className="text-vscode-variable">CGPA: 8</p>
-              </CardContent>
-            </Card>
+            <div className="space-y-4">
+              <Card className="bg-[#1F1F1F] border-vscode-border hover:border-vscode-accent transition-colors duration-300">
+                <CardContent className="pt-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <h3 className="text-lg font-semibold text-white">Gyan Ganga Institute of Technology and Sciences, Jabalpur</h3>
+                    <span className="text-sm text-vscode-comment">2022 - 2026</span>
+                  </div>
+                  <p className="text-vscode-text">Bachelor of Technology in Computer Science and Business System (CSBS)</p>
+                  <p className="text-vscode-variable">CGPA: 8.25</p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-[#1F1F1F] border-vscode-border hover:border-vscode-accent transition-colors duration-300">
+                <CardContent className="pt-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <h3 className="text-lg font-semibold text-white">Ajay Satya Prakash Public School, Jabalpur</h3>
+                    <span className="text-sm text-vscode-comment">2021 - 2022</span>
+                  </div>
+                  <p className="text-vscode-text">Senior Secondary (Class XII), CBSE Board</p>
+                  <p className="text-vscode-variable">Percentage: 92%</p>
+                </CardContent>
+              </Card>
+            </div>
           </section>
 
           {/* Get In Touch Section
@@ -568,50 +849,77 @@ const About: React.FC = () => {
         </div>
 
         <div>
-          <div className="sticky top-48">
+          <div className="sticky top-4 max-h-screen overflow-y-auto">
             <img
               src="/img/me.png"
               alt="Aryan Jain"
-              className="w-full rounded-xl shadow-xl mb-6 border border-vscode-border transform hover:scale-[1.02] transition-transform duration-300"
+              className="w-full rounded-xl shadow-xl mb-4 border border-vscode-border transform hover:scale-[1.02] transition-transform duration-300"
             />
 
 
 
-            <Card className="mb-6 bg-[#1F1F1F] border-vscode-border hover:border-vscode-accent transition-colors duration-300">
-              <CardContent >
-                <h3 className="text-lg font-semibold mb-3">Get In Touch</h3>
-                <div className="space-y-2">
+            <Card className="mb-4 bg-[#1F1F1F] border-vscode-border hover:border-vscode-accent transition-colors duration-300">
+              <CardContent className="py-4">
+                <h3 className="text-base font-semibold mb-2">Get In Touch</h3>
+                <div className="space-y-1.5">
                   <a
                     href="mailto:mail.aryan.jain07@gmail.com"
-                    className="flex items-center gap-2 text-vscode-text hover:text-vscode-accent transition-colors duration-300"
+                    className="flex items-center gap-2 text-sm text-vscode-text hover:text-vscode-accent transition-colors duration-300"
                   >
-                    <Mail size={16} />
+                    <Mail size={14} />
                     <span>Mail</span>
-                  </a>
-                  <a
-                    href="https://instagram.com/arien_jain"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-vscode-text hover:text-vscode-accent transition-colors duration-300"
-                  >
-                    <Instagram size={16} />
-                    <span>arien_jain</span>
                   </a>
                   <a
                     href="https://linkedin.com/in/aryan-jain07"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-vscode-text hover:text-vscode-accent transition-colors duration-300"
+                    className="flex items-center gap-2 text-sm text-vscode-text hover:text-vscode-accent transition-colors duration-300"
                   >
-                    <Linkedin size={16} />
+                    <Linkedin size={14} />
                     <span>aryan-jain07</span>
+                  </a>
+                  <a
+                    href="https://x.com/aryanjain1506"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-sm text-vscode-text hover:text-vscode-accent transition-colors duration-300"
+                  >
+                    <TwitterIcon size={14} />
+                    <span>aryanjain1506</span>
+                  </a>
+                  <a
+                    href="https://t.me/arienjain"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-sm text-vscode-text hover:text-vscode-accent transition-colors duration-300"
+                  >
+                    <FaTelegramPlane size={14} />
+                    <span>arienjain</span>
+                  </a>
+                  <a
+                    href="https://discord.com/users/cosmicnerd"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-sm text-vscode-text hover:text-vscode-accent transition-colors duration-300"
+                  >
+                    <FaDiscord size={14} />
+                    <span>cosmicnerd</span>
+                  </a>
+                  <a
+                    href="https://instagram.com/arien_jain"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-sm text-vscode-text hover:text-vscode-accent transition-colors duration-300"
+                  >
+                    <Instagram size={14} />
+                    <span>arien_jain</span>
                   </a>
                 </div>
               </CardContent>
             </Card>
 
             <Button asChild className="w-full bg-vscode-accent hover:bg-vscode-accent/90 text-white">
-              <a href="/write">Write a Note</a>
+              <a href="https://github.com/gitsofaryan/arien.dev/issues/new" target='_blank'>Write a Note</a>
             </Button>
           </div>
         </div>

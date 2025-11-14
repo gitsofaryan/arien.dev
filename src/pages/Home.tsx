@@ -238,12 +238,11 @@ const Home = () => {
             </Link>
           </div>
         </div>
-
-        <div className="md:col-span-2 flex justify-center">
+        <div className="md:col-span-2 flex items-start md:items-center justify-center">
           <img
             src="/img/ironman.png"
             alt="Illustration of Arien"
-            className="w-[200px] rounded-lg"
+            className="w-full max-w-[260px] sm:max-w-[320px] md:max-w-[360px] lg:max-w-[420px] rounded-lg object-cover shadow-lg"
             loading="lazy"
           />
         </div>
@@ -313,36 +312,6 @@ const Home = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
           {featuredProjects.map(project => (
             <ProjectCard key={project.id} project={project} />
-          ))}
-        </div>
-      </div>
-
-      {/* Notes Section */}
-      <div className="mt-16">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold">Notes</h2>
-          <Link to="/notes" className="text-vscode-accent hover:underline" aria-label="View all notes">
-            See All
-          </Link>
-        </div>
-
-        <p className="text-vscode-text mb-6">
-          Personal notes about life, music, projects, and everything else.
-        </p>
-
-        <div className="space-y-6">
-          {notes.map(note => (
-            <div key={note.id} className="border-b border-vscode-border pb-4">
-              <div className="flex items-center mb-2">
-                {note.isNew && (
-                  <span className="text-xs bg-vscode-highlight px-2 py-1 rounded mr-2">New</span>
-                )}
-                <Link to={note.link} className="text-xl text-white hover:text-vscode-accent">
-                  {note.title}
-                </Link>
-              </div>
-              <p className="text-vscode-text text-sm">{formatDate(note.date)}</p>
-            </div>
           ))}
         </div>
       </div>

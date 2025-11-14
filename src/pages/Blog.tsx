@@ -1,270 +1,222 @@
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { Calendar, ArrowLeft } from 'lucide-react';
 
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Search, Edit, Github } from 'lucide-react';
-import { toast } from "sonner";
-import BlogPost from '../components/BlogPost';
-import CommentSection from '../components/CommentSection';
-import { githubService } from '../services/GithubService';
-
-// Define the blog post type
-interface BlogPostItem {
-  id: string;
+interface MediumArticle {
   title: string;
-  date: string;
-  isNew?: boolean;
-  content?: string | React.ReactNode;
-  source?: 'local' | 'github';
-  githubIssueNumber?: number;
+  link: string;
+  pubDate: string;
+  description: string;
+  thumbnail: string;
+  content: string;
+  author: string;
+  categories: string[];
+  guid: string;
 }
 
-// Define the type for our blogPosts object with proper index signature
-interface BlogPostsCollection {
-  [year: string]: BlogPostItem[];
-}
-
-const BlogPage: React.FC = () => {
-  const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [blogPosts, setBlogPosts] = useState<BlogPostsCollection>({});
-  const [selectedPost, setSelectedPost] = useState<BlogPostItem | null>(null);
+const Blog = () => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const [articles, setArticles] = useState<MediumArticle[]>([]);
+  const [selectedArticle, setSelectedArticle] = useState<MediumArticle | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Check if admin token is configured
-    const adminToken = import.meta.env.VITE_ADMIN_GITHUB_TOKEN;
-    setIsAdmin(!!adminToken && !adminToken.includes('YOUR_PERSONAL_ACCESS_TOKEN_HERE'));
-  }, []);
-  useEffect(() => {
-    const fetchBlogPosts = async () => {
-      setIsLoading(true);
-
+    const fetchMediumArticles = async () => {
       try {
-        // Get GitHub blog posts only
-        let githubBlogPosts: BlogPostItem[] = [];
-        try {
-          const githubIssues = await githubService.getIssues(['blog']);
-          githubBlogPosts = githubIssues.map((issue: any) => ({
-            id: `github-${issue.number}`,
-            title: issue.title,
-            date: new Date(issue.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric' }),
-            content: issue.body,
-            isNew: new Date(issue.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-            source: 'github' as const,
-            githubIssueNumber: issue.number
-          }));
-        } catch (error) {
-          console.error('Error fetching GitHub issues:', error);
-          toast.error('Failed to fetch GitHub blogs');
-        }
+        // Using RSS2JSON service to convert Medium RSS feed to JSON
+        const response = await fetch(
+          'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@arien7'
+        );
+        const data = await response.json();
 
-        // Use only GitHub posts
-        const allPosts = githubBlogPosts;
+        if (data.status === 'ok') {
+          setArticles(data.items);
 
-        // Organize by year
-        const postsByYear: BlogPostsCollection = {};
-        allPosts.forEach(post => {
-          const year = new Date(post.date).getFullYear().toString();
-          if (!postsByYear[year]) {
-            postsByYear[year] = [];
+          // If there's an ID in the URL, find and set the selected article
+          if (id) {
+            const article = data.items.find((item: MediumArticle) =>
+              createSlug(item.title) === id
+            );
+            if (article) {
+              setSelectedArticle(article);
+            }
           }
-          postsByYear[year].push(post);
-        });
-
-        // Sort posts within each year
-        Object.keys(postsByYear).forEach(year => {
-          postsByYear[year].sort((a, b) =>
-            new Date(b.date).getTime() - new Date(a.date).getTime()
-          );
-        });
-
-        // Sort years newest first
-        const sortedPostsByYear: BlogPostsCollection = {};
-        Object.keys(postsByYear)
-          .sort((a, b) => parseInt(b) - parseInt(a))
-          .forEach(year => {
-            sortedPostsByYear[year] = postsByYear[year];
-          });
-
-        setBlogPosts(sortedPostsByYear);
-      } catch (error) {
-        console.error('Error fetching blog posts:', error);
-        toast.error('Failed to fetch blog posts');
+        } else {
+          setError('Failed to load articles');
+        }
+      } catch (err) {
+        setError('Failed to fetch Medium articles');
+        console.error(err);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchBlogPosts();
-  }, []);
+    fetchMediumArticles();
+  }, [id]);
 
-  useEffect(() => {
-    const findSelectedPost = async () => {
-      if (!selectedPostId) return;
-
-      // All posts are from GitHub now
-      if (selectedPostId.startsWith('github-')) {
-        const issueNumber = parseInt(selectedPostId.replace('github-', ''));
-        try {
-          const issue = await githubService.getIssue(issueNumber);
-          setSelectedPost({
-            id: selectedPostId,
-            title: issue.title,
-            date: new Date(issue.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-            content: issue.body,
-            source: 'github',
-            githubIssueNumber: issue.number
-          });
-          return;
-        } catch (error) {
-          console.error('Error fetching GitHub issue:', error);
-          toast.error('Failed to fetch blog post from GitHub');
-          setSelectedPostId(null);
-          return;
-        }
-      }
-    };
-
-    findSelectedPost();
-  }, [selectedPostId]);
-
-  // Filter posts based on search query
-  const getFilteredPosts = (): BlogPostsCollection => {
-    if (!searchQuery.trim()) return blogPosts;
-
-    const filtered: BlogPostsCollection = {};
-
-    Object.keys(blogPosts).forEach(year => {
-      const matchingPosts = blogPosts[year].filter(post =>
-        post.title.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-
-      if (matchingPosts.length > 0) {
-        filtered[year] = matchingPosts;
-      }
-    });
-
-    return filtered;
+  const createSlug = (title: string) => {
+    return title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
   };
 
-  const filteredPosts = getFilteredPosts();
+  const handleArticleClick = (article: MediumArticle) => {
+    const slug = createSlug(article.title);
+    navigate(`/blog/${slug}`);
+    setSelectedArticle(article);
+  };
+
+  const handleBackClick = () => {
+    navigate('/blog');
+    setSelectedArticle(null);
+  };
+
+  const stripHtml = (html: string) => {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || '';
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
 
   return (
-    <>
-      {!selectedPostId ? (
-        <div className="max-w-4xl mx-auto">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-4xl font-bold">Blog</h1>
-            {isAdmin && (
-              <Link
-                to="/write"
-                className="px-6 py-3 bg-vscode-accent hover:bg-opacity-90 rounded-md transition-colors flex items-center"
-              >
-                <Edit size={18} className="mr-2" />
-                Write New Post
-              </Link>
-            )}
-          </div>
-          <p className="text-lg mb-10">
-            Guides, references, and tutorials on programming, web development, and design.
-          </p>
-
-          {/* Search Bar */}
-          <div className="relative mb-12">
-            <input
-              type="text"
-              placeholder="Search posts..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full p-3 pl-10 bg-vscode-sidebar border border-vscode-border rounded-md focus:outline-none focus:border-vscode-accent"
-            />
-            <Search className="absolute left-3 top-3.5 text-vscode-comment" size={18} />
+    <div className="max-w-4xl mx-auto">
+      {!selectedArticle ? (
+        <>
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold mb-4">Blog</h1>
+            <p className="text-lg text-vscode-comment">
+              Articles and thoughts about tech, development, and more.
+            </p>
           </div>
 
           {isLoading ? (
             <div className="flex justify-center my-10">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-vscode-accent"></div>
             </div>
-          ) : Object.keys(filteredPosts).length > 0 ? (
-            <div className="space-y-12">
-              {Object.entries(filteredPosts).map(([year, posts]) => (
-                <div key={year} className="mb-10">
-                  <h2 className="text-2xl font-bold mb-6">{year}</h2>
-                  <ul className="space-y-5">
-                    {posts.map(post => (
-                      <li key={post.id} className="group">
-                        <button
-                          onClick={() => setSelectedPostId(post.id)}
-                          className="w-full text-left flex items-start md:items-center flex-col md:flex-row gap-2 md:gap-0"
-                        >
-                          <div className="flex items-center">
-                            {post.isNew && (
-                              <span className="text-xs bg-vscode-highlight px-2 py-1 rounded mr-2">
-                                ✨ New
-                              </span>
-                            )}
-                            {post.source === 'github' && (
-                              <span className="text-xs bg-vscode-sidebar px-2 py-1 rounded mr-2 flex items-center">
-                                <Github size={12} className="mr-1" />
-                                GitHub
-                              </span>
-                            )}
-                            <span className="text-vscode-comment min-w-[80px] md:min-w-[120px]">{post.date}</span>
-                          </div>
-                          <span className="text-white group-hover:text-vscode-accent transition-colors">{post.title}</span>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+          ) : error ? (
+            <div className="text-center py-12">
+              <p className="text-vscode-comment">{error}</p>
+            </div>
+          ) : articles.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-vscode-comment">No articles found</p>
             </div>
           ) : (
-            <p className="text-center py-8 text-vscode-comment">
-              {searchQuery ? 'No posts found matching your search.' : 'No blog posts yet.'}
-            </p>
-          )}
-        </div>
-      ) : (
-        <>
-          <div className="mb-6">
-            <button
-              onClick={() => setSelectedPostId(null)}
-              className="flex items-center text-vscode-accent hover:underline"
-            >
-              ← Back to Blog
-            </button>
-          </div>
+            <div className="space-y-8">
+              {articles.map((article, index) => (
+                <article
+                  key={index}
+                  className="border-b border-vscode-border pb-8 last:border-b-0"
+                >
+                  <button
+                    onClick={() => handleArticleClick(article)}
+                    className="group text-left w-full"
+                  >
+                    <h2 className="text-2xl font-bold mb-3 text-white group-hover:text-vscode-accent transition-colors">
+                      {article.title}
+                    </h2>
+                  </button>
 
-          {selectedPost && (
-            <>
-              {selectedPost.source === 'github' && (
-                <div className="mb-4 inline-flex items-center px-3 py-1 rounded-full bg-vscode-sidebar border border-vscode-border">
-                  <Github size={14} className="mr-2" />
-                  <span className="text-sm">GitHub Issue #{selectedPost.githubIssueNumber}</span>
-                </div>
-              )}
-              <BlogPost
-                title={selectedPost.title}
-                date={selectedPost.date}
-                content={typeof selectedPost.content === 'string'
-                  ? <div dangerouslySetInnerHTML={{ __html: selectedPost.content.replace(/\n/g, '<br>') }} />
-                  : selectedPost.content}
-                tags={[]}
-              />
-              <CommentSection
-                comments={[]}
-                postId={selectedPostId}
-                postType="blog"
-                issueNumber={selectedPost.githubIssueNumber}
-              />
-            </>
+                  <div className="flex items-center space-x-4 text-sm text-vscode-comment mb-4">
+                    <span className="flex items-center">
+                      <Calendar size={14} className="mr-1" />
+                      {formatDate(article.pubDate)}
+                    </span>
+                    {article.categories && article.categories.length > 0 && (
+                      <span className="flex items-center gap-2">
+                        {article.categories.slice(0, 2).map((cat, i) => (
+                          <span key={i} className="px-2 py-1 bg-vscode-sidebar rounded text-xs">
+                            {cat}
+                          </span>
+                        ))}
+                      </span>
+                    )}
+                  </div>
+
+                  <p className="text-vscode-text mb-4 line-clamp-3">
+                    {stripHtml(article.description)}
+                  </p>
+
+                  <button
+                    onClick={() => handleArticleClick(article)}
+                    className="text-vscode-accent hover:underline"
+                  >
+                    Read more →
+                  </button>
+                </article>
+              ))}
+            </div>
           )}
         </>
+      ) : (
+        <>
+          <button
+            onClick={handleBackClick}
+            className="mb-6 flex items-center text-vscode-accent hover:underline"
+          >
+            <ArrowLeft size={18} className="mr-2" />
+            Back to all articles
+          </button>
+
+          <article className="mb-8">
+            <h1 className="text-4xl font-bold mb-4 text-white">
+              {selectedArticle.title}
+            </h1>
+
+            <div className="flex items-center space-x-4 text-sm text-vscode-comment mb-6 pb-6 border-b border-vscode-border">
+              <span className="flex items-center">
+                <Calendar size={14} className="mr-1" />
+                {formatDate(selectedArticle.pubDate)}
+              </span>
+              {selectedArticle.author && (
+                <span>By {selectedArticle.author}</span>
+              )}
+            </div>
+
+            <div
+              className="prose prose-invert prose-lg max-w-none
+                prose-headings:text-white prose-headings:font-bold
+                prose-p:text-vscode-text prose-p:leading-relaxed
+                prose-a:text-vscode-accent prose-a:no-underline hover:prose-a:underline
+                prose-strong:text-white prose-strong:font-semibold
+                prose-code:text-vscode-accent prose-code:bg-vscode-sidebar prose-code:px-1 prose-code:py-0.5 prose-code:rounded
+                prose-pre:bg-vscode-sidebar prose-pre:border prose-pre:border-vscode-border
+                prose-blockquote:border-l-4 prose-blockquote:border-vscode-accent prose-blockquote:pl-4 prose-blockquote:italic
+                prose-ul:text-vscode-text prose-ol:text-vscode-text
+                prose-li:text-vscode-text prose-li:my-1
+                prose-img:rounded-lg prose-img:my-6"
+              dangerouslySetInnerHTML={{ __html: selectedArticle.content }}
+            />
+
+            {selectedArticle.categories && selectedArticle.categories.length > 0 && (
+              <div className="mt-8 pt-6 border-t border-vscode-border">
+                <h3 className="text-sm uppercase tracking-wider text-vscode-comment mb-3">Tags</h3>
+                <div className="flex flex-wrap gap-2">
+                  {selectedArticle.categories.map((cat, i) => (
+                    <span key={i} className="px-3 py-1 bg-vscode-sidebar text-vscode-text rounded-full text-sm">
+                      {cat}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </article>
+        </>
       )}
-    </>
+    </div>
   );
 };
 
-export default BlogPage;
+export default Blog;
