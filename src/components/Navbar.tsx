@@ -17,9 +17,22 @@ const Navbar: React.FC = () => {
       document.documentElement.classList.toggle('dark', savedTheme === 'dark');
     }
 
-    // Check if admin token is configured (always show Write link if token exists)
-    const adminToken = import.meta.env.VITE_ADMIN_GITHUB_TOKEN;
-    setIsOwner(!!adminToken && !adminToken.includes('YOUR_PERSONAL_ACCESS_TOKEN_HERE'));
+    // Check if admin token is configured OR if authenticated user is gitsofaryan
+    const checkOwner = () => {
+      const adminToken = import.meta.env.VITE_ADMIN_GITHUB_TOKEN;
+      const hasAdminToken = !!adminToken && !adminToken.includes('YOUR_PERSONAL_ACCESS_TOKEN_HERE');
+
+      const credentials = githubService.getCredentials();
+      const isGitsofaryan = credentials.username === 'gitsofaryan' && githubService.isAuthenticated();
+
+      setIsOwner(hasAdminToken || isGitsofaryan);
+    };
+
+    checkOwner();
+
+    // Re-check when authentication changes
+    const interval = setInterval(checkOwner, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   const toggleTheme = () => {
