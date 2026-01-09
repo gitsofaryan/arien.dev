@@ -281,7 +281,7 @@ const Home = () => {
       </div>
 
       <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter mb-8 leading-[0.9] text-white animate-in slide-in-from-bottom-5 duration-500">
-        Software<br />
+        Softwaer<br />
         <span className="text-[#333]">Engineer</span>
       </h1>
 

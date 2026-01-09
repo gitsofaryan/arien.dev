@@ -164,6 +164,7 @@ const About: React.FC = () => {
         </h2>
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-6">
           {[
+            'protocol',
             'CircuitVerse',
             'INCF',
             'sugarlabs',

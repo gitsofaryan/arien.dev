@@ -1,15 +1,7 @@
 import { useState, useEffect } from 'react';
-import { ExternalLink, Github, Trophy } from 'lucide-react';
-
-interface ProjectCard {
-  id: string;
-  title: string;
-  description: string;
-  tags: string[];
-  repo: string;
-  demo?: string;
-  image?: string;
-}
+import { ExternalLink, Github, Trophy, Rocket, Code, Star, GitBranch } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { resumeData } from '@/data/resumeData';
 
 interface DevpostProject {
   title: string;
@@ -23,39 +15,6 @@ interface DevpostProject {
 const Projects = () => {
   const [devpostProjects, setDevpostProjects] = useState<DevpostProject[]>([]);
   const [isLoadingDevpost, setIsLoadingDevpost] = useState(true);
-  const projects: ProjectCard[] = [
-    {
-      id: 'finlitera',
-      title: 'FinLitera - AI Financial Assistant',
-      description: 'Built an AI platform providing financial guidance, investment tips, budgeting advice, and interactive learning. Implemented real-time portfolio analysis and AI recommendations.',
-      tags: ['Next.js', 'Supabase', 'OpenAI API', 'Prisma', 'NextAuth'],
-      repo: 'https://github.com/gitsofaryan/finlitera',
-      demo: 'https://finlitera.vercel.app'
-    },
-    {
-      id: 'ats100',
-      title: 'ATS100 - AI Resume Analyzer',
-      description: 'Built a web app that analyzes resumes, gives ATS scores, and provides feedback on strengths, weaknesses, and improvements.',
-      tags: ['React.js', 'TypeScript', 'PDF.js', 'Vite', 'AI'],
-      repo: 'https://github.com/gitsofaryan/ats100',
-      demo: 'https://ats100.vercel.app'
-    },
-    {
-      id: 'codespace',
-      title: 'CodeSpace - Realtime Code Editor',
-      description: 'Built a collaborative code editor that allows multiple users to code together in real-time with instant synchronization and integrated chat.',
-      tags: ['React.js', 'TypeScript', 'Socket.io', 'Node.js', 'Express.js'],
-      repo: 'https://github.com/gitsofaryan/codespace',
-      demo: 'https://codespace-editor.vercel.app'
-    },
-    {
-      id: 'insignia',
-      title: 'InSignia - Indian Sign Language Translator',
-      description: 'A platform that turns Indian Sign Language (ISL) gestures into text and speech in real-time for easy communication.',
-      tags: ['Python', 'CNN', 'Flask', 'OpenCV', 'Mediapipe'],
-      repo: 'https://github.com/gitsofaryan/insignia'
-    }
-  ];
 
   useEffect(() => {
     // Use mock data directly since API isn't working
@@ -131,7 +90,6 @@ const Projects = () => {
   }, []);
 
   const formatDate = (dateString: string) => {
-    // Handle both date formats - "Mar 2024" or "2024-03-15"
     if (dateString.includes('-')) {
       return new Date(dateString).toLocaleDateString('en-US', {
         month: 'short',
@@ -142,133 +100,123 @@ const Projects = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <h1 className="text-4xl font-bold mb-6">Projects</h1>
-      <p className="text-lg mb-10">
-        A showcase of my featured projects including AI-powered applications, real-time collaborative tools,
-        and accessibility solutions. Each project demonstrates full-stack development skills and problem-solving abilities.
-      </p>
+    <div className="max-w-6xl mx-auto px-6 py-12 animate-fade-in font-mono text-gray-300">
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-        {projects.map(project => (
-          <div
-            key={project.id}
-            className="bg-vscode-sidebar border border-vscode-border rounded-lg overflow-hidden hover:border-vscode-accent transition-colors p-6"
-          >
-            <h2 className="text-xl font-bold mb-2 text-white">{project.title}</h2>
-            <p className="text-vscode-text mb-4">{project.description}</p>
+      {/* Header */}
+      <section className="mb-16">
+        <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight flex items-center gap-4">
+          <Rocket size={40} className="text-vscode-accent" />
+          <span>
+            <span className="text-vscode-function">work</span>
+            <span className="text-vscode-class">.done</span>
+          </span>
+        </h1>
+        <p className="text-lg text-gray-400 max-w-2xl leading-relaxed">
+          A collection of high-impact shipping. From full-stack platforms to AI experimental labs, these differ from tutorials—they solve real problems.
+        </p>
+      </section>
 
-            <div className="flex flex-wrap gap-2 mb-4">
-              {project.tags.map(tag => (
-                <span
-                  key={`${project.id}-${tag}`}
-                  className="text-xs px-2 py-1 bg-vscode-highlight rounded"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+      <hr className="border-vscode-border opacity-50 mb-16" />
 
-            <div className="flex items-center gap-4 mt-4 pt-4 border-t border-vscode-border">
-              <a
-                href={project.repo}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-vscode-accent hover:underline"
-              >
-                <Github size={18} />
-                <span>Repo</span>
-              </a>
-              {project.demo && (
-                <a
-                  href={project.demo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-vscode-accent hover:underline"
-                >
-                  <ExternalLink size={18} />
-                  <span>Live Demo</span>
-                </a>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
+      {/* Main Projects Section */}
+      <section className="mb-20">
+        <h2 className="text-3xl font-bold text-white mb-10 flex items-center gap-3">
+          <GitBranch size={28} className="text-vscode-accent" />
+          Featured Deployments
+        </h2>
 
-      {/* Devpost Hackathon Projects Section */}
-      <div className="mt-16">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-3xl font-bold flex items-center gap-2">
-            <Trophy className="text-vscode-accent" size={28} />
-            Hackathon Projects
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {resumeData.projects.map((project, idx) => (
+            <Card key={idx} className="bg-[#1F1F1F] border-vscode-border hover:border-vscode-accent transition-all group h-full">
+              <CardContent className="pt-6 h-full flex flex-col">
+                <div className="flex justify-between items-start mb-4">
+                  <h3 className="text-xl font-bold text-white group-hover:text-vscode-accent transition-colors">{project.title}</h3>
+                  <a href={project.link} target="_blank" rel="noopener" className="text-gray-400 hover:text-white transition-colors p-1 hover:bg-[#333] rounded"><Github size={20} /></a>
+                </div>
+                <p className="text-sm text-gray-400 mb-6 flex-grow leading-relaxed">
+                  {project.description}
+                </p>
+                <div className="flex flex-wrap gap-2 mt-auto">
+                  {project.tech.slice(0, 6).map(t => (
+                    <span key={t} className="text-[10px] px-2 py-1 bg-[#151515] border border-vscode-border rounded text-vscode-text uppercase tracking-wider">{t}</span>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      {/* Devpost / Hackathons Section */}
+      <section className="mb-20">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
+          <h2 className="text-3xl font-bold text-white flex items-center gap-3">
+            <Trophy size={28} className="text-yellow-500" />
+            Hackathon Grinds
           </h2>
           <a
             href="https://devpost.com/gitsofaryan"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-vscode-accent hover:underline flex items-center gap-1"
+            className="flex items-center gap-2 text-vscode-accent hover:text-white transition-colors text-sm font-bold bg-[#1F1F1F] px-4 py-2 rounded border border-vscode-border"
           >
-            View on Devpost
-            <ExternalLink size={16} />
+            View full history on Devpost <ExternalLink size={14} />
           </a>
         </div>
 
-        <p className="text-vscode-text mb-8">
-          Projects built during hackathons, showcasing rapid prototyping and creative problem-solving.
-        </p>
-
         {isLoadingDevpost ? (
           <div className="flex justify-center my-10">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-vscode-accent"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-vscode-accent"></div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {devpostProjects.map((project, index) => (
-              <div
-                key={index}
-                className="bg-vscode-sidebar border border-vscode-border rounded-lg p-6 hover:border-vscode-accent transition-colors"
-              >
-                <div className="flex items-start justify-between mb-2">
-                  <h3 className="text-xl font-bold text-white">{project.title}</h3>
-                  {project.likeCount > 0 && (
-                    <span className="text-xs bg-vscode-highlight px-2 py-1 rounded flex items-center gap-1">
-                      ❤️ {project.likeCount}
-                    </span>
-                  )}
-                </div>
+              <Card key={index} className="bg-[#1F1F1F] border-vscode-border hover:border-vscode-accent transition-all group h-full">
+                <CardContent className="pt-6 h-full flex flex-col">
+                  <div className="flex justify-between items-start mb-3">
+                    <h3 className="text-lg font-bold text-white group-hover:text-vscode-accent transition-colors line-clamp-1" title={project.title}>{project.title}</h3>
+                    {project.likeCount > 0 && (
+                      <span className="flex items-center gap-1 text-xs text-vscode-comment bg-[#151515] px-2 py-1 rounded">
+                        <Star size={10} className="fill-vscode-accent text-vscode-accent" /> {project.likeCount}
+                      </span>
+                    )}
+                  </div>
 
-                <p className="text-vscode-text mb-4">{project.tagline}</p>
+                  <p className="text-xs text-gray-400 mb-4 line-clamp-3 leading-relaxed flex-grow">
+                    {project.tagline}
+                  </p>
 
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.technologies.map((tech, i) => (
-                    <span
-                      key={i}
-                      className="text-xs px-2 py-1 bg-vscode-highlight rounded"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
+                  <div className="space-y-4 mt-auto">
+                    <div className="flex flex-wrap gap-1.5">
+                      {project.technologies.slice(0, 3).map((tech, i) => (
+                        <span key={i} className="text-[10px] px-1.5 py-0.5 bg-[#151515] border border-vscode-border rounded text-vscode-text">
+                          {tech}
+                        </span>
+                      ))}
+                      {project.technologies.length > 3 && (
+                        <span className="text-[10px] px-1.5 py-0.5 text-vscode-comment">+{project.technologies.length - 3}</span>
+                      )}
+                    </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-vscode-border">
-                  <span className="text-sm text-vscode-comment">
-                    {formatDate(project.submittedAt)}
-                  </span>
-                  <a
-                    href={project.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-vscode-accent hover:underline"
-                  >
-                    View Project
-                    <ExternalLink size={16} />
-                  </a>
-                </div>
-              </div>
+                    <div className="flex items-center justify-between pt-3 border-t border-[#333]">
+                      <span className="text-[10px] text-vscode-comment">{formatDate(project.submittedAt)}</span>
+                      <a href={project.url} target="_blank" rel="noopener" className="text-xs font-bold text-vscode-accent hover:text-white flex items-center gap-1">
+                        Check it out <ExternalLink size={10} />
+                      </a>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
         )}
+      </section>
+
+      {/* Final Quote */}
+      <div className="text-center pt-12 pb-8 opacity-40 text-xs font-mono">
+        <p>"Ship early, ship often, and maybe write a test or two."</p>
       </div>
+
     </div>
   );
 };

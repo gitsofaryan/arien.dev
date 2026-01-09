@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { Calendar, ArrowLeft } from 'lucide-react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Calendar, ArrowLeft, BookOpen, ExternalLink, Hash, ChevronRight } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface MediumArticle {
   title: string;
@@ -25,7 +26,6 @@ const Blog = () => {
   useEffect(() => {
     const fetchMediumArticles = async () => {
       try {
-        // Using RSS2JSON service to convert Medium RSS feed to JSON
         const response = await fetch(
           'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@arien7'
         );
@@ -34,7 +34,6 @@ const Blog = () => {
         if (data.status === 'ok') {
           setArticles(data.items);
 
-          // If there's an ID in the URL, find and set the selected article
           if (id) {
             const article = data.items.find((item: MediumArticle) =>
               createSlug(item.title) === id
@@ -82,80 +81,80 @@ const Blog = () => {
   };
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
-      month: 'long',
+      month: 'short',
       day: 'numeric'
     });
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-5xl mx-auto px-6 py-12 animate-fade-in font-mono text-gray-300">
+
       {!selectedArticle ? (
         <>
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold mb-4">Stories</h1>
-            <p className="text-lg text-vscode-comment">
-              Articles and thoughts about tech, development, and more.
+          {/* Header */}
+          <section className="mb-16">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight flex items-center gap-4">
+              <BookOpen size={40} className="text-vscode-accent" />
+              <span>
+                <span className="text-vscode-function">stories</span>
+                <span className="text-vscode-class">.md</span>
+              </span>
+            </h1>
+            <p className="text-lg text-gray-400 max-w-2xl leading-relaxed">
+              Thoughts on engineering, design drafts, and late-night debugging sessions. This is where I document the process.
             </p>
-          </div>
+          </section>
+
+          <hr className="border-vscode-border opacity-50 mb-16" />
 
           {isLoading ? (
-            <div className="flex justify-center my-10">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-vscode-accent"></div>
+            <div className="flex justify-center my-20">
+              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-vscode-accent"></div>
             </div>
           ) : error ? (
-            <div className="text-center py-12">
-              <p className="text-vscode-comment">{error}</p>
+            <div className="text-center py-12 text-vscode-comment">
+              <p>{error}</p>
             </div>
           ) : articles.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-vscode-comment">No articles found</p>
+            <div className="text-center py-12 text-vscode-comment">
+              <p>No articles found. Time to write something!</p>
             </div>
           ) : (
-            <div className="space-y-8">
+            <div className="grid gap-6">
               {articles.map((article, index) => (
-                <article
+                <Card
                   key={index}
-                  className="border-b border-vscode-border pb-8 last:border-b-0"
+                  className="bg-[#1F1F1F] border-vscode-border hover:border-vscode-accent transition-all group cursor-pointer"
+                  onClick={() => handleArticleClick(article)}
                 >
-                  <button
-                    onClick={() => handleArticleClick(article)}
-                    className="group text-left w-full"
-                  >
-                    <h2 className="text-2xl font-bold mb-3 text-white group-hover:text-vscode-accent transition-colors">
-                      {article.title}
-                    </h2>
-                  </button>
+                  <CardContent className="p-6 md:p-8 flex flex-col md:flex-row gap-6">
+                    <div className="flex-grow space-y-4">
+                      <div className="flex items-center gap-3 text-xs text-vscode-comment uppercase tracking-widest">
+                        <span className="flex items-center gap-1"><Calendar size={12} /> {formatDate(article.pubDate)}</span>
+                        {article.categories?.length > 0 && (
+                          <>
+                            <span>•</span>
+                            <span className="text-vscode-accent">{article.categories[0]}</span>
+                          </>
+                        )}
+                      </div>
 
-                  <div className="flex items-center space-x-4 text-sm text-vscode-comment mb-4">
-                    <span className="flex items-center">
-                      <Calendar size={14} className="mr-1" />
-                      {formatDate(article.pubDate)}
-                    </span>
-                    {article.categories && article.categories.length > 0 && (
-                      <span className="flex items-center gap-2">
-                        {article.categories.slice(0, 2).map((cat, i) => (
-                          <span key={i} className="px-2 py-1 bg-vscode-sidebar rounded text-xs">
-                            {cat}
-                          </span>
-                        ))}
-                      </span>
-                    )}
-                  </div>
+                      <h2 className="text-2xl font-bold text-white group-hover:text-vscode-accent transition-colors leading-tight">
+                        {article.title}
+                      </h2>
 
-                  <p className="text-vscode-text mb-4 line-clamp-3">
-                    {stripHtml(article.description)}
-                  </p>
+                      <p className="text-gray-400 text-sm leading-relaxed line-clamp-2 md:line-clamp-3">
+                        {stripHtml(article.description)}
+                      </p>
 
-                  <button
-                    onClick={() => handleArticleClick(article)}
-                    className="text-vscode-accent hover:underline"
-                  >
-                    Read more →
-                  </button>
-                </article>
+                      <div className="pt-2 flex items-center text-vscode-accent text-sm font-bold group-hover:translate-x-1 transition-transform">
+                        Read Article <ChevronRight size={16} />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               ))}
             </div>
           )}
@@ -164,56 +163,60 @@ const Blog = () => {
         <>
           <button
             onClick={handleBackClick}
-            className="mb-6 flex items-center text-vscode-accent hover:underline"
+            className="mb-8 flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm uppercase tracking-widest group"
           >
-            <ArrowLeft size={18} className="mr-2" />
-            Back to all articles
+            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Library
           </button>
 
-          <article className="mb-8">
-            <h1 className="text-4xl font-bold mb-4 text-white">
-              {selectedArticle.title}
-            </h1>
+          <article className="animate-in slide-in-from-bottom-4 duration-500">
+            <header className="mb-12 pb-8 border-b border-vscode-border">
+              <div className="flex items-center gap-4 text-sm text-vscode-comment mb-6">
+                <span className="flex items-center gap-2 bg-[#1F1F1F] px-3 py-1 rounded border border-vscode-border">
+                  <Calendar size={14} /> {formatDate(selectedArticle.pubDate)}
+                </span>
+                {selectedArticle.categories?.map((cat, i) => (
+                  <span key={i} className="hidden md:flex items-center gap-1 text-vscode-accent">
+                    <Hash size={12} /> {cat}
+                  </span>
+                ))}
+              </div>
 
-            <div className="flex items-center space-x-4 text-sm text-vscode-comment mb-6 pb-6 border-b border-vscode-border">
-              <span className="flex items-center">
-                <Calendar size={14} className="mr-1" />
-                {formatDate(selectedArticle.pubDate)}
-              </span>
-              {selectedArticle.author && (
-                <span>By {selectedArticle.author}</span>
-              )}
-            </div>
+              <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight mb-8">
+                {selectedArticle.title}
+              </h1>
+            </header>
 
             <div
               className="prose prose-invert prose-lg max-w-none
-                prose-headings:text-white prose-headings:font-bold
-                prose-p:text-vscode-text prose-p:leading-relaxed
-                prose-a:text-vscode-accent prose-a:no-underline hover:prose-a:underline
-                prose-strong:text-white prose-strong:font-semibold
-                prose-code:text-vscode-accent prose-code:bg-vscode-sidebar prose-code:px-1 prose-code:py-0.5 prose-code:rounded
-                prose-pre:bg-vscode-sidebar prose-pre:border prose-pre:border-vscode-border
-                prose-blockquote:border-l-4 prose-blockquote:border-vscode-accent prose-blockquote:pl-4 prose-blockquote:italic
-                prose-ul:text-vscode-text prose-ol:text-vscode-text
-                prose-li:text-vscode-text prose-li:my-1
-                prose-img:rounded-lg prose-img:my-6"
+                    prose-headings:text-white prose-headings:font-bold prose-headings:tracking-tight
+                    prose-p:text-gray-300 prose-p:leading-relaxed prose-p:font-sans
+                    prose-a:text-vscode-accent prose-a:no-underline hover:prose-a:underline
+                    prose-strong:text-white prose-strong:font-semibold
+                    prose-code:text-vscode-accent prose-code:bg-[#151515] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-sm prose-code:border prose-code:border-[#333]
+                    prose-pre:bg-[#151515] prose-pre:border prose-pre:border-vscode-border prose-pre:rounded-lg
+                    prose-blockquote:border-l-4 prose-blockquote:border-vscode-accent prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:bg-[#1F1F1F] prose-blockquote:py-2 prose-blockquote:pr-4 prose-blockquote:rounded-r
+                    prose-ul:text-gray-300 prose-li:marker:text-vscode-accent
+                    prose-img:rounded-xl prose-img:border prose-img:border-vscode-border prose-img:shadow-lg"
               dangerouslySetInnerHTML={{ __html: selectedArticle.content }}
             />
 
-            {selectedArticle.categories && selectedArticle.categories.length > 0 && (
-              <div className="mt-8 pt-6 border-t border-vscode-border">
-                <h3 className="text-sm uppercase tracking-wider text-vscode-comment mb-3">Tags</h3>
-                <div className="flex flex-wrap gap-2">
-                  {selectedArticle.categories.map((cat, i) => (
-                    <span key={i} className="px-3 py-1 bg-vscode-sidebar text-vscode-text rounded-full text-sm">
-                      {cat}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
+            <div className="mt-16 pt-8 border-t border-vscode-border flex justify-between items-center">
+              <button onClick={handleBackClick} className="text-gray-400 hover:text-white transition-colors font-bold">
+                &larr; More Stories
+              </button>
+              <a href={selectedArticle.link} target="_blank" rel="noopener" className="flex items-center gap-2 text-vscode-accent hover:text-white transition-colors">
+                Read on Medium <ExternalLink size={16} />
+              </a>
+            </div>
           </article>
         </>
+      )}
+
+      {/* Final Quote */}
+      {!selectedArticle && (
+        <div className="text-center pt-20 pb-8 opacity-40 text-xs font-mono">
+          <p>"Documentation is the love letter you write to your future self."</p>
+        </div>
       )}
     </div>
   );
