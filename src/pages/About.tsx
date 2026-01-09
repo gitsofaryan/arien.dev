@@ -12,45 +12,45 @@ const About: React.FC = () => {
     <div className="max-w-7xl mx-auto animate-fade-in px-4 py-8">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
         <div className="col-span-2 space-y-8">
-          <h1 className="text-4xl font-bold mb-6 text-gradient">About {resumeData.personalInfo.name}</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-6 text-gradient">About {resumeData.personalInfo.name}</h1>
 
           <div className="mb-12">
-            <p className="text-base mb-6 flex items-start gap-4 leading-relaxed">
+            <p className="text-sm md:text-base mb-6 flex items-start gap-4 leading-relaxed">
               <Rocket className="text-vscode-accent mt-1 flex-shrink-0" size={20} />
               <span>
                 I'm <span className="text-vscode-variable font-medium">Aryan Jain</span>, a final-year student from <span className="text-vscode-accent">Jabalpur, Madhya Pradesh</span>, passionate about full-stack development and machine learning. I've contributed to Google Summer of Code and Selected for Summer of Bitcoin 2025, working on impactful open-source projects.
               </span>
             </p>
 
-            <p className="mb-6 flex items-start gap-4 leading-relaxed">
+            <p className="text-sm md:text-base mb-6 flex items-start gap-4 leading-relaxed">
               <Trophy className="text-vscode-accent mt-1 flex-shrink-0" size={20} />
               <span>
                 Selected among the <span className="text-vscode-accent font-medium">top 2% contributors worldwide</span> for Summer of Bitcoin 2025, contributing to Bitcoin protocol and Lightning Network. Also worked with NASA as a Citizen Scientist on astronomical data analysis and planetary science projects through Zooniverse.
               </span>
             </p>
 
-            <p className="mb-6 flex items-start gap-4 leading-relaxed">
+            <p className="text-sm md:text-base mb-6 flex items-start gap-4 leading-relaxed">
               <Users className="text-vscode-accent mt-1 flex-shrink-0" size={20} />
               <span>
                 Lead Coordinator at Google Developers Group, organizing hackathons and DevFests reaching 500+ participants. Former UiPath Student Developer Champion promoting RPA and automation literacy. I love building things that reach people, which is why I actively participate in hackathons.
               </span>
             </p>
 
-            <p className="mb-6 flex items-start gap-4 leading-relaxed">
+            <p className="text-sm md:text-base mb-6 flex items-start gap-4 leading-relaxed">
               <Coffee className="text-vscode-accent mt-1 flex-shrink-0" size={20} />
               <span>
                 When I'm not pushing commits or breaking production (kidding... mostly), I'm probably lifting weights, debugging someone else's code, or pretending I understand blockchain while nodding confidently in meetings. Writing code at 3 AM is a lifestyle choice, not a cry for help.
               </span>
             </p>
 
-            <p className="mb-6 flex items-start gap-4 leading-relaxed">
+            <p className="text-sm md:text-base mb-6 flex items-start gap-4 leading-relaxed">
               <Briefcase className="text-vscode-accent mt-1 flex-shrink-0" size={20} />
               <span>
                 Actively seeking full-stack, AI/ML, data science, blockchain, or product management roles where I can grow, learn, and make an impact.
               </span>
             </p>
 
-            <p className="flex items-start gap-4 leading-relaxed">
+            <p className="text-sm md:text-base flex items-start gap-4 leading-relaxed">
               <Sparkles className="text-vscode-accent mt-1 flex-shrink-0" size={20} />
               <span>
                 This site is mercifully free of ads, tracking scripts, "sponsored content," and other digital nonsense. Just pure, unfiltered tech rambling from someone who's debugged enough segmentation faults to question their life choices.
@@ -121,7 +121,7 @@ const About: React.FC = () => {
 
           {/* What I'm Doing Now Section */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-6 text-white flex items-center gap-2">
+            <h2 className="text-xl md:text-2xl font-bold mb-6 text-white flex items-center gap-2">
               <Clock size={24} className="text-vscode-accent" />
               What I'm Focused On
             </h2>
@@ -129,29 +129,29 @@ const About: React.FC = () => {
               <CardContent className="pt-6">
                 <div className="space-y-4">
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-2 flex items-center gap-2">
+                    <h3 className="text-lg md:text-xl font-semibold text-white mb-2 flex items-center gap-2">
                       <Briefcase size={20} className="text-vscode-accent" />
                       Seeking New Opportunities
                     </h3>
-                    <p className="text-base text-vscode-text leading-relaxed">
+                    <p className="text-sm md:text-base text-vscode-text leading-relaxed">
                       Actively looking for full-stack, AI/ML, data science, blockchain or product management roles where I can grow and learn. I'm eager to tackle complex challenges and contribute to innovative projects that push boundaries.
                     </p>
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-2 flex items-center gap-2">
+                    <h3 className="text-lg md:text-xl font-semibold text-white mb-2 flex items-center gap-2">
                       <CodeSquareIcon size={20} className="text-vscode-accent" />
                       Building & Learning
                     </h3>
-                    <p className="text-base text-vscode-text leading-relaxed">
+                    <p className="text-sm md:text-base text-vscode-text leading-relaxed">
                       Grinding DSA, diving deep into system design, and building countless side projects with AI to bring my 2 AM ideas to life. I'm constantly exploring new tech, participating in online assessments, and learning how the internet actually works under the hood.
                     </p>
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-2 flex items-center gap-2">
+                    <h3 className="text-lg md:text-xl font-semibold text-white mb-2 flex items-center gap-2">
                       <Github size={20} className="text-vscode-accent" />
                       Open Source & Networking
                     </h3>
-                    <p className="text-base text-vscode-text leading-relaxed">
+                    <p className="text-sm md:text-base text-vscode-text leading-relaxed">
                       Continuing to contribute to projects like CircuitVerse and others. Also actively connecting and networking in the Web3 space, because it's the future (and because blockchain is still cool, fight me).
                     </p>
                   </div>
@@ -162,7 +162,7 @@ const About: React.FC = () => {
 
           {/* Technical Skills */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-6 text-white flex items-center gap-2">
+            <h2 className="text-xl md:text-2xl font-bold mb-6 text-white flex items-center gap-2">
               <Cpu size={24} className="text-vscode-accent" />
               Technical Arsenal
             </h2>
@@ -932,8 +932,11 @@ const About: React.FC = () => {
               </CardContent>
             </Card>
 
-            <Button asChild className="w-full bg-vscode-accent hover:bg-vscode-accent/90 text-white">
-              <a href="https://github.com/gitsofaryan/arien.dev/issues/new" target='_blank'>Write a Note</a>
+            <Button asChild className="w-full gap-2">
+              <a href="https://github.com/gitsofaryan/arien.dev/issues/new" target='_blank' rel="noopener noreferrer">
+                <PenTool size={16} />
+                <span>Write a Note</span>
+              </a>
             </Button>
           </div>
         </div>

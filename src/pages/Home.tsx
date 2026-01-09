@@ -276,22 +276,22 @@ const Home = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6">
-      <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-2">
+      <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-2">
         Hey, I'm
       </h1>
-      <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 text-vscode-accent">
+      <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 text-vscode-accent">
         {resumeData?.personalInfo?.name || 'Aryan Jain'}.
       </h2>
-      <p className="text-xl md:text-2xl font-medium mb-6 text-vscode-text leading-relaxed">
+      <p className="text-base md:text-2xl font-medium mb-6 text-vscode-text leading-relaxed">
         <span className="text-vscode-accent font-semibold">Fullstack Developer</span> • <span className="text-vscode-accent font-semibold">SoB'25</span> Lightning Protocols • <span className="text-vscode-accent font-semibold">GoQuant</span> Eng. Fellow'25 • <span className="text-vscode-accent font-semibold">Amazon ML School'25</span> • <span className="text-vscode-accent font-semibold">NASA Navigator '25</span>• <span className="text-vscode-accent font-semibold">GDSC Lead'24</span>
       </p>
 
       <div className="grid grid-cols-1 gap-8 mt-8">
         <div>
-          <p className="text-lg mb-4 leading-relaxed">
+          <p className="text-sm md:text-lg mb-4 leading-relaxed">
             A full-stack engineer and AI/ML practitioner with experience across protocol engineering, exchange systems, and open-source infrastructure. I've contributed to <span className="text-vscode-accent font-medium">Summer of Bitcoin</span> (Lightning Protocols), <span className="text-vscode-accent font-medium">Google Summer of Code</span>, <span className="text-vscode-accent font-medium">NASA Space Apps</span>, and multiple global OSS ecosystems.
           </p>
-          <p className="text-lg mb-6 leading-relaxed">
+          <p className="text-sm md:text-lg mb-6 leading-relaxed">
             As a <span className="text-vscode-accent font-medium">GoQuant Engineering Fellow</span>, <span className="text-vscode-accent font-medium">Amazon ML School</span> participant, and <span className="text-vscode-accent font-medium">NASA Navigator</span>, I focus on building scalable full-stack systems, ML-powered features, and production-ready architectures. I love open source, rapid prototyping, solving challenging engineering problems, and continuously learning to build things that create real impact.
           </p>
 
@@ -313,7 +313,7 @@ const Home = () => {
       </div>
       {/* Organizations Section */}
       <div className="mt-16">
-        <h2 className="text-2xl font-bold mb-6">Organizations I Contributed In.</h2>
+        <h2 className="text-xl md:text-2xl font-bold mb-6">Organizations I Contributed In.</h2>
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-6">
           {orgHandles.map(handle => (
             <a
@@ -339,7 +339,7 @@ const Home = () => {
 
       {/* Graphs Section */}
       <div className="mt-16">
-        <h2 className="text-2xl font-bold mb-6 flex items-center"><Github size={24} className="mr-2" />Activity & Stats</h2>
+        <h2 className="text-xl md:text-2xl font-bold mb-6 flex items-center"><Github size={24} className="mr-2" />Activity & Stats</h2>
         <div className="flex flex-col gap-6 max-w-2xl mx-auto">
           <div className="w-full bg-[#0d1117] rounded-lg p-3 border border-vscode-border">
             <h3 className="text-base font-semibold mb-2 text-white">GitHub Contributions</h3>
@@ -364,8 +364,8 @@ const Home = () => {
 
       {/* Get In Touch Section */}
       <div className="mt-16 mb-8">
-        <h2 className="text-2xl font-bold mb-4">Get In Touch</h2>
-        <p className="text-lg mb-6 text-vscode-text">
+        <h2 className="text-xl md:text-2xl font-bold mb-4">Get In Touch</h2>
+        <p className="text-sm md:text-lg mb-6 text-vscode-text">
           Feel free to reach out if you'd like to collaborate, discuss opportunities, or just chat about tech!
         </p>
         <div className="flex flex-wrap gap-3">
@@ -373,13 +373,13 @@ const Home = () => {
             href={`https://www.linkedin.com/in/${resumeData.personalInfo.linkedin}`}
             target="_blank"
             rel="noopener noreferrer"
-            
+
             aria-label="Connect on LinkedIn"
           >
             <Button>
 
-            <Linkedin size={16} />
-            <span>LinkedIn</span>
+              <Linkedin size={16} />
+              <span>LinkedIn</span>
             </Button>
           </a>
           <a
