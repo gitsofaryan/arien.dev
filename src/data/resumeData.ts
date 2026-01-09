@@ -1,7 +1,7 @@
 export const resumeData = {
   personalInfo: {
     name: "Aryan Jain",
-    location: "Jabalpur, India",
+    location: "Jabalpur, MP, India",
     email: "mail.aryan.jain07@gmail.com",
     phone: "+919301525185",
     github: "gitsofaryan",
@@ -9,6 +9,10 @@ export const resumeData = {
     devpost: "gitsofaryan",
     leetcode: "arien7",
     website: "https://www.arienjain.tech/",
+    twitter: "aryanjain1506",
+    instagram: "arien_jain",
+    discord: "cosmicnerd",
+    telegram: "arienjain",
     tagline: "Software Engineer | AI-Native Builder | 77x Hackathon Shipper",
     bio: "I am a 0 → 1 builder who thrives in the chaos of early-stage development. I don't just write syntax; I ship products. Armed with an AI-native workflow, I compress months of development into weeks. My background isn't just theory—it's battle-tested in 77+ hackathons, Google Summer of Code, and high-frequency trading environments where microseconds matter.",
   },
@@ -214,19 +218,71 @@ export const resumeData = {
     },
   ],
 
-  achievements: [
-    "Veteren Competitor: 77+ Hackathons wins across Devpost, MLH (Smart India Hackathon, MS Imagine Cup)",
-    "Mentorship: GDSC Lead (1000+ students), Google Cloud Arcade Facilitator",
-    "Space Research: NASA Citizen Scientist (50+ projects)",
-    "Algorithmic Solving: 500+ DSA Problems (LeetCode, CodeChef), Active AtCoder",
-    "Open Source: GSoC '25, Summer of Bitcoin '25, GitLab Top 5 Contributor"
+  openSource: [
+    {
+      title: "CircuitVerse",
+      role: "Maintainer",
+      duration: "Present",
+      link: "https://github.com/CircuitVerse/CircuitVerse",
+      desc: [
+        "Upgraded Node.js to version 22 across all configuration files and resolved Ruby deprecation warnings, ensuring smoother operations and improved performance.",
+        "Enhanced the Vue Simulator's user experience by migrating code from JavaScript to TypeScript, resulting in increased type safety and maintainability."
+      ]
+    },
+    {
+      title: "Palisadoes",
+      role: "Maintainer",
+      duration: "Present",
+      link: "https://github.com/Palisadoes",
+      desc: [
+        "Developed comprehensive unit tests, achieving 100% test coverage to ensure robust software quality.",
+        "Resolved critical Flutter bugs and revamped the admin control panel to enhance functionality and user experience."
+      ]
+    }
   ],
 
-  education: {
-    institution: "Gyan Ganga Institute of Technology and Sciences, Jabalpur",
-    degree:
-      "Bachelor of Technology in Computer Science and Business System (CSBS)",
-    duration: "2022 - 2026",
-    cgpa: "8.25",
-  },
+  focus: [
+    {
+      title: "Seeking New Opportunities",
+      desc: "Actively looking for full-stack, AI/ML, data science, blockchain or product management roles where I can grow and learn. I'm eager to tackle complex challenges and contribute to innovative projects that push boundaries."
+    },
+    {
+      title: "Building & Learning",
+      desc: "Grinding DSA, diving deep into system design, and building countless side projects with AI to bring my 2 AM ideas to life. I'm constantly exploring new tech, participating in online assessments, and learning how the internet actually works under the hood."
+    },
+    {
+      title: "Open Source & Networking",
+      desc: "Continuing to contribute to projects like CircuitVerse and others. Also actively connecting and networking in the Web3 space, because it's the future (and because blockchain is still cool, fight me)."
+    }
+  ],
+
+  achievements: [
+     "Solved 500+ DSA problems in C++, Python, and SQL",
+     "Google Solutions Challenge 2024: Regional Finalist",
+     "Microsoft Imagine Cup 2024: Semi-Finalist",
+     "Smart India Hackathon 2023: National Finalist",
+     "IIT Bombay E-Cell Eureka: Top 50 out of 5000+",
+     "Cisco ThingQbator: Top 10 Startup",
+     "Hacktoberfest 2024 & Open Source Connect India: Top 10 Contributor & Mentor",
+     "Competed in 70+ esteemed hackathons with multiple wins",
+     "Competitive Programming: Meta Hacker Cup'25, Flipkart GRID, AtCoder rating 700+",
+     "NASA Citizen Scientist 2024: 49+ research projects",
+     "Topmate Mentor: Top 10% globally",
+     "GitHub: 1000+ contributions across open-source projects"
+  ],
+
+  education: [
+    {
+      institution: "Gyan Ganga Institute of Technology and Sciences, Jabalpur",
+      degree: "Bachelor of Technology in Computer Science and Business System (CSBS)",
+      duration: "2022 - 2026",
+      grade: "CGPA: 8.25",
+    },
+    {
+      institution: "Ajay Satya Prakash Public School, Jabalpur",
+      degree: "Senior Secondary (Class XII), CBSE Board",
+      duration: "2021 - 2022",
+      grade: "Percentage: 92%",
+    }
+  ],
 };

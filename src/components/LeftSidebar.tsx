@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Mail, MapPin, Phone, Github, Linkedin, FileDown } from 'lucide-react';
+import { Mail, MapPin, Github, Linkedin, FileDown, Twitter, Instagram, MessageCircle, Send } from 'lucide-react';
 import { resumeData } from "@/data/resumeData";
 
 const LeftSidebar = () => {
@@ -11,9 +11,9 @@ const LeftSidebar = () => {
                 <div className="flex flex-col gap-4">
                     <div className="w-32 h-32 rounded-lg overflow-hidden border-2 border-vscode-border">
                         <img
-                            src="https://github.com/gitsofaryan.png"
+                            src="/img/me.png"
                             alt="Profile"
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300 transform hover:scale-105"
                         />
                     </div>
                     <div>
@@ -31,7 +31,14 @@ const LeftSidebar = () => {
                 <div className="flex flex-col gap-3 text-sm text-vscode-text">
                     <div className="flex items-center gap-3">
                         <MapPin size={16} className="text-vscode-accent" />
-                        <span>India</span>
+                        <a
+                            href="https://www.google.com/maps/search/?api=1&query=Jabalpur,+Madhya+Pradesh,+India"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-white transition-colors"
+                        >
+                            Jabalpur, MP, India
+                        </a>
                     </div>
                     <div className="flex items-center gap-3">
                         <Mail size={16} className="text-vscode-accent" />
@@ -43,12 +50,28 @@ const LeftSidebar = () => {
 
                 {/* Socials & Actions */}
                 <div className="flex flex-col gap-3 mt-auto">
-                    <div className="flex gap-2 mb-2">
-                        <a href={`https://github.com/${resumeData.personalInfo.github}`} target="_blank" rel="noopener" className="p-2 bg-vscode-sidebar border border-vscode-border rounded hover:border-vscode-accent transition-colors">
+                    <div className="flex flex-wrap gap-2 mb-2">
+                        <a href={`https://github.com/${resumeData.personalInfo.github}`} target="_blank" rel="noopener" className="p-2 bg-vscode-sidebar border border-vscode-border rounded hover:border-vscode-accent hover:text-white transition-colors text-vscode-text" aria-label="GitHub">
                             <Github size={18} />
                         </a>
-                        <a href={`https://linkedin.com/in/${resumeData.personalInfo.linkedin}`} target="_blank" rel="noopener" className="p-2 bg-vscode-sidebar border border-vscode-border rounded hover:border-vscode-accent transition-colors">
+                        <a href={`https://linkedin.com/in/${resumeData.personalInfo.linkedin}`} target="_blank" rel="noopener" className="p-2 bg-vscode-sidebar border border-vscode-border rounded hover:border-vscode-accent hover:text-white transition-colors text-vscode-text" aria-label="LinkedIn">
                             <Linkedin size={18} />
+                        </a>
+                        <a href={`https://twitter.com/${resumeData.personalInfo.twitter}`} target="_blank" rel="noopener" className="p-2 bg-vscode-sidebar border border-vscode-border rounded hover:border-vscode-accent hover:text-white transition-colors text-vscode-text" aria-label="Twitter">
+                            <Twitter size={18} />
+                        </a>
+                        <a href={`https://instagram.com/${resumeData.personalInfo.instagram}`} target="_blank" rel="noopener" className="p-2 bg-vscode-sidebar border border-vscode-border rounded hover:border-vscode-accent hover:text-white transition-colors text-vscode-text" aria-label="Instagram">
+                            <Instagram size={18} />
+                        </a>
+                        {/* Discord (using MessageCircle as generic chat icon if specific one missing, or handle display) */}
+                        <div className="group relative p-2 bg-vscode-sidebar border border-vscode-border rounded hover:border-vscode-accent hover:text-white transition-colors text-vscode-text cursor-help" aria-label="Discord">
+                            <MessageCircle size={18} />
+                            <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs bg-black border border-vscode-border rounded opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none transition-opacity">
+                                Discord: {resumeData.personalInfo.discord}
+                            </span>
+                        </div>
+                        <a href={`https://t.me/${resumeData.personalInfo.telegram}`} target="_blank" rel="noopener" className="p-2 bg-vscode-sidebar border border-vscode-border rounded hover:border-vscode-accent hover:text-white transition-colors text-vscode-text" aria-label="Telegram">
+                            <Send size={18} />
                         </a>
                     </div>
 
