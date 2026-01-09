@@ -4,6 +4,7 @@ import { memo, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Github, GitPullRequest, Linkedin, Globe, Mail, FileText, Code, Twitter } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { resumeData } from "@/data/resumeData";
 
 // Fallback mock profile data in case API fails
@@ -23,7 +24,7 @@ const featuredProjects = [
     id: "finlitera",
     title: "FinLitera - AI Financial Assistant",
     description: "Built an AI platform providing financial guidance, investment tips, budgeting advice, and interactive learning with real-time portfolio analysis.",
-    image: "/lovable-uploads/finlitera.png",
+    image: "/uploads/finlitera.png",
     link: "https://github.com/gitsofaryan/finlitera",
     tags: ["Next.js", "Supabase", "OpenAI API", "Prisma"]
   },
@@ -31,7 +32,7 @@ const featuredProjects = [
     id: "ats100",
     title: "ATS100 - AI Resume Analyzer",
     description: "Built a web app that analyzes resumes, gives ATS scores, and provides feedback on strengths, weaknesses, and improvements.",
-    image: "/lovable-uploads/ats100.png",
+    image: "/uploads/ats100.png",
     link: "https://github.com/gitsofaryan/ats100",
     tags: ["React.js", "TypeScript", "PDF.js", "Vite"]
   },
@@ -39,7 +40,7 @@ const featuredProjects = [
     id: "codespace",
     title: "CodeSpace - Realtime Code Editor",
     description: "A collaborative, real-time code editor where users can seamlessly code together with integrated chat and notifications.",
-    image: "/lovable-uploads/c1a2980b-0986-4a83-a70e-dc805410acaf.png",
+    image: "/uploads/c1a2980b-0986-4a83-a70e-dc805410acaf.png",
     link: "https://github.com/gitsofaryan/codespace",
     tags: ["React.js", "TypeScript", "Socket.io", "Node.js"]
   },
@@ -47,7 +48,7 @@ const featuredProjects = [
     id: "insignia",
     title: "InSignia - Indian Sign Language Translator",
     description: "A platform that turns Indian Sign Language (ISL) gestures into text and speech in real-time for easy communication.",
-    image: "/lovable-uploads/insignia.png",
+    image: "/uploads/insignia.png",
     link: "https://github.com/gitsofaryan/insignia",
     tags: ["Python", "CNN", "Flask", "OpenCV"]
   }
@@ -295,21 +296,17 @@ const Home = () => {
           </p>
 
           <div className="flex flex-wrap gap-3 mb-8">
-            <Link
-              to="/about"
-              className="flex items-center gap-2 px-4 py-2 text-sm rounded-md bg-vscode-accent hover:bg-opacity-80 text-white transition-colors"
-              aria-label="Learn more about me"
-            >
-              <FileText size={16} />
-              <span>About Me</span>
+            <Link to="/about">
+              <Button className="gap-2">
+                <FileText size={16} />
+                <span>About Me</span>
+              </Button>
             </Link>
-            <Link
-              to="/resume"
-              className="flex items-center gap-2 px-4 py-2 text-sm rounded-md border border-vscode-border hover:border-vscode-accent bg-vscode-sidebar transition-colors"
-              aria-label="View my resume"
-            >
-              <FileText size={16} />
-              <span>Resume</span>
+            <Link to="/resume">
+              <Button variant="outline" className="gap-2">
+                <FileText size={16} />
+                <span>Resume</span>
+              </Button>
             </Link>
           </div>
         </div>
@@ -376,11 +373,14 @@ const Home = () => {
             href={`https://www.linkedin.com/in/${resumeData.personalInfo.linkedin}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2 text-sm rounded-md bg-vscode-accent hover:bg-opacity-80 text-white transition-colors"
+            
             aria-label="Connect on LinkedIn"
           >
+            <Button>
+
             <Linkedin size={16} />
             <span>LinkedIn</span>
+            </Button>
           </a>
           <a
             href={`mailto:${resumeData.personalInfo.email}`}

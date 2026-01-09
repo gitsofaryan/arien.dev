@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Github, LinkedinIcon, BookOpen } from 'lucide-react';
+import { Mail, Github, LinkedinIcon, BookOpen, FileDown } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 
 const Navbar: React.FC = () => {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
@@ -60,10 +61,17 @@ const Navbar: React.FC = () => {
             >
               <LinkedinIcon size={20} />
             </a>
+
+            <a href="/resume.pdf" download="Resume.pdf" target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" size="sm" className="gap-2 border-border hover:bg-muted text-muted-foreground hover:text-foreground transition-all">
+                <FileDown size={16} />
+                <span>Resume</span>
+              </Button>
+            </a>
           </nav>
         </div>
       </div>
-    </header>
+    </header >
   );
 };
 

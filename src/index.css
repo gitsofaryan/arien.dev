@@ -8,65 +8,67 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Zen Dark Theme */
+    --background: 0 0% 2%; /* #050505 - Nearly Black */
+    --foreground: 0 0% 90%; /* #e5e5e5 - Light Gray */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 0 0% 4%; /* #0a0a0a */
+    --card-foreground: 0 0% 90%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 90%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 0 0% 98%; /* White accent */
+    --primary-foreground: 0 0% 0%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 0 0% 9%; /* #171717 */
+    --secondary-foreground: 0 0% 90%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 0 0% 9%;
+    --muted-foreground: 0 0% 50%; /* #808080 */
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 0 0% 9%;
+    --accent-foreground: 0 0% 90%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --border: 0 0% 15%; /* #262626 - Subtle Border */
+    --input: 0 0% 15%;
+    --ring: 0 0% 80%;
+
+    --radius: 0.3rem; /* Slightly tighter radius */
+  }
+
+  /* Force dark mode variables to same as root to ensure consistency */
+  .dark {
+    --background: 0 0% 2%;
+    --foreground: 0 0% 90%;
+    
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 90%;
+    
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 90%;
+    
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 0%;
+    
+    --secondary: 0 0% 9%;
+    --secondary-foreground: 0 0% 90%;
+    
+    --muted: 0 0% 9%;
+    --muted-foreground: 0 0% 50%;
+    
+    --accent: 0 0% 9%;
+    --accent-foreground: 0 0% 90%;
+    
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 0 0% 80%;
   }
 }
 
@@ -75,30 +77,30 @@
     @apply border-border;
   }
   body {
-    @apply bg-[#181818] text-vscode-text antialiased;
+    @apply bg-background text-foreground antialiased;
     font-family: 'Inter', sans-serif;
   }
   
-  /* Code block styling */
+  /* Code block styling - Zen Minimal */
   pre {
-    @apply bg-[#181818] border border-[#181818] rounded-md p-4 my-4 overflow-x-auto text-sm font-code;
+    @apply bg-card border border-border rounded-md p-4 my-4 overflow-x-auto text-sm font-code;
   }
   
   code {
-    @apply font-mono text-vscode-string;
+    @apply font-mono text-muted-foreground;
   }
   
   /* Typography */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-sans font-semibold text-white;
+    @apply font-sans font-semibold text-foreground tracking-tight;
   }
   
   h1 {
-    @apply text-4xl mb-6 mt-8;
+    @apply text-4xl mb-6 mt-8 font-bold tracking-tighter;
   }
   
   h2 {
-    @apply text-3xl mb-4 mt-8;
+    @apply text-3xl mb-4 mt-8 font-semibold tracking-tight;
   }
   
   h3 {
@@ -110,42 +112,25 @@
   }
   
   p {
-    @apply mb-4 leading-relaxed;
+    @apply mb-4 leading-relaxed text-muted-foreground;
   }
   
   a {
-    @apply text-vscode-accent hover:text-opacity-80 transition-colors duration-200;
+    @apply text-foreground hover:text-white underline-offset-4 hover:underline transition-all duration-200;
   }
   
-  /* Table of contents */
-  .toc-link {
-    @apply block py-1 hover:text-vscode-accent transition-colors duration-200;
-  }
-  
-  .toc-link.active {
-    @apply text-vscode-accent;
-  }
-  
-  /* Tags */
-  .tag {
-    @apply inline-block px-2 py-1 bg-vscode-highlight text-sm rounded mr-2 mb-2;
-  }
-  
-  /* Transition effects */
-  .page-transition {
-    @apply transition-all duration-300;
-  }
-  
-  /* Link hover effect */
+  /* Navigation Link - Minimal */
   .nav-link {
-    @apply relative;
+    @apply relative text-muted-foreground hover:text-foreground transition-colors;
   }
   
-  .nav-link::after {
-    @apply content-[''] absolute w-0 h-0.5 bg-vscode-accent left-0 -bottom-1 transition-all duration-300;
+  /* Tags - Outlined style */
+  .tag {
+    @apply inline-block px-2.5 py-1 bg-transparent border border-border text-xs rounded-md mr-2 mb-2 text-muted-foreground hover:text-foreground hover:border-foreground/50 transition-colors;
   }
   
-  .nav-link:hover::after {
-    @apply w-full;
+  /* Section Outlines - New utility for the 'outline' look */
+  .zen-section {
+    @apply border-y border-border py-12;
   }
 }

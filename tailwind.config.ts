@@ -64,19 +64,20 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
         // VS Code inspired theme colors
+        // Zen Dark Theme Colors
         vscode: {
-          bg: '#1e1e1e',
-          sidebar: '#252526',
-          text: '#d4d4d4',
-          accent: '#007acc',
-          highlight: '#264f78',
-          border: '#444444',
-          comment: '#6a9955',
-          string: '#ce9178',
-          keyword: '#569cd6',
-          function: '#dcdcaa',
-          type: '#4ec9b0',
-          variable: '#9cdcfe'
+          bg: '#050505',
+          sidebar: '#0a0a0a',
+          text: '#e5e5e5',
+          accent: '#ffffff', // White accent
+          highlight: '#262626',
+          border: '#262626',
+          comment: '#808080',
+          string: '#a3a3a3',
+          keyword: '#e5e5e5',
+          function: '#e5e5e5',
+          type: '#e5e5e5',
+          variable: '#e5e5e5'
         }
 			},
 			fontFamily: {
