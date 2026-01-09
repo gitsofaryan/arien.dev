@@ -1,416 +1,259 @@
-
-import * as React from 'react';
 import { memo, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Github, GitPullRequest, Linkedin, Globe, Mail, FileText, Code, Twitter } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Github, Linkedin, Mail, Download, ExternalLink, ArrowRight } from 'lucide-react';
 import { resumeData } from "@/data/resumeData";
 
-// Fallback mock profile data in case API fails
-const fallbackProfileData = {
-  username: "gitsofaryan",
-  avatar: "https://avatars.githubusercontent.com/u/12345678?v=4",
-  bio: "Software engineer and open-source creator.",
-  followers: 150,
-  following: 80,
-  publicRepos: 45,
-  name: "Arien"
-};
-
-// Mock project data (replace with API calls in production)
-const featuredProjects = [
-  {
-    id: "finlitera",
-    title: "FinLitera - AI Financial Assistant",
-    description: "Built an AI platform providing financial guidance, investment tips, budgeting advice, and interactive learning with real-time portfolio analysis.",
-    image: "/lovable-uploads/finlitera.png",
-    link: "https://github.com/gitsofaryan/finlitera",
-    tags: ["Next.js", "Supabase", "OpenAI API", "Prisma"]
-  },
-  {
-    id: "ats100",
-    title: "ATS100 - AI Resume Analyzer",
-    description: "Built a web app that analyzes resumes, gives ATS scores, and provides feedback on strengths, weaknesses, and improvements.",
-    image: "/lovable-uploads/ats100.png",
-    link: "https://github.com/gitsofaryan/ats100",
-    tags: ["React.js", "TypeScript", "PDF.js", "Vite"]
-  },
-  {
-    id: "codespace",
-    title: "CodeSpace - Realtime Code Editor",
-    description: "A collaborative, real-time code editor where users can seamlessly code together with integrated chat and notifications.",
-    image: "/lovable-uploads/c1a2980b-0986-4a83-a70e-dc805410acaf.png",
-    link: "https://github.com/gitsofaryan/codespace",
-    tags: ["React.js", "TypeScript", "Socket.io", "Node.js"]
-  },
-  {
-    id: "insignia",
-    title: "InSignia - Indian Sign Language Translator",
-    description: "A platform that turns Indian Sign Language (ISL) gestures into text and speech in real-time for easy communication.",
-    image: "/lovable-uploads/insignia.png",
-    link: "https://github.com/gitsofaryan/insignia",
-    tags: ["Python", "CNN", "Flask", "OpenCV"]
-  }
-];
-
-// Mock notes data (replace with API calls in production)
-const notes = [
-  {
-    id: "year-in-review-2024",
-    title: "Year in Review: 2024 into 2025",
-    link: "/notes/year-in-review",
-    date: "2025-03-01",
-    isNew: true
-  },
-  {
-    id: "redesign",
-    title: "Redesign: Version 7.0: Sidebars, light-dark, and Bluesky",
-    link: "/notes/redesign",
-    date: "2024-12-01",
-    isNew: false
-  },
-  {
-    id: "year-in-review-2023",
-    title: "Year in Review: 2023 into 2024",
-    link: "/notes/year-in-review-2023",
-    date: "2024-01-01",
-    isNew: false
-  }
-];
-
-// Define proper interface for profile data
-interface ProfileData {
-  username: string;
-  avatar?: string;
-  avatar_url?: string;
-  bio: string;
-  followers: number;
-  following: number;
-  publicRepos?: number;
-  public_repos?: number;
-  name: string;
-  location?: string;
-  company?: string;
-  blog?: string | null;
-  twitter_username?: string | null;
-  login?: string;
-}
-
-// Define interface for ProfileCard props
-interface ProfileCardProps {
-  profile: ProfileData;
-}
-
-// Memoized ProfileCard component
-const ProfileCard = memo(({ profile }: ProfileCardProps) => (
-  <Card className="bg-vscode-sidebar border border-vscode-border mb-8">
-    <CardHeader className="p-4 flex flex-row items-center gap-4">
-      <img
-        src={profile.avatar_url || profile.avatar}
-        alt={`Avatar of ${profile.login || profile.username}`}
-        className="w-16 h-16 rounded-full"
-        loading="lazy"
-      />
-      <div>
-        <CardTitle className="text-xl font-bold text-white">{profile.name || profile.username}</CardTitle>
-        <CardDescription className="text-vscode-text">{profile.bio || 'No bio available'}</CardDescription>
-      </div>
-    </CardHeader>
-    <CardContent className="p-4 pt-0">
-      <div className="flex gap-4 text-sm text-vscode-text">
-        <span>{profile.followers} Followers</span>
-        <span>{profile.following} Following</span>
-        <span>{profile.public_repos || profile.publicRepos} Public Repos</span>
-      </div>
-      <img
-        src={`https://github-readme-stats.vercel.app/api?username=${profile.login || profile.username}&show_icons=true&theme=transparent&text_color=d4d4d4&title_color=569cd6&icon_color=569cd6`}
-        alt={`GitHub stats for ${profile.login || profile.username}`}
-        className="mt-4 w-full rounded"
-        loading="lazy"
-      />
-    </CardContent>
-  </Card>
+// Terminal-style section component
+const TerminalSection = memo(({ title, children }: { title: string; children: React.ReactNode }) => (
+  <div className="terminal-panel">
+    <div className="terminal-header">
+      <span className="text-muted-foreground">$</span>
+      <span>{title}</span>
+    </div>
+    <div className="terminal-content">
+      {children}
+    </div>
+  </div>
 ));
 
-// Define interface for ProjectData
-interface ProjectData {
-  id: string;
-  title: string;
-  description: string;
-  image: string;
-  link: string;
-  tags: string[];
-}
-
-// Define interface for ProjectCard props
-interface ProjectCardProps {
-  project: ProjectData;
-}
-
-// Memoized ProjectCard component
-const ProjectCard = memo(({ project }: ProjectCardProps) => (
-  <Link to={project.link} className="block">
-    <Card className="h-full bg-vscode-sidebar border border-vscode-border hover:border-vscode-accent transition-all duration-300 hover:shadow-md">
-      <CardHeader className="p-4">
-        <CardTitle className="text-xl font-bold text-white">{project.title}</CardTitle>
-        <CardDescription className="text-vscode-text">{project.description}</CardDescription>
-      </CardHeader>
-      <CardContent className="p-4 pt-0">
-        <div className="flex flex-wrap gap-2 mt-3">
-          {project.tags.map(tag => (
-            <span key={`${project.id}-${tag}`} className="text-xs px-2 py-1 bg-vscode-highlight rounded">
-              {tag}
-            </span>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-  </Link>
+// CLI-style project card
+const ProjectCard = memo(({ project }: { project: typeof resumeData.projects[0] }) => (
+  <a
+    href={project.link}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="block p-4 bg-card border border-border rounded-md hover:border-primary/50 transition-colors group"
+  >
+    <div className="flex items-start justify-between mb-2">
+      <h3 className="font-mono text-foreground group-hover:text-primary transition-colors">
+        {project.title}
+      </h3>
+      <ExternalLink size={14} className="text-muted-foreground group-hover:text-primary transition-colors" />
+    </div>
+    <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
+      {project.description.split('.')[0]}.
+    </p>
+    <div className="flex flex-wrap gap-2">
+      {project.tech.slice(0, 4).map(tech => (
+        <span key={tech} className="text-xs font-mono text-muted-foreground">
+          {tech}
+        </span>
+      ))}
+    </div>
+  </a>
 ));
-
-// Format date for display
-const formatDate = (dateString) => {
-  return new Date(dateString).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-};
 
 const Home = () => {
-  const [profileData, setProfileData] = useState<ProfileData>(fallbackProfileData);
+  const [githubStats, setGithubStats] = useState({ followers: 0, repos: 0 });
 
   useEffect(() => {
-    const fetchProfileData = async () => {
-      try {
-        const response = await fetch('https://api.github.com/users/gitsofaryan');
-        if (!response.ok) throw new Error('Failed to fetch profile');
-        const data = await response.json();
-        setProfileData({
-          username: data.login,
-          avatar_url: data.avatar_url,
-          bio: data.bio || 'No bio available',
-          followers: data.followers,
-          following: data.following,
-          public_repos: data.public_repos,
-          name: data.name || data.login,
-          location: data.location || 'Not specified',
-          company: data.company || 'Not specified',
-          blog: data.blog || null,
-          twitter_username: data.twitter_username || null,
-          login: data.login
+    fetch('https://api.github.com/users/gitsofaryan')
+      .then(res => res.json())
+      .then(data => {
+        setGithubStats({
+          followers: data.followers || 0,
+          repos: data.public_repos || 0,
         });
-      } catch (error) {
-        console.error('Error fetching GitHub profile:', error);
-        setProfileData(fallbackProfileData); // Fallback to mock data
-      }
-    };
-    fetchProfileData();
+      })
+      .catch(() => {});
   }, []);
 
-  // Social links derived from resume data
-  const socials = [
-    {
-      id: 'github',
-      href: `https://github.com/${resumeData.personalInfo.github}`,
-      label: 'GitHub',
-      icon: Github
-    },
-    {
-      id: 'linkedin',
-      href: `https://www.linkedin.com/in/${resumeData.personalInfo.linkedin}`,
-      label: 'LinkedIn',
-      icon: Linkedin
-    },
-    {
-      id: 'twitter',
-      href: `https://twitter.com/${resumeData.personalInfo.github}`,
-      label: 'Twitter',
-      icon: Twitter
-    },
-    {
-      id: 'devpost',
-      href: `https://devpost.com/${resumeData.personalInfo.devpost}`,
-      label: 'Devpost',
-      icon: Code
-    },
-    {
-      id: 'leetcode',
-      href: `https://leetcode.com/${resumeData.personalInfo.leetcode}`,
-      label: 'LeetCode',
-      icon: Code
-    },
-    {
-      id: 'website',
-      href: resumeData.personalInfo.website,
-      label: 'Website',
-      icon: Globe
-    },
-    {
-      id: 'email',
-      href: `mailto:${resumeData.personalInfo.email}`,
-      label: 'Email',
-      icon: Mail
-    }
-  ];
-
-  const orgHandles: string[] = [
-    'CircuitVerse',
-    'INCF',
-    'sugarlabs',
-    'hyperledger',
-    'genn-team',
-    'lightningnetwork',
-    'PalisadoesFoundation',
-    'kubeedge',
-    'OSIPI',
-    'antrea-io',
-    'LeetCode-Feedback',
-    'pipe-cd',
-    'ruxailab',
-    'community',
-    'kubeslice',
-    'project-copacetic',
-    'RoboSats',
-    'arkade-os',
-    'bitcoin-dev-project',
-    'p2poolv2'
-  ];
-
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6">
-      <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-2">
-        Hey, I'm
-      </h1>
-      <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 text-vscode-accent">
-        {resumeData?.personalInfo?.name || 'Aryan Jain'}.
-      </h2>
-      <p className="text-xl md:text-2xl font-medium mb-6 text-vscode-text leading-relaxed">
-        <span className="text-vscode-accent font-semibold">Fullstack Developer</span> • <span className="text-vscode-accent font-semibold">SoB'25</span> Lightning Protocols • <span className="text-vscode-accent font-semibold">GoQuant</span> Eng. Fellow'25 • <span className="text-vscode-accent font-semibold">Amazon ML School'25</span> • <span className="text-vscode-accent font-semibold">NASA Navigator '25</span>• <span className="text-vscode-accent font-semibold">GDSC Lead'24</span>
-      </p>
-
-      <div className="grid grid-cols-1 gap-8 mt-8">
-        <div>
-          <p className="text-lg mb-4 leading-relaxed">
-            A full-stack engineer and AI/ML practitioner with experience across protocol engineering, exchange systems, and open-source infrastructure. I've contributed to <span className="text-vscode-accent font-medium">Summer of Bitcoin</span> (Lightning Protocols), <span className="text-vscode-accent font-medium">Google Summer of Code</span>, <span className="text-vscode-accent font-medium">NASA Space Apps</span>, and multiple global OSS ecosystems.
-          </p>
-          <p className="text-lg mb-6 leading-relaxed">
-            As a <span className="text-vscode-accent font-medium">GoQuant Engineering Fellow</span>, <span className="text-vscode-accent font-medium">Amazon ML School</span> participant, and <span className="text-vscode-accent font-medium">NASA Navigator</span>, I focus on building scalable full-stack systems, ML-powered features, and production-ready architectures. I love open source, rapid prototyping, solving challenging engineering problems, and continuously learning to build things that create real impact.
-          </p>
-
-          <div className="flex flex-wrap gap-3 mb-8">
-            <Link
-              to="/about"
-              className="flex items-center gap-2 px-4 py-2 text-sm rounded-md bg-vscode-accent hover:bg-opacity-80 text-white transition-colors"
-              aria-label="Learn more about me"
-            >
-              <FileText size={16} />
-              <span>About Me</span>
-            </Link>
-            <a
-              href="/Aryan_Jain.pdf"
-              download="Aryan_Jain_Resume.pdf"
-              className="flex items-center gap-2 px-4 py-2 text-sm rounded-md border border-vscode-border hover:border-vscode-accent bg-vscode-sidebar transition-colors"
-              aria-label="Download my resume"
-            >
-              <FileText size={16} />
-              <span>Resume</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      {/* Organizations Section */}
-      <div className="mt-16">
-        <h2 className="text-2xl font-bold mb-6">Organizations I Contributed In.</h2>
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-6">
-          {orgHandles.map(handle => (
-            <a
-              key={handle}
-              href={`https://github.com/${handle}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex flex-col items-center group"
-              aria-label={`View ${handle} on GitHub`}
-            >
-              <img
-                src={`https://github.com/${handle}.png?size=96`}
-                alt={`${handle} avatar`}
-                loading="lazy"
-                className="w-16 h-16 rounded-full border border-vscode-border group-hover:border-vscode-accent transition-colors"
-              />
-              <span className="mt-2 text-xs text-vscode-text group-hover:text-white truncate max-w-16">@{handle}</span>
-            </a>
-          ))}
-        </div>
-      </div>
-
-
-      {/* Graphs Section */}
-      <div className="mt-16">
-        <h2 className="text-2xl font-bold mb-6 flex items-center"><Github size={24} className="mr-2" />Activity & Stats</h2>
-        <div className="flex flex-col gap-6 max-w-2xl mx-auto">
-          <div className="w-full bg-[#0d1117] rounded-lg p-3 border border-vscode-border">
-            <h3 className="text-base font-semibold mb-2 text-white">GitHub Contributions</h3>
-            <img
-              src={`https://ghchart.rshah.org/${profileData.username}`}
-              alt={`GitHub contribution graph for ${profileData.username}`}
-              className="block mx-auto w-full"
-              loading="lazy"
-            />
-          </div>
-          <div className="w-full bg-[#0d1117] rounded-lg p-3 border border-vscode-border">
-            <h3 className="text-base font-semibold mb-2 text-white">LeetCode Progress</h3>
-            <img
-              src={`https://leetcard.jacoblin.cool/${resumeData.personalInfo.leetcode}?theme=dark&font=Source%20Sans%20Pro&ext=heatmap`}
-              alt={`LeetCode stats for ${resumeData.personalInfo.leetcode}`}
-              className="block mx-auto w-full"
-              loading="lazy"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Get In Touch Section */}
-      <div className="mt-16 mb-8">
-        <h2 className="text-2xl font-bold mb-4">Get In Touch</h2>
-        <p className="text-lg mb-6 text-vscode-text">
-          Feel free to reach out if you'd like to collaborate, discuss opportunities, or just chat about tech!
+    <div className="max-w-5xl mx-auto px-6 py-16">
+      {/* Hero Section */}
+      <section className="mb-20">
+        <p className="text-muted-foreground mb-4 font-mono text-sm">
+          Full-stack Engineer • Open Source Contributor
         </p>
-        <div className="flex flex-wrap gap-3">
+        <h1 className="text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight mb-6">
+          <span className="text-primary">Aryan Jain</span>
+        </h1>
+        <p className="text-lg text-muted-foreground max-w-2xl leading-relaxed mb-8">
+          Building infrastructure for the open web. Contributing to{' '}
+          <span className="text-foreground">Summer of Bitcoin</span>,{' '}
+          <span className="text-foreground">Google Summer of Code</span>, and{' '}
+          <span className="text-foreground">NASA Space Apps</span>.
+        </p>
+
+        {/* Install command - OpenCode style */}
+        <div className="terminal-panel max-w-xl mb-8">
+          <div className="terminal-header">
+            <div className="flex gap-1.5">
+              <span className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/30"></span>
+              <span className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/30"></span>
+              <span className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/30"></span>
+            </div>
+            <span className="ml-4">terminal</span>
+          </div>
+          <div className="terminal-content font-mono text-sm">
+            <span className="terminal-prompt">$ </span>
+            <span className="terminal-command">curl -fsSL </span>
+            <span className="terminal-highlight">https://aryan.dev</span>
+            <span className="terminal-command">/connect</span>
+          </div>
+        </div>
+
+        {/* CTA Buttons */}
+        <div className="flex flex-wrap gap-4">
           <a
-            href={`https://www.linkedin.com/in/${resumeData.personalInfo.linkedin}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2 text-sm rounded-md bg-vscode-accent hover:bg-opacity-80 text-white transition-colors"
-            aria-label="Connect on LinkedIn"
+            href="/Aryan_Jain.pdf"
+            download="Aryan_Jain_Resume.pdf"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-foreground text-background rounded hover:bg-foreground/90 transition-colors text-sm font-medium"
           >
-            <Linkedin size={16} />
-            <span>LinkedIn</span>
+            <Download size={16} />
+            Download Resume
           </a>
           <a
             href={`mailto:${resumeData.personalInfo.email}`}
-            className="flex items-center gap-2 px-4 py-2 text-sm rounded-md border border-vscode-border hover:border-vscode-accent bg-vscode-sidebar transition-colors"
-            aria-label="Send an email"
+            className="inline-flex items-center gap-2 px-4 py-2 border border-border rounded hover:border-primary/50 transition-colors text-sm text-muted-foreground hover:text-foreground"
           >
             <Mail size={16} />
-            <span>Email</span>
+            Get in touch
           </a>
         </div>
-      </div>
+      </section>
 
+      {/* Identity Section - Terminal Style */}
+      <section className="mb-16">
+        <TerminalSection title="whoami">
+          <div className="space-y-2 font-mono text-sm">
+            <p><span className="text-muted-foreground">role:</span> <span className="text-foreground">Full-stack Engineer</span></p>
+            <p><span className="text-muted-foreground">focus:</span> <span className="text-foreground">Protocol Engineering, Exchange Systems, OSS Infrastructure</span></p>
+            <p><span className="text-muted-foreground">location:</span> <span className="text-foreground">{resumeData.personalInfo.location}</span></p>
+            <p><span className="text-muted-foreground">github:</span> <span className="text-primary">@{resumeData.personalInfo.github}</span></p>
+            <p><span className="text-muted-foreground">hackathons:</span> <span className="text-foreground">70+ competed</span></p>
+          </div>
+        </TerminalSection>
+      </section>
 
+      {/* Skills Section - Terminal Style */}
+      <section className="mb-16">
+        <TerminalSection title="cat skills.json">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-sm">
+            <div>
+              <p className="text-muted-foreground mb-2">"languages":</p>
+              <div className="flex flex-wrap gap-2 ml-4">
+                {resumeData.technicalSkills.languages.map(lang => (
+                  <span key={lang} className="text-foreground">{lang}</span>
+                ))}
+              </div>
+            </div>
+            <div>
+              <p className="text-muted-foreground mb-2">"frameworks":</p>
+              <div className="flex flex-wrap gap-2 ml-4">
+                {resumeData.technicalSkills.frameworks.slice(0, 6).map(fw => (
+                  <span key={fw} className="text-foreground">{fw}</span>
+                ))}
+              </div>
+            </div>
+            <div>
+              <p className="text-muted-foreground mb-2">"databases":</p>
+              <div className="flex flex-wrap gap-2 ml-4">
+                {resumeData.technicalSkills.databases.map(db => (
+                  <span key={db} className="text-foreground">{db}</span>
+                ))}
+              </div>
+            </div>
+            <div>
+              <p className="text-muted-foreground mb-2">"cloud":</p>
+              <div className="flex flex-wrap gap-2 ml-4">
+                {resumeData.technicalSkills.cloud.map(c => (
+                  <span key={c} className="text-foreground">{c}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </TerminalSection>
+      </section>
 
-      {/* Featured Projects Section
-      <div className="mt-16">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold">Featured Projects</h2>
-          <Link to="/projects" className="text-vscode-accent hover:underline" aria-label="View all projects">
-            View All Projects
+      {/* Experience Highlights */}
+      <section className="mb-16">
+        <h2 className="text-2xl font-semibold mb-6 text-foreground">Experience</h2>
+        <div className="space-y-4">
+          {resumeData.experience.slice(0, 3).map((exp, i) => (
+            <div key={i} className="p-4 border border-border rounded-md hover:border-primary/30 transition-colors">
+              <div className="flex items-start justify-between mb-1">
+                <h3 className="font-medium text-foreground">{exp.role}</h3>
+                <span className="text-xs text-muted-foreground font-mono">{exp.duration}</span>
+              </div>
+              <p className="text-sm text-primary mb-2">{exp.company}</p>
+              <p className="text-sm text-muted-foreground">{exp.achievements[0]}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Projects Grid */}
+      <section className="mb-16">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-semibold text-foreground">Projects</h2>
+          <Link to="/projects" className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1 transition-colors">
+            View all <ArrowRight size={14} />
           </Link>
         </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-          {featuredProjects.map(project => (
-            <ProjectCard key={project.id} project={project} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {resumeData.projects.map((project, i) => (
+            <ProjectCard key={i} project={project} />
           ))}
-        </div> */}
-      {/* </div> */}
+        </div>
+      </section>
+
+      {/* Stats Row */}
+      <section className="mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="p-4 border border-border rounded-md text-center">
+            <p className="text-2xl font-mono text-foreground">500+</p>
+            <p className="text-xs text-muted-foreground">DSA Problems</p>
+          </div>
+          <div className="p-4 border border-border rounded-md text-center">
+            <p className="text-2xl font-mono text-foreground">70+</p>
+            <p className="text-xs text-muted-foreground">Hackathons</p>
+          </div>
+          <div className="p-4 border border-border rounded-md text-center">
+            <p className="text-2xl font-mono text-foreground">1000+</p>
+            <p className="text-xs text-muted-foreground">GitHub Contributions</p>
+          </div>
+          <div className="p-4 border border-border rounded-md text-center">
+            <p className="text-2xl font-mono text-foreground">{githubStats.repos || '45'}+</p>
+            <p className="text-xs text-muted-foreground">Public Repos</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section className="border-t border-border pt-12">
+        <h2 className="text-2xl font-semibold mb-4 text-foreground">Get in touch</h2>
+        <p className="text-muted-foreground mb-6 max-w-lg">
+          Open to collaborations, opportunities, or just a chat about open source and engineering.
+        </p>
+        <div className="flex flex-wrap gap-4">
+          <a
+            href={`mailto:${resumeData.personalInfo.email}`}
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <Mail size={16} />
+            {resumeData.personalInfo.email}
+          </a>
+          <a
+            href={`https://github.com/${resumeData.personalInfo.github}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <Github size={16} />
+            GitHub
+          </a>
+          <a
+            href={`https://linkedin.com/in/${resumeData.personalInfo.linkedin}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <Linkedin size={16} />
+            LinkedIn
+          </a>
+        </div>
+      </section>
     </div>
   );
 };
