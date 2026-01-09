@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import LeftSidebar from './LeftSidebar';
 import RightSidebar from './RightSidebar';
 import Navbar from './Navbar';
@@ -9,6 +10,8 @@ interface MainLayoutProps {
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     const [time, setTime] = useState(new Date());
+    const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const timer = setInterval(() => setTime(new Date()), 1000);
@@ -41,11 +44,24 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                     <div className="hidden md:flex h-14 border-b border-[#1f1f1f] bg-[#1F1F1F] items-center justify-between px-6 shrink-0">
                         {/* Tabs */}
                         <div className="flex gap-8 text-sm">
-                            <div className="relative text-white font-medium cursor-pointer">
+                            <div
+                                onClick={() => navigate('/')}
+                                className={`relative font-medium cursor-pointer transition-colors ${location.pathname === '/' ? 'text-white' : 'text-gray-500 hover:text-gray-300'}`}
+                            >
                                 aryan.info
-                                <div className="absolute -bottom-[19px] left-0 w-full h-[2px] bg-[#f0f0f0]"></div>
+                                {location.pathname === '/' && (
+                                    <div className="absolute -bottom-[19px] left-0 w-full h-[2px] bg-[#f0f0f0]"></div>
+                                )}
                             </div>
-                            <div className="text-gray-500 hover:text-gray-300 cursor-pointer transition-colors">work.done</div>
+                            <div
+                                onClick={() => navigate('/projects')}
+                                className={`relative font-medium cursor-pointer transition-colors ${location.pathname === '/projects' ? 'text-white' : 'text-gray-500 hover:text-gray-300'}`}
+                            >
+                                work.done
+                                {location.pathname === '/projects' && (
+                                    <div className="absolute -bottom-[19px] left-0 w-full h-[2px] bg-[#f0f0f0]"></div>
+                                )}
+                            </div>
                         </div>
 
                         {/* Status Info */}

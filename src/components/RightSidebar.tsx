@@ -4,8 +4,8 @@ import { NavLink } from 'react-router-dom';
 const RightSidebar = () => {
     const navItems = [
         { label: 'Home', path: '/' },
-        { label: 'Work', path: '/projects' },
         { label: 'About', path: '/about' },
+        { label: 'Work', path: '/projects' },
         { label: 'Stories', path: '/blog' },
     ];
 

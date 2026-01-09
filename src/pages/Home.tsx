@@ -281,13 +281,16 @@ const Home = () => {
       </div>
 
       <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter mb-8 leading-[0.9] text-white animate-in slide-in-from-bottom-5 duration-500">
-        Fullstack<br />
+        Software<br />
         <span className="text-[#333]">Engineer</span>
       </h1>
 
       <div className="max-w-2xl">
-        <p className="text-lg md:text-xl text-[#888] leading-relaxed mb-12 font-mono">
-          As a protocol-centric engineer, I architect scalable systems and decentralized networks that transform complex logic into reliable infrastructure.
+        <p className="text-lg md:text-xl text-[#888] leading-relaxed mb-4 font-mono">
+          {resumeData.personalInfo.bio}
+        </p>
+        <p className="text-sm md:text-base text-vscode-accent font-mono mb-12">
+             // Current Vibe: Building fast, breaking barriers, and shipping continuously.
         </p>
       </div>
 
@@ -302,6 +305,58 @@ const Home = () => {
             VIEW WORK <span className="group-hover:translate-x-1 transition-transform">-&gt;</span>
           </Button>
         </Link>
+      </div>
+
+      <div className="mb-24 space-y-12">
+        {/* Technical Proficiency */}
+        <div>
+          <h2 className="text-xl md:text-2xl font-bold mb-6 flex items-center text-white">
+            <span className="text-vscode-accent mr-3">const</span>
+            TECHNICAL_PROFICIENCY
+            <span className="text-vscode-accent ml-3">=</span>
+            <span className="text-vscode-text ml-3">{'{'}</span>
+          </h2>
+          <div className="pl-6 md:pl-12 border-l border-[#333] ml-3 md:ml-6 space-y-4 font-mono text-sm leading-relaxed">
+            <div>
+              <span className="text-vscode-def">Languages:</span> <span className="text-[#ce9178]">['TypeScript', 'Rust', 'Solidity', 'Python', 'C++', 'Go']</span>,
+            </div>
+            <div>
+              <span className="text-vscode-def">Blockchain:</span> <span className="text-[#ce9178]">['Smart Contracts', 'Web3.js', 'Ethereum', 'Bitcoin', 'Lightning']</span>,
+            </div>
+            <div>
+              <span className="text-vscode-def">AI_ML_Data:</span> <span className="text-[#ce9178]">['Machine Learning', 'Deep Learning', 'Data Science', 'TensorFlow']</span>,
+            </div>
+            <div>
+              <span className="text-vscode-def">MERN_Stack:</span> <span className="text-[#ce9178]">['MongoDB', 'Express', 'React', 'Node', 'Next.js']</span>,
+            </div>
+            <div>
+              <span className="text-vscode-def">Backend_Cloud:</span> <span className="text-[#ce9178]">['Microservices', 'Docker', 'K8s', 'AWS', 'GCP', 'Supabase']</span>,
+            </div>
+          </div>
+          <h2 className="text-xl md:text-2xl font-bold mt-2 ml-3 text-white">
+            <span className="text-vscode-text">{'}'};</span>
+          </h2>
+        </div>
+
+        {/* Achievements */}
+        <div>
+          <h2 className="text-xl md:text-2xl font-bold mb-6 flex items-center text-white">
+            <span className="text-vscode-accent mr-3">const</span>
+            ACHIEVEMENTS
+            <span className="text-vscode-accent ml-3">=</span>
+            <span className="text-vscode-text ml-3">[</span>
+          </h2>
+          <div className="pl-6 md:pl-12 border-l border-[#333] ml-3 md:ml-6 space-y-2 font-mono text-sm">
+            {resumeData.achievements.map((achievement, i) => (
+              <div key={i} className="text-[#888]">
+                <span className="text-[#ce9178]">"{achievement}"</span>,
+              </div>
+            ))}
+          </div>
+          <h2 className="text-xl md:text-2xl font-bold mt-2 ml-3 text-white">
+            <span className="text-vscode-text">];</span>
+          </h2>
+        </div>
       </div>
 
       <div className="select-none text-[#333] font-mono text-sm mb-12">
