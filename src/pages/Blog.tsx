@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Calendar, ArrowLeft, ArrowRight } from 'lucide-react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { Calendar, ArrowLeft } from 'lucide-react';
 
 interface MediumArticle {
   title: string;
   link: string;
   pubDate: string;
   description: string;
+  thumbnail: string;
   content: string;
   author: string;
   categories: string[];
@@ -24,6 +25,7 @@ const Blog = () => {
   useEffect(() => {
     const fetchMediumArticles = async () => {
       try {
+        // Using RSS2JSON service to convert Medium RSS feed to JSON
         const response = await fetch(
           'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@arien7'
         );
@@ -31,29 +33,40 @@ const Blog = () => {
 
         if (data.status === 'ok') {
           setArticles(data.items);
+
+          // If there's an ID in the URL, find and set the selected article
           if (id) {
             const article = data.items.find((item: MediumArticle) =>
               createSlug(item.title) === id
             );
-            if (article) setSelectedArticle(article);
+            if (article) {
+              setSelectedArticle(article);
+            }
           }
         } else {
           setError('Failed to load articles');
         }
-      } catch {
-        setError('Failed to fetch articles');
+      } catch (err) {
+        setError('Failed to fetch Medium articles');
+        console.error(err);
       } finally {
         setIsLoading(false);
       }
     };
+
     fetchMediumArticles();
   }, [id]);
 
-  const createSlug = (title: string) => 
-    title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  const createSlug = (title: string) => {
+    return title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
 
   const handleArticleClick = (article: MediumArticle) => {
-    navigate(`/blog/${createSlug(article.title)}`);
+    const slug = createSlug(article.title);
+    navigate(`/blog/${slug}`);
     setSelectedArticle(article);
   };
 
@@ -68,65 +81,80 @@ const Blog = () => {
     return tmp.textContent || tmp.innerText || '';
   };
 
-  const formatDate = (dateString: string) => 
-    new Date(dateString).toLocaleDateString('en-US', {
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
     });
+  };
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-16">
+    <div className="max-w-4xl mx-auto">
       {!selectedArticle ? (
         <>
-          <div className="mb-12">
-            <p className="text-muted-foreground mb-2 font-mono text-sm">$ ls blog/</p>
-            <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-foreground">
-              Blog
-            </h1>
-            <p className="mt-4 text-muted-foreground max-w-xl">
-              Thoughts on engineering, open source, and building developer tools.
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold mb-4">Stories</h1>
+            <p className="text-lg text-vscode-comment">
+              Articles and thoughts about tech, development, and more.
             </p>
           </div>
 
           {isLoading ? (
-            <div className="flex justify-center py-16">
-              <div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+            <div className="flex justify-center my-10">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-vscode-accent"></div>
             </div>
           ) : error ? (
-            <div className="text-center py-16 text-muted-foreground">{error}</div>
+            <div className="text-center py-12">
+              <p className="text-vscode-comment">{error}</p>
+            </div>
           ) : articles.length === 0 ? (
-            <div className="text-center py-16 text-muted-foreground">No articles found</div>
+            <div className="text-center py-12">
+              <p className="text-vscode-comment">No articles found</p>
+            </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-8">
               {articles.map((article, index) => (
                 <article
                   key={index}
-                  onClick={() => handleArticleClick(article)}
-                  className="p-6 bg-card border border-border rounded-md hover:border-primary/50 transition-colors cursor-pointer group"
+                  className="border-b border-vscode-border pb-8 last:border-b-0"
                 >
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3 font-mono">
-                    <Calendar size={12} />
-                    {formatDate(article.pubDate)}
+                  <button
+                    onClick={() => handleArticleClick(article)}
+                    className="group text-left w-full"
+                  >
+                    <h2 className="text-2xl font-bold mb-3 text-white group-hover:text-vscode-accent transition-colors">
+                      {article.title}
+                    </h2>
+                  </button>
+
+                  <div className="flex items-center space-x-4 text-sm text-vscode-comment mb-4">
+                    <span className="flex items-center">
+                      <Calendar size={14} className="mr-1" />
+                      {formatDate(article.pubDate)}
+                    </span>
+                    {article.categories && article.categories.length > 0 && (
+                      <span className="flex items-center gap-2">
+                        {article.categories.slice(0, 2).map((cat, i) => (
+                          <span key={i} className="px-2 py-1 bg-vscode-sidebar rounded text-xs">
+                            {cat}
+                          </span>
+                        ))}
+                      </span>
+                    )}
                   </div>
-                  <h2 className="text-xl font-medium text-foreground group-hover:text-primary transition-colors mb-2">
-                    {article.title}
-                  </h2>
-                  <p className="text-muted-foreground mb-4 line-clamp-2">
+
+                  <p className="text-vscode-text mb-4 line-clamp-3">
                     {stripHtml(article.description)}
                   </p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex flex-wrap gap-2">
-                      {article.categories?.slice(0, 3).map((cat, i) => (
-                        <span key={i} className="text-xs font-mono px-2 py-1 bg-muted rounded text-muted-foreground">
-                          {cat}
-                        </span>
-                      ))}
-                    </div>
-                    <span className="text-sm text-muted-foreground group-hover:text-primary flex items-center gap-1 transition-colors">
-                      Read <ArrowRight size={14} />
-                    </span>
-                  </div>
+
+                  <button
+                    onClick={() => handleArticleClick(article)}
+                    className="text-vscode-accent hover:underline"
+                  >
+                    Read more →
+                  </button>
                 </article>
               ))}
             </div>
@@ -136,45 +164,54 @@ const Blog = () => {
         <>
           <button
             onClick={handleBackClick}
-            className="mb-8 flex items-center text-muted-foreground hover:text-foreground transition-colors"
+            className="mb-6 flex items-center text-vscode-accent hover:underline"
           >
-            <ArrowLeft size={16} className="mr-2" />
-            Back to articles
+            <ArrowLeft size={18} className="mr-2" />
+            Back to all articles
           </button>
 
-          <article>
-            <div className="mb-8">
-              <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4 font-mono">
-                <Calendar size={12} />
+          <article className="mb-8">
+            <h1 className="text-4xl font-bold mb-4 text-white">
+              {selectedArticle.title}
+            </h1>
+
+            <div className="flex items-center space-x-4 text-sm text-vscode-comment mb-6 pb-6 border-b border-vscode-border">
+              <span className="flex items-center">
+                <Calendar size={14} className="mr-1" />
                 {formatDate(selectedArticle.pubDate)}
-                {selectedArticle.author && <span>• {selectedArticle.author}</span>}
-              </div>
-              <h1 className="text-3xl md:text-4xl font-semibold text-foreground mb-4">
-                {selectedArticle.title}
-              </h1>
-              {selectedArticle.categories?.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {selectedArticle.categories.map((cat, i) => (
-                    <span key={i} className="text-xs font-mono px-2 py-1 bg-muted rounded text-muted-foreground">
-                      {cat}
-                    </span>
-                  ))}
-                </div>
+              </span>
+              {selectedArticle.author && (
+                <span>By {selectedArticle.author}</span>
               )}
             </div>
 
             <div
-              className="prose prose-invert max-w-none
-                prose-headings:text-foreground prose-headings:font-semibold
-                prose-p:text-muted-foreground prose-p:leading-relaxed
-                prose-a:text-primary prose-a:no-underline hover:prose-a:underline
-                prose-strong:text-foreground
-                prose-code:text-primary prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:font-mono
-                prose-pre:bg-card prose-pre:border prose-pre:border-border
-                prose-blockquote:border-l-2 prose-blockquote:border-primary prose-blockquote:pl-4 prose-blockquote:text-muted-foreground
-                prose-ul:text-muted-foreground prose-ol:text-muted-foreground"
+              className="prose prose-invert prose-lg max-w-none
+                prose-headings:text-white prose-headings:font-bold
+                prose-p:text-vscode-text prose-p:leading-relaxed
+                prose-a:text-vscode-accent prose-a:no-underline hover:prose-a:underline
+                prose-strong:text-white prose-strong:font-semibold
+                prose-code:text-vscode-accent prose-code:bg-vscode-sidebar prose-code:px-1 prose-code:py-0.5 prose-code:rounded
+                prose-pre:bg-vscode-sidebar prose-pre:border prose-pre:border-vscode-border
+                prose-blockquote:border-l-4 prose-blockquote:border-vscode-accent prose-blockquote:pl-4 prose-blockquote:italic
+                prose-ul:text-vscode-text prose-ol:text-vscode-text
+                prose-li:text-vscode-text prose-li:my-1
+                prose-img:rounded-lg prose-img:my-6"
               dangerouslySetInnerHTML={{ __html: selectedArticle.content }}
             />
+
+            {selectedArticle.categories && selectedArticle.categories.length > 0 && (
+              <div className="mt-8 pt-6 border-t border-vscode-border">
+                <h3 className="text-sm uppercase tracking-wider text-vscode-comment mb-3">Tags</h3>
+                <div className="flex flex-wrap gap-2">
+                  {selectedArticle.categories.map((cat, i) => (
+                    <span key={i} className="px-3 py-1 bg-vscode-sidebar text-vscode-text rounded-full text-sm">
+                      {cat}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </article>
         </>
       )}

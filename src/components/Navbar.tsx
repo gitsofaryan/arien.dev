@@ -1,41 +1,64 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Github, Download } from 'lucide-react';
+import { Mail, Github, LinkedinIcon, BookOpen } from 'lucide-react';
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') as 'dark' | 'light' | null;
+    if (savedTheme) {
+      setTheme(savedTheme);
+      document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+  };
+
   return (
-    <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
-      <div className="max-w-5xl mx-auto px-6">
-        <div className="flex justify-between items-center h-14">
-          <Link to="/" className="font-mono text-lg text-foreground hover:text-primary transition-colors">
-            aryan.dev
-          </Link>
+    <header className="sticky top-0 z-10 bg-[#181818] border-b border-vscode-border">
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between items-center h-16">
+          <div className="flex-shrink-0">
+            <Link to="/" className="flex items-center space-x-2">
+              <span className="text-white font-mono font-bold text-xl underline">arien.dev</span>
+            </Link>
+          </div>
 
-          <nav className="flex items-center gap-8">
-            <Link to="/about" className="nav-link text-sm">
-              About
+          <nav className="hidden md:flex space-x-8">
+            <Link to="/about" className="nav-link flex items-center space-x-1 text-vscode-text hover:text-white">
+              <Mail size={18} />
+              <span>About</span>
             </Link>
-            <Link to="/projects" className="nav-link text-sm">
-              Projects
+            <Link to="/projects" className="nav-link flex items-center space-x-1 text-vscode-text hover:text-white">
+              <span className="text-lg"><img src="/img/projects.png" alt="" height={20} width={20} /></span>
+              <span>Projects</span>
             </Link>
-            <Link to="/blog" className="nav-link text-sm">
-              Blog
+            <Link to="/blog" className="nav-link flex items-center space-x-1 text-vscode-text hover:text-white">
+              <BookOpen size={18} />
+              <span>Stories</span>
             </Link>
+
             <a
               href="https://github.com/gitsofaryan"
               target="_blank"
               rel="noopener noreferrer"
-              className="nav-link flex items-center gap-1.5 text-sm"
+              className="nav-link flex items-center space-x-1 text-vscode-text hover:text-white"
             >
-              GitHub
-              <span className="text-muted-foreground text-xs">[1K+]</span>
+              <Github size={20} />
             </a>
             <a
-              href="/Aryan_Jain.pdf"
-              download="Aryan_Jain_Resume.pdf"
-              className="flex items-center gap-2 px-3 py-1.5 text-sm bg-foreground text-background rounded hover:bg-foreground/90 transition-colors"
+              href="https://linkedin.com/in/aryan-jain07/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="nav-link flex items-center space-x-1 text-vscode-text hover:text-white"
             >
-              <Download size={14} />
-              Resume
+              <LinkedinIcon size={20} />
             </a>
           </nav>
         </div>
