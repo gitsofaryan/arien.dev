@@ -276,41 +276,82 @@ const Home = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6">
-      <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-2">
-        Hey, I'm
-      </h1>
-      <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 text-vscode-accent">
-        {resumeData?.personalInfo?.name || 'Aryan Jain'}.
-      </h2>
-      <p className="text-base md:text-2xl font-medium mb-6 text-vscode-text leading-relaxed">
-        <span className="text-vscode-accent font-semibold">Fullstack Developer</span> • <span className="text-vscode-accent font-semibold">SoB'25</span> Lightning Protocols • <span className="text-vscode-accent font-semibold">GoQuant</span> Eng. Fellow'25 • <span className="text-vscode-accent font-semibold">Amazon ML School'25</span> • <span className="text-vscode-accent font-semibold">NASA Navigator '25</span>• <span className="text-vscode-accent font-semibold">GDSC Lead'24</span>
-      </p>
-
-      <div className="grid grid-cols-1 gap-8 mt-8">
-        <div>
-          <p className="text-sm md:text-lg mb-4 leading-relaxed">
-            A full-stack engineer and AI/ML practitioner with experience across protocol engineering, exchange systems, and open-source infrastructure. I've contributed to <span className="text-vscode-accent font-medium">Summer of Bitcoin</span> (Lightning Protocols), <span className="text-vscode-accent font-medium">Google Summer of Code</span>, <span className="text-vscode-accent font-medium">NASA Space Apps</span>, and multiple global OSS ecosystems.
-          </p>
-          <p className="text-sm md:text-lg mb-6 leading-relaxed">
-            As a <span className="text-vscode-accent font-medium">GoQuant Engineering Fellow</span>, <span className="text-vscode-accent font-medium">Amazon ML School</span> participant, and <span className="text-vscode-accent font-medium">NASA Navigator</span>, I focus on building scalable full-stack systems, ML-powered features, and production-ready architectures. I love open source, rapid prototyping, solving challenging engineering problems, and continuously learning to build things that create real impact.
-          </p>
-
-          <div className="flex flex-wrap gap-3 mb-8">
-            <Link to="/about">
-              <Button className="gap-2">
-                <FileText size={16} />
-                <span>About Me</span>
-              </Button>
-            </Link>
-            <Link to="/resume">
-              <Button variant="outline" className="gap-2">
-                <FileText size={16} />
-                <span>Resume</span>
-              </Button>
-            </Link>
-          </div>
-        </div>
+      <div className="select-none text-[#333] font-mono text-sm mb-8 animate-fade-in">
+        &lt;!-- Hero section --&gt;
       </div>
+
+      <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter mb-8 leading-[0.9] text-white animate-in slide-in-from-bottom-5 duration-500">
+        Fullstack<br />
+        <span className="text-[#333]">Engineer</span>
+      </h1>
+
+      <div className="max-w-2xl">
+        <p className="text-lg md:text-xl text-[#888] leading-relaxed mb-12 font-mono">
+          As a protocol-centric engineer, I architect scalable systems and decentralized networks that transform complex logic into reliable infrastructure.
+        </p>
+      </div>
+
+      <div className="flex flex-wrap gap-4 mb-24">
+        <Link to="/about">
+          <Button className="h-12 px-8 bg-white text-black hover:bg-gray-200 rounded-sm font-bold tracking-wide">
+            MORE ABOUT ME
+          </Button>
+        </Link>
+        <Link to="/projects">
+          <Button variant="ghost" className="h-12 px-8 text-white hover:bg-[#1f1f1f] rounded-sm font-bold tracking-wide flex items-center gap-2 group">
+            VIEW WORK <span className="group-hover:translate-x-1 transition-transform">-&gt;</span>
+          </Button>
+        </Link>
+      </div>
+
+      <div className="select-none text-[#333] font-mono text-sm mb-12">
+        &lt;!-- Featured work --&gt;
+      </div>
+
+      {/* Work Experience Section */}
+      <div className="mt-16 mb-24">
+        <h2 className="text-xl md:text-2xl font-bold mb-12 flex items-center text-white">
+          <span className="text-vscode-accent mr-3">const</span>
+          WORK_EXPERIENCE
+          <span className="text-vscode-accent ml-3">=</span>
+          <span className="text-vscode-text ml-3">[</span>
+        </h2>
+
+        <div className="relative border-l border-[#333] ml-3 md:ml-6 space-y-12 pl-8 md:pl-12">
+          {resumeData.experience.map((exp, index) => (
+            <div key={index} className="relative group">
+              {/* Timeline Dot */}
+              <div className="absolute -left-[41px] md:-left-[57px] top-0 w-4 h-4 rounded-full bg-[#1F1F1F] border-2 border-[#333] group-hover:border-vscode-accent group-hover:bg-vscode-accent transition-all duration-300"></div>
+
+              <div className="flex flex-col md:flex-row md:items-baseline justify-between mb-2">
+                <h3 className="text-xl font-bold text-white group-hover:text-vscode-accent transition-colors">
+                  {exp.company}
+                </h3>
+                <span className="text-sm font-mono text-[#666]">{exp.duration}</span>
+              </div>
+
+              <div className="text-md text-[#aaa] font-mono mb-4 flex items-center gap-2">
+                <span>{exp.role}</span>
+                <span className="text-[#333]">•</span>
+                <span className="text-xs text-[#555]">{exp.location}</span>
+              </div>
+
+              <ul className="space-y-2">
+                {exp.achievements.map((achievement, i) => (
+                  <li key={i} className="text-[#888] text-sm leading-relaxed flex items-start gap-3">
+                    <span className="text-vscode-accent mt-1.5 text-xs leading-none">{'//'}</span>
+                    {achievement}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <h2 className="text-xl md:text-2xl font-bold mt-8 ml-3 text-white">
+          <span className="text-vscode-text">];</span>
+        </h2>
+      </div>
+
       {/* Organizations Section */}
       <div className="mt-16">
         <h2 className="text-xl md:text-2xl font-bold mb-6">Organizations I Contributed In.</h2>

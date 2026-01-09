@@ -1,12 +1,11 @@
 
-import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "./components/Layout";
-import Home from "./pages/Index";
+import MainLayout from "./components/MainLayout";
+import Home from "./pages/Home";
 import Blog from "./pages/Blog";
 import Projects from "./pages/Projects";
 import About from "./pages/About";
@@ -30,14 +29,16 @@ const AppContent = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Layout children={<Home />} />} />
-            <Route path="/blog" element={<Layout children={<Blog />} />} />
-            <Route path="/blog/:id" element={<Layout children={<Blog />} />} />
-            <Route path="/projects" element={<Layout children={<Projects />} />} />
-            <Route path="/about" element={<Layout children={<About />} />} />
-            <Route path="*" element={<Layout children={<NotFound />} />} />
-          </Routes>
+          <MainLayout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:id" element={<Blog />} />
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/about" element={<About />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </MainLayout>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

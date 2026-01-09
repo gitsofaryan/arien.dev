@@ -35,7 +35,7 @@ const Navbar: React.FC = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-[#181818] border-b border-vscode-border">
+    <header className="sticky top-0 z-50 bg-[#181818] border-b border-vscode-border md:hidden">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
@@ -44,7 +44,8 @@ const Navbar: React.FC = () => {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation REMOVED - NOW IN RIGHT SIDEBAR */}
+
           <nav className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
               <Link
