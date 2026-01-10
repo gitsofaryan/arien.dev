@@ -82,7 +82,7 @@ const MacDesktop = () => {
                     {/* Hawkins - Stranger Things App */}
                     {openApps.includes('hawkins') && (
                         <MacWindow
-                            title="Hawkins Lab"
+                            title="Hawkins"
                             icon={<Tv size={14} className="text-red-400" />}
                             defaultPosition={{ x: 150, y: 150 }}
                             defaultSize={{ width: 800, height: 500 }}

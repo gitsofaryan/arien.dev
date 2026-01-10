@@ -45,6 +45,8 @@ interface AgentState {
     x: number; // Percentage 0.0 - 1.0
     y: number; // Percentage 0.0 - 1.0
     facing: 'left' | 'right';
+    speech: string | null;
+    speechTimer: number;
 }
 
 // --- Building Labels (Stranger Things Lore) ---
@@ -67,9 +69,41 @@ const BUILDINGS: BuildingLabel[] = [
     { id: 'house_mike', label: "Wheeler's House", x: 0.85, y: 0.45 },
 ];
 
+const QUOTES = {
+    mike: [
+        "El, I love you!",
+        "Friends don't lie.",
+        "You're my superhero.",
+        "I never gave up on you.",
+        "You're the most important thing to me.",
+        "I love you more than anything.",
+        "We aren't kids anymore.",
+        "I promise.",
+        "Crazy together."
+    ],
+    eleven: [
+        "Me too.",
+        "I love you, Mike.",
+        "You are my home.",
+        "Better... together.",
+        "Friends don't lie.",
+        "Mike...",
+        "Halfway happy.",
+        "Promise?"
+    ],
+    demogorgon: [
+        "RRRAAAARRGGHH!",
+        "*screeching*",
+        "*guttural growl*",
+        "*hiss*",
+        "..."
+    ]
+};
+
 const Hawkins = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [isUpsideDown, setIsUpsideDown] = useState(false);
+    const [isPaused, setIsPaused] = useState(false);
 
     // Initial Agents - Start exactly at nodes
     const [mike, setMike] = useState<AgentState>({
@@ -80,7 +114,9 @@ const Hawkins = () => {
         speed: 0.0015,
         x: NETWORK['ML'].x,
         y: NETWORK['ML'].y,
-        facing: 'right'
+        facing: 'right',
+        speech: null,
+        speechTimer: 0
     });
 
     const [eleven, setEleven] = useState<AgentState>({
@@ -91,7 +127,9 @@ const Hawkins = () => {
         speed: 0.0015,
         x: NETWORK['TR'].x,
         y: NETWORK['TR'].y,
-        facing: 'left'
+        facing: 'left',
+        speech: null,
+        speechTimer: 0
     });
 
     const [demogorgon, setDemogorgon] = useState<AgentState>({
@@ -102,14 +140,18 @@ const Hawkins = () => {
         speed: 0.002,
         x: NETWORK['C'].x,
         y: NETWORK['C'].y,
-        facing: 'right'
+        facing: 'right',
+        speech: null,
+        speechTimer: 0
     });
 
     useEffect(() => {
         let animationFrameId: number;
 
         const updateAgent = (agent: AgentState): AgentState => {
-            let { currentNodeId, targetNodeId, progress, speed, facing } = agent;
+            if (isPaused) return agent;
+
+            let { currentNodeId, targetNodeId, progress, speed, facing, speech, speechTimer } = agent;
 
             // 1. Move progress
             progress += speed;
@@ -138,7 +180,24 @@ const Hawkins = () => {
             if (dpX > 0) facing = 'right';
             if (dpX < 0) facing = 'left';
 
-            return { ...agent, currentNodeId, targetNodeId, progress, x: pctX, y: pctY, facing };
+            // 5. Handle Speech logic
+            if (speech) {
+                speechTimer--;
+                if (speechTimer <= 0) {
+                    speech = null;
+                }
+            } else {
+                // Randomly trigger speech (approx 1/800 chance per frame)
+                if (Math.random() < 0.0012) {
+                    const characterQuotes = QUOTES[agent.id as keyof typeof QUOTES];
+                    if (characterQuotes) {
+                        speech = characterQuotes[Math.floor(Math.random() * characterQuotes.length)];
+                        speechTimer = 240; // Display for ~4 seconds (60fps)
+                    }
+                }
+            }
+
+            return { ...agent, currentNodeId, targetNodeId, progress, x: pctX, y: pctY, facing, speech, speechTimer };
         };
 
         const animate = () => {
@@ -151,12 +210,32 @@ const Hawkins = () => {
 
         animationFrameId = requestAnimationFrame(animate);
         return () => cancelAnimationFrame(animationFrameId);
-    }, []);
+    }, [isPaused]);
 
     // Helper to calculate walking bounce (sine wave)
     const getBounce = (progress: number) => {
+        if (isPaused) return 0;
         // 8 steps per path segment
         return Math.abs(Math.sin(progress * Math.PI * 8)) * 4;
+    };
+
+    // Helper to render speech bubble
+    const SpeechBubble = ({ text, isUpsideDown }: { text: string | null, isUpsideDown: boolean }) => {
+        if (!text) return null;
+        return (
+            <div className={`absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap px-2 py-1 rounded-lg text-[8px] font-bold border pointer-events-none z-50 animate-bounce transition-opacity duration-300
+                ${isUpsideDown
+                    ? 'bg-[#2a0a0a] border-red-800 text-red-300 shadow-[0_0_10px_rgba(255,0,0,0.3)]'
+                    : 'bg-white border-black text-black shadow-sm'
+                }`}
+                style={{ fontFamily: "'Press Start 2P', cursive" }}
+            >
+                {text}
+                <div className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rotate-45 border-b border-r
+                    ${isUpsideDown ? 'bg-[#2a0a0a] border-red-800' : 'bg-white border-black'}`}
+                />
+            </div>
+        );
     };
 
     // --- Loading State ---
@@ -195,8 +274,9 @@ const Hawkins = () => {
     return (
         <div
             ref={containerRef}
-            className="w-full h-full relative overflow-hidden bg-[#1a1a1a]"
+            className="w-full h-full relative overflow-hidden bg-[#1a1a1a] cursor-pointer"
             style={{ imageRendering: 'pixelated' }}
+            onClick={() => setIsPaused(!isPaused)}
         >
             {/* Background Map */}
             <div
@@ -236,52 +316,72 @@ const Hawkins = () => {
             ))}
 
             {/* Mike */}
-            <img
-                src="/img/mike.png"
-                alt="Mike"
-                className="absolute w-16 h-16 object-contain transition-all duration-100 ease-linear"
+            <div className="absolute w-16 h-16 pointer-events-none z-20"
                 style={{
                     left: `${mike.x * 100}%`,
                     top: `${mike.y * 100}%`,
-                    // Center anchor (-50%, -50%), Flip X based on facing, Bounce translation Y
-                    transform: `translate(-50%, -50%) scaleX(${mike.facing === 'right' ? 1 : -1}) translateY(-${getBounce(mike.progress)}px)`,
-                    filter: isUpsideDown
-                        ? 'drop-shadow(0 4px 4px rgba(255,0,0,0.5)) sepia(0.5)'
-                        : 'drop-shadow(0 4px 4px rgba(0,0,0,0.5))',
-                    zIndex: 20
+                    transform: `translate(-50%, -50%) translateY(-${getBounce(mike.progress)}px)`,
+                    willChange: 'left, top'
                 }}
-            />
+            >
+                <img
+                    src="/img/mike.png"
+                    alt="Mike"
+                    className="w-full h-full object-contain"
+                    style={{
+                        transform: `scaleX(${mike.facing === 'right' ? 1 : -1})`,
+                        filter: isUpsideDown
+                            ? 'drop-shadow(0 4px 4px rgba(255,0,0,0.5)) sepia(0.5)'
+                            : 'drop-shadow(0 4px 4px rgba(0,0,0,0.5))',
+                    }}
+                />
+                <SpeechBubble text={mike.speech} isUpsideDown={isUpsideDown} />
+            </div>
 
             {/* Eleven */}
-            <img
-                src="/img/eleven.png"
-                alt="Eleven"
-                className="absolute w-16 h-16 object-contain transition-all duration-100 ease-linear"
+            <div className="absolute w-16 h-16 pointer-events-none z-20"
                 style={{
                     left: `${eleven.x * 100}%`,
                     top: `${eleven.y * 100}%`,
-                    transform: `translate(-50%, -50%) scaleX(${eleven.facing === 'right' ? 1 : -1}) translateY(-${getBounce(eleven.progress)}px)`,
-                    filter: isUpsideDown
-                        ? 'drop-shadow(0 4px 4px rgba(255,0,0,0.5)) sepia(0.5)'
-                        : 'drop-shadow(0 4px 4px rgba(236, 72, 153, 0.3))',
-                    zIndex: 20
+                    transform: `translate(-50%, -50%) translateY(-${getBounce(eleven.progress)}px)`,
+                    willChange: 'left, top'
                 }}
-            />
+            >
+                <img
+                    src="/img/eleven.png"
+                    alt="Eleven"
+                    className="w-full h-full object-contain"
+                    style={{
+                        transform: `scaleX(${eleven.facing === 'right' ? 1 : -1})`,
+                        filter: isUpsideDown
+                            ? 'drop-shadow(0 4px 4px rgba(255,0,0,0.5)) sepia(0.5)'
+                            : 'drop-shadow(0 4px 4px rgba(236, 72, 153, 0.3))',
+                    }}
+                />
+                <SpeechBubble text={eleven.speech} isUpsideDown={isUpsideDown} />
+            </div>
 
             {/* Demogorgon (Only in Upside Down) */}
             {isUpsideDown && (
-                <img
-                    src="/img/demogorgan.png"
-                    alt="Demogorgon"
-                    className="absolute w-20 h-20 object-contain transition-all duration-100 ease-linear"
+                <div className="absolute w-20 h-20 pointer-events-none z-25"
                     style={{
                         left: `${demogorgon.x * 100}%`,
                         top: `${demogorgon.y * 100}%`,
-                        transform: `translate(-50%, -50%) scaleX(${demogorgon.facing === 'right' ? 1 : -1}) translateY(-${getBounce(demogorgon.progress)}px)`,
-                        filter: 'drop-shadow(0 0 15px rgba(255,0,0,0.6))',
-                        zIndex: 25
+                        transform: `translate(-50%, -50%) translateY(-${getBounce(demogorgon.progress)}px)`,
+                        willChange: 'left, top'
                     }}
-                />
+                >
+                    <img
+                        src="/img/demogorgan.png"
+                        alt="Demogorgon"
+                        className="w-full h-full object-contain"
+                        style={{
+                            transform: `scaleX(${demogorgon.facing === 'right' ? 1 : -1})`,
+                            filter: 'drop-shadow(0 0 15px rgba(255,0,0,0.6))',
+                        }}
+                    />
+                    <SpeechBubble text={demogorgon.speech} isUpsideDown={isUpsideDown} />
+                </div>
             )}
 
             {/* Retro Overlay */}
@@ -289,7 +389,7 @@ const Hawkins = () => {
 
             {/* Toggle Button */}
             <button
-                onClick={() => setIsUpsideDown(!isUpsideDown)}
+                onClick={(e) => { e.stopPropagation(); setIsUpsideDown(!isUpsideDown); }}
                 className={`absolute top-4 right-4 z-50 px-3 py-1.5 rounded border text-xs font-bold font-mono transition-all duration-500
                     ${isUpsideDown
                         ? 'bg-red-900/80 border-red-500 text-red-200 hover:bg-red-800 shadow-[0_0_15px_rgba(255,0,0,0.5)]'
@@ -299,8 +399,15 @@ const Hawkins = () => {
                 {isUpsideDown ? '🌌 NORMAL WORLD' : '🙃 UPSIDE DOWN'}
             </button>
 
+            {/* PAUSED Indicator */}
+            {isPaused && (
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white/90 font-mono text-xl tracking-[0.5em] z-40 bg-black/60 px-6 py-3 rounded animate-pulse pointer-events-none border border-white/20 backdrop-blur-sm">
+                    PAUSED
+                </div>
+            )}
+
             <div className="absolute bottom-4 right-4 text-white/40 text-[10px] font-mono z-40 bg-black/50 px-2 rounded">
-                HAWKINS_NAV_SYSTEM_V4 :: {isUpsideDown ? 'DIMENSION_ERROR' : 'ROAD_NETWORK_ACTIVE'}
+                HAWKINS_NAV_SYSTEM_V4 :: {isUpsideDown ? 'DIMENSION_ERROR' : 'ROAD_NETWORK_ACTIVE'} {isPaused ? '[PAUSED]' : ''}
             </div>
         </div>
     );
