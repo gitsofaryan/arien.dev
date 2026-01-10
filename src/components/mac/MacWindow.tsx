@@ -9,12 +9,13 @@ interface MacWindowProps {
     onClose: () => void;
     children: React.ReactNode;
     defaultPosition?: { x: number; y: number };
+    defaultSize?: { width: number | string; height: number | string };
     icon?: React.ReactNode;
     zIndex?: number;
     onClick?: () => void;
 }
 
-const MacWindow: React.FC<MacWindowProps> = ({ title, isOpen, onClose, children, defaultPosition = { x: 50, y: 50 }, icon, zIndex = 50, onClick }) => {
+const MacWindow: React.FC<MacWindowProps> = ({ title, isOpen, onClose, children, defaultPosition = { x: 50, y: 50 }, defaultSize = { width: 600, height: 400 }, icon, zIndex = 50, onClick }) => {
     const nodeRef = useRef(null);
 
     if (!isOpen) return null;
@@ -32,10 +33,7 @@ const MacWindow: React.FC<MacWindowProps> = ({ title, isOpen, onClose, children,
                 onClick={onClick}
             >
                 <Resizable
-                    defaultSize={{
-                        width: 600,
-                        height: 400,
-                    }}
+                    defaultSize={defaultSize}
                     minWidth={300}
                     minHeight={200}
                     className="flex flex-col bg-vscode-sidebar/90 backdrop-blur-2xl"

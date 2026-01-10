@@ -26,7 +26,8 @@ const MacDesktop = () => {
                         title="My Computer"
                         isOpen={openApps.includes('computer')}
                         onClose={() => closeApp('computer')}
-                        defaultPosition={{ x: 50, y: 50 }}
+                        defaultPosition={{ x: 600, y: 150 }}
+                        defaultSize={{ width: 375, height: 600 }}
                         icon={<Monitor size={14} className="text-blue-400" />}
                         zIndex={isFocused('computer') ? 50 : 10}
                         onClick={() => toggleApp('computer')}
@@ -39,7 +40,8 @@ const MacDesktop = () => {
                         title="Spotify"
                         isOpen={openApps.includes('spotify')}
                         onClose={() => closeApp('spotify')}
-                        defaultPosition={{ x: 150, y: 150 }} // Staggered
+                        defaultPosition={{ x: 650, y: 200 }}
+                        defaultSize={{ width: 375, height: 600 }}
                         icon={<Music size={14} className="text-green-400" />}
                         zIndex={isFocused('spotify') ? 51 : 20}
                         onClick={() => toggleApp('spotify')}
@@ -52,7 +54,8 @@ const MacDesktop = () => {
                         title="Games"
                         isOpen={openApps.includes('games')}
                         onClose={() => closeApp('games')}
-                        defaultPosition={{ x: 300, y: 100 }} // Staggered
+                        defaultPosition={{ x: 700, y: 250 }}
+                        defaultSize={{ width: 375, height: 600 }}
                         icon={<Gamepad2 size={14} className="text-purple-400" />}
                         zIndex={isFocused('games') ? 52 : 30}
                         onClick={() => toggleApp('games')}
