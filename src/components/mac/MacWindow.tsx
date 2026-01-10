@@ -40,23 +40,24 @@ const MacWindow: React.FC<MacWindowProps> = ({ title, isOpen, onClose, children,
                 >
                     {/* Title Bar */}
                     <div
-                        className="window-handle h-10 bg-vscode-bg/40 border-b border-vscode-border/30 flex items-center px-4 justify-between cursor-move select-none shrink-0"
+                        className="window-handle h-8 md:h-10 bg-vscode-bg/40 border-b border-vscode-border/30 flex items-center px-3 md:px-4 justify-between cursor-move select-none shrink-0"
                     >
                         <div className="flex gap-2 group">
                             <button
                                 onClick={(e) => { e.stopPropagation(); onClose(); }}
-                                className="w-3 h-3 rounded-full bg-[#FF5F56] hover:bg-[#FF5F56]/80 flex items-center justify-center transition-colors shadow-inner"
+                                onTouchEnd={(e) => { e.stopPropagation(); onClose(); }}
+                                className="w-3 h-3 md:w-3 md:h-3 rounded-full bg-[#FF5F56] hover:bg-[#FF5F56]/80 flex items-center justify-center transition-colors shadow-inner"
                             >
-                                <X size={8} className="opacity-0 group-hover:opacity-100 text-black/60" />
+                                <X size={6} className="opacity-0 group-hover:opacity-100 text-black/60 md:w-2 md:h-2" />
                             </button>
-                            <button className="w-3 h-3 rounded-full bg-[#FFBD2E] hover:bg-[#FFBD2E]/80 flex items-center justify-center transition-colors shadow-inner">
-                                <Minus size={8} className="opacity-0 group-hover:opacity-100 text-black/60" />
+                            <button className="w-3 h-3 md:w-3 md:h-3 rounded-full bg-[#FFBD2E] hover:bg-[#FFBD2E]/80 flex items-center justify-center transition-colors shadow-inner">
+                                <Minus size={6} className="opacity-0 group-hover:opacity-100 text-black/60 md:w-2 md:h-2" />
                             </button>
-                            <button className="w-3 h-3 rounded-full bg-[#27C93F] hover:bg-[#27C93F]/80 flex items-center justify-center transition-colors shadow-inner">
-                                <Maximize2 size={8} className="opacity-0 group-hover:opacity-100 text-black/60" />
+                            <button className="w-3 h-3 md:w-3 md:h-3 rounded-full bg-[#27C93F] hover:bg-[#27C93F]/80 flex items-center justify-center transition-colors shadow-inner">
+                                <Maximize2 size={6} className="opacity-0 group-hover:opacity-100 text-black/60 md:w-2 md:h-2" />
                             </button>
                         </div>
-                        <div className="flex items-center gap-2 text-sm font-medium text-vscode-text/90 shadow-sm">
+                        <div className="flex items-center gap-2 text-xs md:text-sm font-medium text-vscode-text/90 shadow-sm">
                             {icon}
                             <span>{title}</span>
                         </div>

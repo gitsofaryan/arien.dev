@@ -102,8 +102,13 @@ const QUOTES = {
 
 const Hawkins = () => {
     const containerRef = useRef<HTMLDivElement>(null);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+
+    // State
     const [isUpsideDown, setIsUpsideDown] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
+    const [isMuted, setIsMuted] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     // Initial Agents - Start exactly at nodes
     const [mike, setMike] = useState<AgentState>({
@@ -145,7 +150,72 @@ const Hawkins = () => {
         speechTimer: 0
     });
 
+    // --- Smart Loading & Preload ---
     useEffect(() => {
+        const loadAssets = async () => {
+            const assets = [
+                '/img/hawkins-map.png',
+                '/img/hawkins-upside-down.png',
+                '/img/mike.png',
+                '/img/eleven.png',
+                '/img/demogorgan.png'
+            ];
+
+            const promises = assets.map(src => {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.src = src;
+                    img.onload = resolve;
+                    img.onerror = resolve; // Continue even if one fails
+                });
+            });
+
+            // Also initialize Auto
+            const audio = new Audio('/music/Stranger Things.mp3');
+            audio.loop = true;
+            audio.volume = 0.3;
+            audioRef.current = audio;
+
+            // Wait for images
+            await Promise.all(promises);
+
+            // Short artificial delay only if load was instant (to prevent flicker)
+            setTimeout(() => setIsLoading(false), 500);
+
+            // Try playback
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("Autoplay prevented:", error);
+                    setIsMuted(true);
+                });
+            }
+        };
+
+        loadAssets();
+
+        return () => {
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current.currentTime = 0;
+            }
+        };
+    }, []);
+
+    // Handle Mute Toggle
+    useEffect(() => {
+        if (audioRef.current) {
+            audioRef.current.muted = isMuted;
+            if (!isMuted && audioRef.current.paused) {
+                audioRef.current.play().catch(e => console.log("Play failed:", e));
+            }
+        }
+    }, [isMuted]);
+
+    // --- Animation Loop ---
+    useEffect(() => {
+        if (isLoading) return; // Don't animate while loading
+
         let animationFrameId: number;
 
         const updateAgent = (agent: AgentState): AgentState => {
@@ -210,7 +280,7 @@ const Hawkins = () => {
 
         animationFrameId = requestAnimationFrame(animate);
         return () => cancelAnimationFrame(animationFrameId);
-    }, [isPaused]);
+    }, [isPaused, isLoading]);
 
     // Helper to calculate walking bounce (sine wave)
     const getBounce = (progress: number) => {
@@ -238,16 +308,6 @@ const Hawkins = () => {
         );
     };
 
-    // --- Loading State ---
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsLoading(false);
-        }, 2000);
-        return () => clearTimeout(timer);
-    }, []);
-
     if (isLoading) {
         return (
             <div className="w-full h-full bg-black flex flex-col items-center justify-center relative overflow-hidden">
@@ -262,7 +322,7 @@ const Hawkins = () => {
                         STRANGER<br />THINGS
                     </div>
                     <div className="text-white/80 font-mono text-xs tracking-widest animate-pulse">
-                        LOADING...
+                        LOADING ASSETS...
                     </div>
                 </div>
                 {/* Retro Scanline Overlay */}
@@ -290,6 +350,33 @@ const Hawkins = () => {
                 }}
             />
 
+            {/* Mobile-Friendly Controls Container */}
+            <div className="absolute top-4 right-4 z-50 flex flex-col gap-2 items-end">
+                {/* Toggle Button */}
+                <button
+                    onClick={(e) => { e.stopPropagation(); setIsUpsideDown(!isUpsideDown); }}
+                    className={`px-3 py-2 md:py-1.5 rounded border text-xs font-bold font-mono transition-all duration-500 touch-manipulation
+                        ${isUpsideDown
+                            ? 'bg-red-900/80 border-red-500 text-red-200 hover:bg-red-800 shadow-[0_0_15px_rgba(255,0,0,0.5)]'
+                            : 'bg-blue-900/80 border-blue-500 text-blue-200 hover:bg-blue-800 shadow-[0_0_15px_rgba(0,0,255,0.3)]'
+                        }`}
+                >
+                    {isUpsideDown ? '🌌 NORMAL' : '🙃 UPSIDE'}
+                </button>
+
+                {/* Mute Button */}
+                <button
+                    onClick={(e) => { e.stopPropagation(); setIsMuted(!isMuted); }}
+                    className={`px-3 py-2 md:py-1.5 rounded border text-xs font-bold font-mono transition-all duration-500 flex items-center justify-center min-w-[100px] touch-manipulation
+                        ${isUpsideDown
+                            ? 'bg-red-900/80 border-red-500 text-red-200 hover:bg-red-800 shadow-[0_0_15px_rgba(255,0,0,0.5)]'
+                            : 'bg-blue-900/80 border-blue-500 text-blue-200 hover:bg-blue-800 shadow-[0_0_15px_rgba(0,0,255,0.3)]'
+                        }`}
+                >
+                    {isMuted ? '🔇 MUTED' : '🔊 MUSIC ON'}
+                </button>
+            </div>
+
             {/* Upside Down Particles/Spores */}
             {isUpsideDown && (
                 <div className="absolute inset-0 pointer-events-none z-20 animate-pulse bg-cover opacity-30 mix-blend-overlay"
@@ -304,7 +391,7 @@ const Hawkins = () => {
             {BUILDINGS.map(b => (
                 <div
                     key={b.id}
-                    className="absolute text-[10px] font-medium text-black bg-[#FFD700] px-1.5 py-0.5 rounded-sm border border-black/20 shadow-sm pointer-events-none z-10 whitespace-nowrap opacity-90"
+                    className="absolute text-[8px] md:text-[10px] font-medium text-black bg-[#FFD700] px-1 md:px-1.5 py-0.5 rounded-sm border border-black/20 shadow-sm pointer-events-none z-10 whitespace-nowrap opacity-90"
                     style={{
                         left: `${b.x * 100}%`,
                         top: `${b.y * 100}%`,
@@ -316,7 +403,7 @@ const Hawkins = () => {
             ))}
 
             {/* Mike */}
-            <div className="absolute w-16 h-16 pointer-events-none z-20"
+            <div className="absolute w-12 h-12 md:w-16 md:h-16 pointer-events-none z-20"
                 style={{
                     left: `${mike.x * 100}%`,
                     top: `${mike.y * 100}%`,
@@ -339,7 +426,7 @@ const Hawkins = () => {
             </div>
 
             {/* Eleven */}
-            <div className="absolute w-16 h-16 pointer-events-none z-20"
+            <div className="absolute w-12 h-12 md:w-16 md:h-16 pointer-events-none z-20"
                 style={{
                     left: `${eleven.x * 100}%`,
                     top: `${eleven.y * 100}%`,
@@ -363,7 +450,7 @@ const Hawkins = () => {
 
             {/* Demogorgon (Only in Upside Down) */}
             {isUpsideDown && (
-                <div className="absolute w-20 h-20 pointer-events-none z-25"
+                <div className="absolute w-16 h-16 md:w-20 md:h-20 pointer-events-none z-25"
                     style={{
                         left: `${demogorgon.x * 100}%`,
                         top: `${demogorgon.y * 100}%`,
@@ -387,27 +474,15 @@ const Hawkins = () => {
             {/* Retro Overlay */}
             <div className={`absolute inset-0 pointer-events-none z-30 bg-[length:100%_2px,3px_100%] ${isUpsideDown ? 'bg-[linear-gradient(rgba(50,0,0,0.2)_50%,rgba(0,0,0,0.4)_50%)]' : 'bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%)]'}`} />
 
-            {/* Toggle Button */}
-            <button
-                onClick={(e) => { e.stopPropagation(); setIsUpsideDown(!isUpsideDown); }}
-                className={`absolute top-4 right-4 z-50 px-3 py-1.5 rounded border text-xs font-bold font-mono transition-all duration-500
-                    ${isUpsideDown
-                        ? 'bg-red-900/80 border-red-500 text-red-200 hover:bg-red-800 shadow-[0_0_15px_rgba(255,0,0,0.5)]'
-                        : 'bg-blue-900/80 border-blue-500 text-blue-200 hover:bg-blue-800 shadow-[0_0_15px_rgba(0,0,255,0.3)]'
-                    }`}
-            >
-                {isUpsideDown ? '🌌 NORMAL WORLD' : '🙃 UPSIDE DOWN'}
-            </button>
-
             {/* PAUSED Indicator */}
             {isPaused && (
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white/90 font-mono text-xl tracking-[0.5em] z-40 bg-black/60 px-6 py-3 rounded animate-pulse pointer-events-none border border-white/20 backdrop-blur-sm">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white/90 font-mono text-xl md:text-xl tracking-[0.5em] z-40 bg-black/60 px-6 py-3 rounded animate-pulse pointer-events-none border border-white/20 backdrop-blur-sm">
                     PAUSED
                 </div>
             )}
 
-            <div className="absolute bottom-4 right-4 text-white/40 text-[10px] font-mono z-40 bg-black/50 px-2 rounded">
-                HAWKINS_NAV_SYSTEM_V4 :: {isUpsideDown ? 'DIMENSION_ERROR' : 'ROAD_NETWORK_ACTIVE'} {isPaused ? '[PAUSED]' : ''}
+            <div className="absolute bottom-4 right-4 text-white/40 text-[8px] md:text-[10px] font-mono z-40 bg-black/50 px-2 rounded">
+                HAWKINS_NAV_SYSTEM_V5 :: {isUpsideDown ? 'DIMENSION_ERROR' : 'ROAD_NETWORK_ACTIVE'} {isPaused ? '[PAUSED]' : ''}
             </div>
         </div>
     );

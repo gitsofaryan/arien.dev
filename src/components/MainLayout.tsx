@@ -1,16 +1,136 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import LeftSidebar from './LeftSidebar';
 import RightSidebar from './RightSidebar';
 import Navbar from './Navbar';
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { GitBranch, Star, Bell, Settings, Layout, X, Menu, Loader2, RotateCw } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
-import MacDesktop from './mac/MacDesktop'; // Import MacDesktop
+import { GitBranch, Star, Layout, X, Menu, Music, Gamepad2, Keyboard, Tv, MessageCircle } from 'lucide-react';
+import MacDesktop from './mac/MacDesktop';
+import { useTheme } from '@/context/ThemeContext';
+import { useOS } from '@/context/OSContext';
 
 interface MainLayoutProps {
     children: React.ReactNode;
 }
+
+const MobileMenu = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const { theme, setTheme } = useTheme();
+    const { launchApp } = useOS();
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    // Prevent scrolling when menu is open
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+    }, [isOpen]);
+
+    const navItems = [
+        { label: 'Home', path: '/', icon: Layout },
+        { label: 'About', path: '/about', icon: Star },
+        { label: 'Work', path: '/projects', icon: GitBranch }, // Added icon for Work/Projects
+        { label: 'Stories', path: '/blog', icon: MessageCircle },
+    ];
+
+    return (
+        <div className="md:hidden">
+            {/* Hamburger Button */}
+            <button
+                onClick={() => setIsOpen(true)}
+                className="fixed top-4 left-4 z-50 p-2 bg-vscode-sidebar/90 backdrop-blur-md rounded-lg border border-vscode-border shadow-lg text-vscode-text"
+            >
+                <Menu size={24} />
+            </button>
+
+            {/* Overlay */}
+            {isOpen && (
+                <div className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm" onClick={() => setIsOpen(false)} />
+            )}
+
+            {/* Drawer */}
+            <div className={`fixed inset-y-0 left-0 z-[70] w-[80%] max-w-[300px] bg-vscode-sidebar border-r border-vscode-border transform transition-transform duration-300 ease-out flex flex-col ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+
+                {/* Header */}
+                <div className="p-6 border-b border-vscode-border flex items-center justify-between">
+                    <span className="font-bold text-lg text-vscode-text">Menu</span>
+                    <button onClick={() => setIsOpen(false)} className="text-vscode-text/60 hover:text-vscode-text">
+                        <X size={24} />
+                    </button>
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 overflow-y-auto p-6 space-y-8">
+
+                    {/* Navigation */}
+                    <nav className="space-y-4">
+                        <h3 className="text-xs uppercase tracking-wider text-vscode-text/50 font-bold">Navigation</h3>
+                        {navItems.map(item => (
+                            <button
+                                key={item.path}
+                                onClick={() => {
+                                    navigate(item.path);
+                                    setIsOpen(false);
+                                }}
+                                className={`flex items-center gap-3 w-full text-left p-2 rounded transition-colors ${location.pathname === item.path ? 'bg-vscode-accent/10 text-vscode-accent' : 'text-vscode-text hover:bg-vscode-highlight'}`}
+                            >
+                                <item.icon size={18} />
+                                <span className="font-medium">{item.label}</span>
+                            </button>
+                        ))}
+                    </nav>
+
+                    {/* Apps */}
+                    <div className="space-y-4">
+                        <h3 className="text-xs uppercase tracking-wider text-vscode-text/50 font-bold">Apps</h3>
+                        <div className="grid grid-cols-4 gap-2">
+                            {[
+                                { id: 'spotify', label: 'Spotify', icon: Music, color: 'text-green-400' },
+                                { id: 'games', label: 'Games', icon: Gamepad2, color: 'text-purple-400' },
+                                { id: 'speedmaster', label: 'Typing', icon: Keyboard, color: 'text-yellow-400' },
+                                { id: 'hawkins', label: 'Hawkins', icon: Tv, color: 'text-red-400' }
+                            ].map((app) => (
+                                <button
+                                    key={app.id}
+                                    onClick={() => {
+                                        launchApp(app.id);
+                                        setIsOpen(false);
+                                    }}
+                                    className="flex flex-col items-center justify-center p-3 rounded bg-vscode-bg border border-vscode-border hover:border-vscode-accent/50 transition-all aspect-square"
+                                >
+                                    <app.icon size={24} className={app.color} />
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Themes */}
+                    <div className="space-y-4">
+                        <h3 className="text-xs uppercase tracking-wider text-vscode-text/50 font-bold">Themes</h3>
+                        <div className="grid grid-cols-2 gap-2">
+                            {['dark', 'retro', 'markdown', 'spatial', 'pixel'].map((t) => (
+                                <button
+                                    key={t}
+                                    onClick={() => setTheme(t as any)}
+                                    className={`px-3 py-2 rounded text-xs font-medium capitalize border transition-colors ${theme === t ? 'bg-vscode-accent text-vscode-bg border-vscode-accent' : 'bg-vscode-bg border-vscode-border text-vscode-text hover:border-vscode-accent/50'}`}
+                                >
+                                    {t}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Footer */}
+                <div className="p-6 border-t border-vscode-border text-xs text-vscode-text/40">
+                    &copy; 2026 Aryan Jain
+                </div>
+            </div>
+        </div>
+    );
+};
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     const [time, setTime] = useState(new Date());
@@ -25,7 +145,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         { id: 'stories', label: 'stories.read', paths: ['/blog'] }
     ];
 
-    // State for open tabs (start with only the active tab)
+    // State for open tabs
     const [openTabIds, setOpenTabIds] = useState<string[]>(() => {
         const activeTab = allTabs.find(tab =>
             tab.paths.some(path => location.pathname === path || (path !== '/' && location.pathname.startsWith(path)))
@@ -53,31 +173,21 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     };
 
     const handleCloseTab = (e: React.MouseEvent, tabId: string) => {
-        e.stopPropagation(); // Prevent navigation on close
+        e.stopPropagation();
         const newTabs = openTabIds.filter(id => id !== tabId);
         setOpenTabIds(newTabs);
 
-        // If we closed the active tab, navigate to another one
         const closingTab = allTabs.find(t => t.id === tabId);
         const isActive = closingTab?.paths.some(path => location.pathname === path || (path !== '/' && location.pathname.startsWith(path)));
 
         if (isActive && newTabs.length > 0) {
-            // Navigate to the last opened tab
             const lastTabId = newTabs[newTabs.length - 1];
             const lastTab = allTabs.find(t => t.id === lastTabId);
             if (lastTab) navigate(lastTab.paths[0]);
         } else if (isActive && newTabs.length === 0) {
-            navigate('/'); // Fallback or could stay on "empty" state (we will handle empty state in render)
+            navigate('/');
         }
     };
-
-    // Check if current route corresponds to an open tab
-    const isAnyTabOpen = openTabIds.length > 0;
-    // We only show content if the current active "file" is actually open. 
-    // However, in a real SPA handling "empty state" while actively on a route is tricky without changing route.
-    // For this portfolio, if "no tabs are open", we can visually mask the content or show a placeholder, 
-    // even if the URL is technically at a route.
-    // Let's rely on openTabIds. If the active route's tab isn't open, we effectively show the "empty" background.
 
     const activeTab = allTabs.find(tab =>
         tab.paths.some(path => location.pathname === path || (path !== '/' && location.pathname.startsWith(path)))
@@ -87,15 +197,15 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     return (
         <div className="min-h-screen bg-vscode-bg text-vscode-text font-mono selection:bg-vscode-accent selection:text-vscode-bg flex flex-col md:flex-row overflow-hidden transition-colors duration-300">
 
-            {/* Mobile Header */}
-            <div className="md:hidden">
-                <Navbar />
-            </div>
+            {/* Mobile Hamburger Menu */}
+            <MobileMenu />
+
+            {/* NB: Navbar removed on mobile as per user request to use Hamburger only */}
 
             {/* Desktop Grid Layout */}
             <div className="flex-1 flex flex-col md:flex-row h-screen overflow-hidden">
 
-                {/* Left Sidebar */}
+                {/* Left Sidebar (Desktop Only) */}
                 <div className="hidden md:block h-full shrink-0">
                     <LeftSidebar />
                 </div>
@@ -108,7 +218,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                         backgroundSize: 'var(--vscode-bg-size, cover)'
                     }}
                 >
-                    {/* Top Status Bar */}
+                    {/* Top Status Bar (Desktop Only) */}
                     <div className="hidden md:flex h-14 border-b border-vscode-border bg-vscode-bg items-center justify-between px-6 shrink-0 select-none transition-colors duration-300">
                         {/* Tabs */}
                         <div className="flex gap-1 text-sm overflow-x-auto">
@@ -128,18 +238,12 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                                         `}
                                     >
                                         <span className="truncate">{tab.label}</span>
-                                        {/* Active Indicator Line */}
                                         {isActive && (
                                             <div className="absolute top-0 left-0 w-full h-[1px] bg-vscode-accent"></div>
                                         )}
-
-                                        {/* Close Button (visible on hover or active) */}
                                         <span
                                             onClick={(e) => handleCloseTab(e, tab.id)}
-                                            className={`
-                                                ml-auto p-0.5 rounded-sm hover:bg-vscode-highlight opacity-0 group-hover:opacity-100 transition-opacity
-                                                ${isActive ? 'opacity-100' : ''}
-                                            `}
+                                            className={`ml-auto p-0.5 rounded-sm hover:bg-vscode-highlight opacity-0 group-hover:opacity-100 transition-opacity ${isActive ? 'opacity-100' : ''}`}
                                         >
                                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
                                         </span>
@@ -161,24 +265,20 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                         </div>
                     </div>
 
-                    {/* Scrollable Content Area */}
+                    {/* Content Area */}
                     <div className="flex-1 overflow-y-auto relative scrollbar-thin scrollbar-thumb-vscode-border scrollbar-track-transparent bg-vscode-bg transition-colors duration-300">
                         {showContent ? (
                             <>
-                                {/* Line Numbers */}
                                 <div className="hidden md:block absolute left-0 top-0 bottom-0 w-12 text-right pr-3 pt-8 text-vscode-text/30 font-mono text-xs select-none pointer-events-none">
                                     {Array.from({ length: 100 }).map((_, i) => (
                                         <div key={i} className="leading-[1.8]">{i + 1}</div>
                                     ))}
                                 </div>
-
-                                {/* Content with padding for line numbers */}
                                 <div className="md:pl-16 p-8 md:p-12 max-w-5xl mx-auto min-h-full">
                                     {children}
                                 </div>
                             </>
                         ) : (
-                            // Empty Editor State
                             <div className="flex flex-col items-center justify-center h-full text-vscode-text/50 select-none">
                                 <div className="mb-4 opacity-20">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><path d="m18 16 4-4-4-4" /><path d="m6 8-4 4 4 4" /><path d="m14.5 4-5 16" /></svg>
@@ -190,7 +290,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                     </div>
                 </main>
 
-                {/* Right Sidebar */}
+                {/* Right Sidebar (Desktop Only) */}
                 <div className="hidden md:block h-full shrink-0">
                     <RightSidebar />
                 </div>
@@ -201,6 +301,5 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         </div>
     );
 };
-
 
 export default MainLayout;

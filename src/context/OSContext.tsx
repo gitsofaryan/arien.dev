@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 // Note: AppId is implicitly any string in this implementation, but we track known apps for type safety if needed.
 // Known apps: 'finder' | 'calculator' | 'calendar' | 'notes' | 'terminal' | 'music' | 'settings' | 'computer' | 'spotify' | 'games' | 'speedmaster'
-export type AppId = 'finder' | 'calculator' | 'calendar' | 'notes' | 'terminal' | 'music' | 'settings' | 'computer' | 'spotify' | 'games' | 'speedmaster' | 'hawkins';
+export type AppId = 'finder' | 'calculator' | 'calendar' | 'notes' | 'terminal' | 'music' | 'settings' | 'spotify' | 'games' | 'speedmaster' | 'hawkins';
 
 interface OSContextType {
     openApps: string[];
