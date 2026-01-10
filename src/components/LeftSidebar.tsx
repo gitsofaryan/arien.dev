@@ -75,7 +75,7 @@ const LeftSidebar = () => {
                         </a>
                     </div>
 
-                    <a href="/resume.pdf" download="Resume.pdf" target="_blank" rel="noopener noreferrer" className="w-full">
+                    <a href="/resume.pdf" download="Aryan_Jain_Resume.pdf" target="_blank" rel="noopener noreferrer" className="w-full">
                         <Button variant="outline" className="w-full gap-2 border-vscode-accent text-vscode-accent hover:bg-vscode-accent hover:text-vscode-bg transition-all">
                             <FileDown size={16} />
                             <span>Download CV</span>

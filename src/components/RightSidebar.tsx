@@ -33,6 +33,8 @@ const RightSidebar = () => {
                             {item.label}
                         </NavLink>
                     ))}
+
+
                 </nav>
 
                 <h3 className="text-vscode-text font-bold uppercase text-xs tracking-wider mt-8 mb-6 border-b border-vscode-border pb-2">
