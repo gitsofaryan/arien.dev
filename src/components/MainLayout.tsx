@@ -66,7 +66,7 @@ const MobileMenu = () => {
 
                     {/* Navigation */}
                     <nav className="space-y-4">
-                        <h3 className="text-xs uppercase tracking-wider text-vscode-text/50 font-bold">Navigation</h3>
+                        <h3 className="text-xs uppercase tracking-wider text-gray-500 font-bold">Navigation</h3>
                         {navItems.map(item => (
                             <button
                                 key={item.path}
@@ -84,7 +84,7 @@ const MobileMenu = () => {
 
                     {/* Apps */}
                     <div className="space-y-4">
-                        <h3 className="text-xs uppercase tracking-wider text-vscode-text/50 font-bold">Apps</h3>
+                        <h3 className="text-xs uppercase tracking-wider text-gray-500 font-bold">Apps</h3>
                         <div className="grid grid-cols-4 gap-2">
                             {[
                                 { id: 'spotify', label: 'Spotify', icon: Music, color: 'text-green-400' },
@@ -108,7 +108,7 @@ const MobileMenu = () => {
 
                     {/* Themes */}
                     <div className="space-y-4">
-                        <h3 className="text-xs uppercase tracking-wider text-vscode-text/50 font-bold">Themes</h3>
+                        <h3 className="text-xs uppercase tracking-wider text-gray-500 font-bold">Themes</h3>
                         <div className="grid grid-cols-2 gap-2">
                             {['dark', 'retro', 'markdown', 'spatial', 'pixel'].map((t) => (
                                 <button

@@ -89,14 +89,14 @@ const Blog = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-12 animate-fade-in font-mono text-vscode-text/80">
+    <div className="max-w-5xl mx-auto px-4 md:px-6 py-8 md:py-12 animate-fade-in font-mono text-vscode-text/80">
 
       {!selectedArticle ? (
         <>
           {/* Header */}
-          <section className="mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold text-vscode-text mb-6 tracking-tight flex items-center gap-4">
-              <BookOpen size={40} className="text-vscode-accent" />
+          <section className="mb-10 md:mb-16">
+            <h1 className="text-3xl md:text-5xl font-bold text-vscode-text mb-4 md:mb-6 tracking-tight flex items-center gap-3 md:gap-4">
+              <BookOpen size={32} className="text-vscode-accent md:w-10 md:h-10" />
               <span>
                 <span className="text-vscode-function">stories</span>
                 <span className="text-vscode-class">.md</span>
@@ -122,38 +122,51 @@ const Blog = () => {
               <p>No articles found. Time to write something!</p>
             </div>
           ) : (
-            <div className="grid gap-6">
+            <div className="grid grid-cols-1 gap-6">
               {articles.map((article, index) => (
                 <Card
                   key={index}
-                  className="bg-vscode-sidebar border-vscode-border hover:border-vscode-accent transition-all group cursor-pointer"
+                  className="bg-vscode-sidebar border-vscode-border hover:border-vscode-accent transition-all group cursor-pointer overflow-hidden"
                   onClick={() => handleArticleClick(article)}
                 >
-                  <CardContent className="p-6 md:p-8 flex flex-col md:flex-row gap-6">
-                    <div className="flex-grow space-y-4">
-                      <div className="flex items-center gap-3 text-xs text-vscode-comment uppercase tracking-widest">
-                        <span className="flex items-center gap-1"><Calendar size={12} /> {formatDate(article.pubDate)}</span>
-                        {article.categories?.length > 0 && (
-                          <>
-                            <span>•</span>
-                            <span className="text-vscode-accent">{article.categories[0]}</span>
-                          </>
-                        )}
+                  <div className="flex flex-col md:flex-row h-full">
+                    {/* Thumbnail */}
+                    {article.thumbnail && (
+                      <div className="h-48 md:h-auto md:w-72 shrink-0 border-b md:border-b-0 md:border-r border-vscode-border relative overflow-hidden">
+                        <img
+                          src={article.thumbnail}
+                          alt={article.title}
+                          className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-105"
+                        />
+                      </div>
+                    )}
+
+                    <CardContent className="p-4 md:p-8 flex flex-col gap-4 flex-grow justify-center">
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-3 text-[10px] md:text-xs text-vscode-comment uppercase tracking-widest">
+                          <span className="flex items-center gap-1"><Calendar size={12} /> {formatDate(article.pubDate)}</span>
+                          {article.categories?.length > 0 && (
+                            <>
+                              <span>•</span>
+                              <span className="text-vscode-accent truncate">{article.categories[0]}</span>
+                            </>
+                          )}
+                        </div>
+
+                        <h2 className="text-lg md:text-2xl font-bold text-vscode-text group-hover:text-vscode-accent transition-colors leading-tight">
+                          {article.title}
+                        </h2>
+
+                        <p className="text-vscode-text/60 text-xs md:text-sm leading-relaxed line-clamp-2 md:line-clamp-2">
+                          {stripHtml(article.description)}
+                        </p>
                       </div>
 
-                      <h2 className="text-2xl font-bold text-vscode-text group-hover:text-vscode-accent transition-colors leading-tight">
-                        {article.title}
-                      </h2>
-
-                      <p className="text-vscode-text/60 text-sm leading-relaxed line-clamp-2 md:line-clamp-3">
-                        {stripHtml(article.description)}
-                      </p>
-
-                      <div className="pt-2 flex items-center text-vscode-accent text-sm font-bold group-hover:translate-x-1 transition-transform">
-                        Read Article <ChevronRight size={16} />
+                      <div className="pt-2 flex items-center text-vscode-accent text-xs md:text-sm font-bold group-hover:translate-x-1 transition-transform mt-auto md:mt-0">
+                        Read <ChevronRight size={14} className="md:w-4 md:h-4" />
                       </div>
-                    </div>
-                  </CardContent>
+                    </CardContent>
+                  </div>
                 </Card>
               ))}
             </div>
