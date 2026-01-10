@@ -18,7 +18,7 @@ const LeftSidebar = () => {
                     </div>
                     <div>
                         <h2 className="text-xl font-bold text-vscode-text mb-1">{resumeData.personalInfo.name}</h2>
-                        <p className="text-vscode-accent font-mono text-sm">&lt;Fullstack Engineer /&gt;</p>
+                        <p className="text-vscode-accent font-mono text-sm">&lt;Software Engineer /&gt;</p>
                     </div>
                 </div>
 

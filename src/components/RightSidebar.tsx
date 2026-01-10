@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTheme } from '@/context/ThemeContext';
 import { useOS } from '@/context/OSContext';
-import { Monitor, Music, Gamepad2, Keyboard } from 'lucide-react';
+import { Monitor, Music, Gamepad2, Keyboard, Tv } from 'lucide-react';
 
 const RightSidebar = () => {
     const { theme, setTheme } = useTheme();
@@ -59,20 +59,21 @@ const RightSidebar = () => {
                 <h3 className="text-vscode-text font-bold uppercase text-xs tracking-wider mt-8 mb-6 border-b border-vscode-border pb-2">
                     Apps
                 </h3>
-                <div className="flex flex-col gap-2">
+                <div className="grid grid-cols-4 gap-2">
                     {[
                         // { id: 'computer', label: 'My Computer', icon: Monitor },
                         { id: 'spotify', label: 'Spotify', icon: Music },
                         { id: 'games', label: 'Tic-Tac-Toe', icon: Gamepad2 },
-                        { id: 'speedmaster', label: 'SpeedMaster', icon: Keyboard }
+                        { id: 'speedmaster', label: 'SpeedMaster', icon: Keyboard },
+                        { id: 'hawkins', label: 'Hawkins', icon: Tv }
                     ].map((app) => (
                         <button
                             key={app.id}
                             onClick={() => launchApp(app.id)}
-                            className={`flex items-center gap-2 text-left text-sm font-medium transition-colors px-2 py-1 rounded text-vscode-text hover:text-white hover:bg-vscode-highlight`}
+                            title={app.label}
+                            className={`flex flex-col items-center justify-center p-2 rounded transition-colors text-vscode-text hover:text-white hover:bg-vscode-highlight aspect-square`}
                         >
-                            <app.icon size={14} className={app.id === 'spotify' ? 'text-green-400' : app.id === 'games' ? 'text-purple-400' : app.id === 'speedmaster' ? 'text-yellow-400' : 'text-blue-400'} />
-                            <span className="capitalize">{app.label}</span>
+                            <app.icon size={20} className={app.id === 'spotify' ? 'text-green-400' : app.id === 'games' ? 'text-purple-400' : app.id === 'speedmaster' ? 'text-yellow-400' : 'text-blue-400'} />
                         </button>
                     ))}
                 </div>

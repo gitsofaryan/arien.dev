@@ -4,12 +4,13 @@ import MyComputer from './apps/MyComputer';
 import Spotify from './apps/Spotify';
 import Games from './apps/Games';
 import SpeedMaster from './apps/SpeedMaster';
-import { Monitor, Music, Gamepad2, Keyboard } from 'lucide-react';
+import Hawkins from './apps/Hawkins';
+import { Monitor, Music, Gamepad2, Keyboard, Tv } from 'lucide-react';
 
 import { useOS } from '@/context/OSContext';
 
 const MacDesktop = () => {
-    const { openApps, focusedApp, closeApp, toggleApp } = useOS();
+    const { openApps, focusedApp, closeApp, toggleApp, focusApp } = useOS();
 
     // Mapping for proper z-index and focus handling
     const isFocused = (appId: string) => focusedApp === appId;
@@ -78,6 +79,21 @@ const MacDesktop = () => {
                         <SpeedMaster />
                     </MacWindow>
 
+                    {/* Hawkins - Stranger Things App */}
+                    {openApps.includes('hawkins') && (
+                        <MacWindow
+                            title="Hawkins Lab"
+                            icon={<Tv size={14} className="text-red-400" />}
+                            defaultPosition={{ x: 150, y: 150 }}
+                            defaultSize={{ width: 800, height: 500 }}
+                            isOpen={openApps.includes('hawkins')}
+                            onClose={() => closeApp('hawkins')}
+                            zIndex={isFocused('hawkins') ? 54 : 40}
+                            onClick={() => toggleApp('hawkins')}
+                        >
+                            <Hawkins />
+                        </MacWindow>
+                    )}
                 </div>
             </div>
 
