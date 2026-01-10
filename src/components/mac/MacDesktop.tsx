@@ -3,7 +3,8 @@ import MacWindow from './MacWindow';
 import MyComputer from './apps/MyComputer';
 import Spotify from './apps/Spotify';
 import Games from './apps/Games';
-import { Monitor, Music, Gamepad2 } from 'lucide-react';
+import SpeedMaster from './apps/SpeedMaster';
+import { Monitor, Music, Gamepad2, Keyboard } from 'lucide-react';
 
 import { useOS } from '@/context/OSContext';
 
@@ -61,6 +62,20 @@ const MacDesktop = () => {
                         onClick={() => toggleApp('games')}
                     >
                         <Games />
+                    </MacWindow>
+
+                    {/* SpeedMaster */}
+                    <MacWindow
+                        title="SpeedMaster"
+                        isOpen={openApps.includes('speedmaster')}
+                        onClose={() => closeApp('speedmaster')}
+                        defaultPosition={{ x: 100, y: 100 }}
+                        defaultSize={{ width: 600, height: 400 }}
+                        icon={<Keyboard size={14} className="text-yellow-400" />}
+                        zIndex={isFocused('speedmaster') ? 53 : 30}
+                        onClick={() => toggleApp('speedmaster')}
+                    >
+                        <SpeedMaster />
                     </MacWindow>
 
                 </div>
