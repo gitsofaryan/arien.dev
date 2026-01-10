@@ -1,9 +1,12 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTheme } from '@/context/ThemeContext';
+import { useOS } from '@/context/OSContext';
+import { Monitor, Music, Gamepad2 } from 'lucide-react';
 
 const RightSidebar = () => {
     const { theme, setTheme } = useTheme();
+    const { launchApp } = useOS();
     const navItems = [
         { label: 'Home', path: '/' },
         { label: 'About', path: '/about' },
@@ -47,6 +50,26 @@ const RightSidebar = () => {
                                 }`}
                         >
                             <span className="capitalize">{t}</span>
+                        </button>
+                    ))}
+                </div>
+
+                <h3 className="text-vscode-text font-bold uppercase text-xs tracking-wider mt-8 mb-6 border-b border-vscode-border pb-2">
+                    Apps
+                </h3>
+                <div className="flex flex-col gap-2">
+                    {[
+                        // { id: 'computer', label: 'My Computer', icon: Monitor },
+                        { id: 'spotify', label: 'Spotify', icon: Music },
+                        { id: 'games', label: 'Tic-Tac-Toe', icon: Gamepad2 }
+                    ].map((app) => (
+                        <button
+                            key={app.id}
+                            onClick={() => launchApp(app.id)}
+                            className={`flex items-center gap-2 text-left text-sm font-medium transition-colors px-2 py-1 rounded text-vscode-text hover:text-white hover:bg-vscode-highlight`}
+                        >
+                            <app.icon size={14} className={app.id === 'spotify' ? 'text-green-400' : app.id === 'games' ? 'text-purple-400' : 'text-blue-400'} />
+                            <span className="capitalize">{app.label}</span>
                         </button>
                     ))}
                 </div>

@@ -1,8 +1,8 @@
-
 import * as React from 'react';
 import { memo, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Github, GitPullRequest, Linkedin, Globe, Mail, FileText, Code, Twitter } from 'lucide-react';
+import ProjectCard from '../components/ProjectCard';
+import { Github, Linkedin, Mail, Code, Terminal, Cpu, Globe, Database, Coffee, Twitter } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { resumeData } from "@/data/resumeData";
@@ -133,41 +133,7 @@ const ProfileCard = memo(({ profile }: ProfileCardProps) => (
   </Card>
 ));
 
-// Define interface for ProjectData
-interface ProjectData {
-  id: string;
-  title: string;
-  description: string;
-  image: string;
-  link: string;
-  tags: string[];
-}
-
-// Define interface for ProjectCard props
-interface ProjectCardProps {
-  project: ProjectData;
-}
-
-// Memoized ProjectCard component
-const ProjectCard = memo(({ project }: ProjectCardProps) => (
-  <Link to={project.link} className="block">
-    <Card className="h-full bg-vscode-sidebar border border-vscode-border hover:border-vscode-accent transition-all duration-300 hover:shadow-md">
-      <CardHeader className="p-4">
-        <CardTitle className="text-xl font-bold text-vscode-text">{project.title}</CardTitle>
-        <CardDescription className="text-vscode-text/60">{project.description}</CardDescription>
-      </CardHeader>
-      <CardContent className="p-4 pt-0">
-        <div className="flex flex-wrap gap-2 mt-3">
-          {project.tags.map(tag => (
-            <span key={`${project.id}-${tag}`} className="text-xs px-2 py-1 bg-vscode-highlight rounded">
-              {tag}
-            </span>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-  </Link>
-));
+// ProjectCard extracted to components/ProjectCard.tsx
 
 // Format date for display
 const formatDate = (dateString) => {
@@ -492,7 +458,8 @@ const Home = () => {
 
 
 
-      {/* Featured Projects Section
+      {/* Featured Projects Section */}
+      {/* 
       <div className="mt-16">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">Featured Projects</h2>
@@ -505,8 +472,9 @@ const Home = () => {
           {featuredProjects.map(project => (
             <ProjectCard key={project.id} project={project} />
           ))}
-        </div> */}
-      {/* </div> */}
+        </div>
+      </div> 
+      */}
     </div>
   );
 };

@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import LeftSidebar from './LeftSidebar';
 import RightSidebar from './RightSidebar';
 import Navbar from './Navbar';
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { GitBranch, Star, Bell, Settings, Layout, X, Menu, Loader2, RotateCw } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import MacDesktop from './mac/MacDesktop'; // Import MacDesktop
 
 interface MainLayoutProps {
     children: React.ReactNode;
@@ -100,8 +104,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 <main
                     className="flex-1 h-full overflow-hidden flex flex-col bg-vscode-bg relative shadow-2xl z-10 transition-colors duration-300"
                     style={{
-                        backgroundImage: 'var(--vscode-bg-image)',
-                        backgroundSize: 'var(--vscode-bg-size)'
+                        backgroundImage: 'var(--vscode-bg-image, none)',
+                        backgroundSize: 'var(--vscode-bg-size, cover)'
                     }}
                 >
                     {/* Top Status Bar */}
@@ -190,8 +194,10 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 <div className="hidden md:block h-full shrink-0">
                     <RightSidebar />
                 </div>
-
             </div>
+
+            {/* Global Mac Desktop Overlay */}
+            <MacDesktop />
         </div>
     );
 };
