@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import ReactAudioPlayer from 'react-audio-player';
 import { Play, RotateCcw, Search, MoreHorizontal, Pause, Heart, ArrowDownCircle, Volume2, Music4 } from 'lucide-react';
 
 // The User's specific playlist (Static Data with Local Files)
@@ -23,7 +22,8 @@ const Spotify = () => {
     const [currentTrackIndex, setCurrentTrackIndex] = useState<number | null>(null);
     const [search, setSearch] = useState("");
 
-    const playerRef = useRef<ReactAudioPlayer>(null);
+    // Use standard HTMLAudioElement ref
+    const audioRef = useRef<HTMLAudioElement>(null);
 
     // Initial Load: Check/Preload files asynchronously
     useEffect(() => {
@@ -54,32 +54,44 @@ const Spotify = () => {
         };
     }, []);
 
-    // Sync Play/Pause state with Player
+    // Effect for play/pause toggle when isPlaying changes
     useEffect(() => {
-        if (!playerRef.current?.audioEl.current) return;
+        const audio = audioRef.current;
+        if (!audio) return;
 
         if (isPlaying) {
-            playerRef.current.audioEl.current.play().catch(e => {
-                console.warn("Autoplay blocked or failed:", e);
+            audio.play().catch(err => {
+                console.error("Playback failed:", err);
                 setIsPlaying(false);
             });
         } else {
-            playerRef.current.audioEl.current.pause();
+            audio.pause();
         }
     }, [isPlaying, currentTrackIndex]);
 
-    // Format time helper
-    const formatTime = (time: number) => {
-        if (isNaN(time)) return "0:00";
-        const minutes = Math.floor(time / 60);
-        const seconds = Math.floor(time % 60);
-        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    const handleTimeUpdate = () => {
+        if (audioRef.current) {
+            setCurrentTime(audioRef.current.currentTime);
+        }
+    };
+
+    const handleLoadedMetadata = () => {
+        if (audioRef.current) {
+            setDuration(audioRef.current.duration);
+            if (isPlaying) {
+                audioRef.current.play().catch(console.error);
+            }
+        }
+    };
+
+    const handleEnded = () => {
+        handleNext();
     };
 
     const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
         const time = Number(e.target.value);
-        if (playerRef.current?.audioEl.current) {
-            playerRef.current.audioEl.current.currentTime = time;
+        if (audioRef.current) {
+            audioRef.current.currentTime = time;
             setCurrentTime(time);
         }
     };
@@ -105,8 +117,10 @@ const Spotify = () => {
         while (nextIndex < tracks.length && tracks[nextIndex].status !== 'ready') {
             nextIndex++;
         }
-        if (nextIndex < tracks.length) handlePlay(nextIndex);
-        else {
+        if (nextIndex < tracks.length) {
+            setCurrentTrackIndex(nextIndex);
+            setIsPlaying(true);
+        } else {
             setIsPlaying(false);
             setCurrentTrackIndex(null);
         }
@@ -117,8 +131,21 @@ const Spotify = () => {
         while (prevIndex >= 0 && tracks[prevIndex].status !== 'ready') {
             prevIndex--;
         }
-        if (prevIndex >= 0) handlePlay(prevIndex);
-        else handlePlay(0); // Restart first if nothing before
+        if (prevIndex >= 0) {
+            setCurrentTrackIndex(prevIndex);
+            setIsPlaying(true);
+        } else {
+            setCurrentTrackIndex(0);
+            setIsPlaying(true);
+        }
+    };
+
+    // Format time helper
+    const formatTime = (time: number) => {
+        if (isNaN(time)) return "0:00";
+        const minutes = Math.floor(time / 60);
+        const seconds = Math.floor(time % 60);
+        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
     };
 
     const filteredTracks = tracks.filter(t =>
@@ -130,18 +157,14 @@ const Spotify = () => {
 
     return (
         <div className="flex flex-col h-full bg-[#121212] text-white font-sans selection:bg-[#1ed760] selection:text-black relative">
-            <ReactAudioPlayer
-                ref={playerRef}
+
+            {/* Native Audio Element */}
+            <audio
+                ref={audioRef}
                 src={currentTrack?.blobUrl}
-                listenInterval={100}
-                onListen={setCurrentTime}
-                onEnded={handleNext}
-                onLoadedMetadata={(e) => {
-                    const audio = e.target as HTMLAudioElement;
-                    setDuration(audio.duration);
-                    if (isPlaying) audio.play().catch(console.error);
-                }}
-                volume={0.5}
+                onTimeUpdate={handleTimeUpdate}
+                onLoadedMetadata={handleLoadedMetadata}
+                onEnded={handleEnded}
             />
 
             {/* Header / Top Bar */}
@@ -171,7 +194,7 @@ const Spotify = () => {
             </div>
 
             {/* Playlist Content */}
-            <div className="flex-1 overflow-auto pb-24 scrollbar-hide">
+            <div className="flex-1 overflow-auto pb-48 scrollbar-hide">
                 {/* Playlist Header Info */}
                 <div className="px-6 pt-8 pb-6 flex flex-col items-center gap-4 bg-gradient-to-b from-indigo-900/80 to-[#121212] text-center">
                     <div className="w-48 h-48 shadow-2xl shadow-black/50 flex flex-col relative items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-800 text-white shrink-0 group rounded-md">
@@ -235,9 +258,9 @@ const Spotify = () => {
                 </div>
             </div>
 
-            {/* Persistent Player Bar - Mobile Optimized */}
-            <div className="h-auto min-h-[5rem] bg-[#181818] border-t border-[#282828] px-4 py-2 flex flex-col justify-center gap-2 z-20 shrink-0">
-                {/* Top Row: Track Check */}
+            {/* Persistent Player Bar - Custom Native Implementation */}
+            <div className="absolute bottom-0 left-0 right-0 h-auto min-h-[5rem] bg-[#181818] border-t border-[#282828] px-4 py-2 flex flex-col justify-center gap-2 z-30 shrink-0">
+                {/* Top Row: Track Output */}
                 <div className="flex items-center justify-between w-full">
                     <div className="flex items-center gap-3 overflow-hidden flex-1">
                         {currentTrack ? (

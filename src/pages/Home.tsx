@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { memo, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import ProjectCard from '../components/ProjectCard';
+import ProjectCard from '@/components/ProjectCard';
 import { Github, Linkedin, Mail, Code, Terminal, Cpu, Globe, Database, Coffee, Twitter } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
