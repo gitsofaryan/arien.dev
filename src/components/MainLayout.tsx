@@ -81,7 +81,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     const showContent = activeTab && openTabIds.includes(activeTab.id);
 
     return (
-        <div className="min-h-screen bg-[#000000] text-white font-mono selection:bg-green-900 selection:text-white flex flex-col md:flex-row overflow-hidden">
+        <div className="min-h-screen bg-vscode-bg text-vscode-text font-mono selection:bg-vscode-accent selection:text-vscode-bg flex flex-col md:flex-row overflow-hidden transition-colors duration-300">
 
             {/* Mobile Header */}
             <div className="md:hidden">
@@ -97,9 +97,15 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 </div>
 
                 {/* Center Panel (Main Content) */}
-                <main className="flex-1 h-full overflow-hidden flex flex-col bg-[#1F1F1F] relative shadow-2xl z-10">
+                <main
+                    className="flex-1 h-full overflow-hidden flex flex-col bg-vscode-bg relative shadow-2xl z-10 transition-colors duration-300"
+                    style={{
+                        backgroundImage: 'var(--vscode-bg-image)',
+                        backgroundSize: 'var(--vscode-bg-size)'
+                    }}
+                >
                     {/* Top Status Bar */}
-                    <div className="hidden md:flex h-14 border-b border-[#1f1f1f] bg-[#1F1F1F] items-center justify-between px-6 shrink-0 select-none">
+                    <div className="hidden md:flex h-14 border-b border-vscode-border bg-vscode-bg items-center justify-between px-6 shrink-0 select-none transition-colors duration-300">
                         {/* Tabs */}
                         <div className="flex gap-1 text-sm overflow-x-auto">
                             {openTabIds.map(tabId => {
@@ -113,8 +119,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                                         key={tab.id}
                                         onClick={() => navigate(tab.paths[0])}
                                         className={`
-                                            group relative flex items-center gap-2 px-4 py-2 min-w-[120px] cursor-pointer transition-colors border-r border-[#1f1f1f]/50
-                                            ${isActive ? 'bg-[#1F1F1F] text-white' : 'bg-[#151515] text-gray-500 hover:bg-[#1a1a1a]'}
+                                            group relative flex items-center gap-2 px-4 py-2 min-w-[120px] cursor-pointer transition-colors border-r border-vscode-border/50
+                                            ${isActive ? 'bg-vscode-bg text-vscode-text' : 'bg-vscode-sidebar text-vscode-text/70 hover:bg-vscode-highlight'}
                                         `}
                                     >
                                         <span className="truncate">{tab.label}</span>
@@ -127,7 +133,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                                         <span
                                             onClick={(e) => handleCloseTab(e, tab.id)}
                                             className={`
-                                                ml-auto p-0.5 rounded-sm hover:bg-[#333] opacity-0 group-hover:opacity-100 transition-opacity
+                                                ml-auto p-0.5 rounded-sm hover:bg-vscode-highlight opacity-0 group-hover:opacity-100 transition-opacity
                                                 ${isActive ? 'opacity-100' : ''}
                                             `}
                                         >
@@ -139,24 +145,24 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                         </div>
 
                         {/* Status Info */}
-                        <div className="flex items-center gap-6 text-xs font-medium tracking-wide">
+                        <div className="flex items-center gap-6 text-xs font-medium tracking-wide text-vscode-text/80">
                             <div className="flex items-center gap-2 text-green-400 bg-green-400/10 px-3 py-1 rounded-full">
                                 <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></div>
                                 Open to new work
                             </div>
-                            <div className="text-gray-500 max-w-[100px] truncate">Jabalpur, India</div>
-                            <div className="text-gray-500 flex items-center gap-2 whitespace-nowrap">
+                            <div className="text-vscode-text/60 max-w-[100px] truncate">Jabalpur, India</div>
+                            <div className="text-vscode-text/60 flex items-center gap-2 whitespace-nowrap">
                                 * My time: {formatTime(time)}
                             </div>
                         </div>
                     </div>
 
                     {/* Scrollable Content Area */}
-                    <div className="flex-1 overflow-y-auto relative scrollbar-thin scrollbar-thumb-[#1f1f1f] scrollbar-track-transparent bg-[#1F1F1F]">
+                    <div className="flex-1 overflow-y-auto relative scrollbar-thin scrollbar-thumb-vscode-border scrollbar-track-transparent bg-vscode-bg transition-colors duration-300">
                         {showContent ? (
                             <>
                                 {/* Line Numbers */}
-                                <div className="hidden md:block absolute left-0 top-0 bottom-0 w-12 text-right pr-3 pt-8 text-[#333] font-mono text-xs select-none pointer-events-none">
+                                <div className="hidden md:block absolute left-0 top-0 bottom-0 w-12 text-right pr-3 pt-8 text-vscode-text/30 font-mono text-xs select-none pointer-events-none">
                                     {Array.from({ length: 100 }).map((_, i) => (
                                         <div key={i} className="leading-[1.8]">{i + 1}</div>
                                     ))}
@@ -169,12 +175,12 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                             </>
                         ) : (
                             // Empty Editor State
-                            <div className="flex flex-col items-center justify-center h-full text-[#333] select-none">
+                            <div className="flex flex-col items-center justify-center h-full text-vscode-text/50 select-none">
                                 <div className="mb-4 opacity-20">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><path d="m18 16 4-4-4-4" /><path d="m6 8-4 4 4 4" /><path d="m14.5 4-5 16" /></svg>
                                 </div>
                                 <p className="text-sm font-mono">No files open</p>
-                                <p className="text-xs font-mono mt-2 text-[#444]">Select a file from the sidebar explorer</p>
+                                <p className="text-xs font-mono mt-2 text-vscode-text/40">Select a file from the sidebar explorer</p>
                             </div>
                         )}
                     </div>
@@ -189,5 +195,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         </div>
     );
 };
+
 
 export default MainLayout;

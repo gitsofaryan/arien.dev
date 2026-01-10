@@ -1,7 +1,9 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useTheme } from '@/context/ThemeContext';
 
 const RightSidebar = () => {
+    const { theme, setTheme } = useTheme();
     const navItems = [
         { label: 'Home', path: '/' },
         { label: 'About', path: '/about' },
@@ -10,7 +12,7 @@ const RightSidebar = () => {
     ];
 
     return (
-        <aside className="hidden md:flex w-[240px] bg-[#181818] border-l border-[#1f1f1f] flex-col h-full font-mono">
+        <aside className="hidden md:flex w-[240px] bg-vscode-sidebar border-l border-vscode-border flex-col h-full font-mono transition-colors duration-300">
             <div className="p-6">
                 <h3 className="text-vscode-text font-bold uppercase text-xs tracking-wider mb-6 border-b border-vscode-border pb-2">
                     Index
@@ -29,6 +31,25 @@ const RightSidebar = () => {
                         </NavLink>
                     ))}
                 </nav>
+
+                <h3 className="text-vscode-text font-bold uppercase text-xs tracking-wider mt-8 mb-6 border-b border-vscode-border pb-2">
+                    Themes
+                </h3>
+                <div className="flex flex-col gap-2">
+                    {['dark', 'retro', 'markdown', 'spatial'].map((t) => (
+                        <button
+                            key={t}
+                            onClick={() => setTheme(t as any)}
+                            className={`text-left text-sm font-medium transition-colors px-2 py-1 rounded
+                                ${theme === t
+                                    ? 'bg-vscode-accent/10 text-vscode-accent border-l-2 border-vscode-accent'
+                                    : 'text-vscode-text hover:text-white hover:bg-vscode-highlight'
+                                }`}
+                        >
+                            <span className="capitalize">{t}</span>
+                        </button>
+                    ))}
+                </div>
             </div>
 
             <div className="mt-auto p-6 text-xs text-vscode-text opacity-50">

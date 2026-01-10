@@ -73,10 +73,10 @@ export const resumeData = {
     {
       company: "Protocol Labs Dev Guild",
       location: "Remote",
-      role: "Fellow (Cohort 5) - Team Linka",
+      role: "Fellow (Cohort 6) - Team Linka",
       duration: "Present",
       achievements: [
-        "Selected for the Protocol Labs Dev Guild Cohort 5 to contribute to the Filecoin and IPFS ecosystem.",
+        "Selected for the Protocol Labs Dev Guild Cohort 6 to contribute to the Filecoin and IPFS ecosystem.",
         "Collaborating with Team Linka to build decentralized social graph infrastructure and OSS tooling.",
       ],
     },

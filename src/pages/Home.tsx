@@ -113,12 +113,12 @@ const ProfileCard = memo(({ profile }: ProfileCardProps) => (
         loading="lazy"
       />
       <div>
-        <CardTitle className="text-xl font-bold text-white">{profile.name || profile.username}</CardTitle>
-        <CardDescription className="text-vscode-text">{profile.bio || 'No bio available'}</CardDescription>
+        <CardTitle className="text-xl font-bold text-vscode-text">{profile.name || profile.username}</CardTitle>
+        <CardDescription className="text-vscode-text/60">{profile.bio || 'No bio available'}</CardDescription>
       </div>
     </CardHeader>
     <CardContent className="p-4 pt-0">
-      <div className="flex gap-4 text-sm text-vscode-text">
+      <div className="flex gap-4 text-sm text-vscode-text/80">
         <span>{profile.followers} Followers</span>
         <span>{profile.following} Following</span>
         <span>{profile.public_repos || profile.publicRepos} Public Repos</span>
@@ -153,8 +153,8 @@ const ProjectCard = memo(({ project }: ProjectCardProps) => (
   <Link to={project.link} className="block">
     <Card className="h-full bg-vscode-sidebar border border-vscode-border hover:border-vscode-accent transition-all duration-300 hover:shadow-md">
       <CardHeader className="p-4">
-        <CardTitle className="text-xl font-bold text-white">{project.title}</CardTitle>
-        <CardDescription className="text-vscode-text">{project.description}</CardDescription>
+        <CardTitle className="text-xl font-bold text-vscode-text">{project.title}</CardTitle>
+        <CardDescription className="text-vscode-text/60">{project.description}</CardDescription>
       </CardHeader>
       <CardContent className="p-4 pt-0">
         <div className="flex flex-wrap gap-2 mt-3">
@@ -276,17 +276,17 @@ const Home = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6">
-      <div className="select-none text-[#333] font-mono text-sm mb-8 animate-fade-in">
+      <div className="select-none text-vscode-text/60 font-mono text-sm mb-8 animate-fade-in">
         &lt;!-- Hero section --&gt;
       </div>
 
-      <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter mb-8 leading-[0.9] text-white animate-in slide-in-from-bottom-5 duration-500">
-        Softwaer<br />
-        <span className="text-[#333]">Engineer</span>
+      <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter mb-8 leading-[0.9] text-vscode-text animate-in slide-in-from-bottom-5 duration-500">
+        Software<br />
+        <span className="text-vscode-text/70">Engineer</span>
       </h1>
 
       <div className="max-w-2xl">
-        <p className="text-lg md:text-xl text-[#888] leading-relaxed mb-4 font-mono">
+        <p className="text-lg md:text-xl text-vscode-text/80 leading-relaxed mb-4 font-mono">
           {resumeData.personalInfo.bio}
         </p>
         <p className="text-sm md:text-base text-vscode-accent font-mono mb-12">
@@ -296,12 +296,12 @@ const Home = () => {
 
       <div className="flex flex-wrap gap-4 mb-24">
         <Link to="/about">
-          <Button className="h-12 px-8 bg-white text-black hover:bg-gray-200 rounded-sm font-bold tracking-wide">
+          <Button className="h-12 px-8 bg-vscode-text text-vscode-bg hover:bg-vscode-highlight rounded-sm font-bold tracking-wide">
             MORE ABOUT ME
           </Button>
         </Link>
         <Link to="/projects">
-          <Button variant="ghost" className="h-12 px-8 text-white hover:bg-[#1f1f1f] rounded-sm font-bold tracking-wide flex items-center gap-2 group">
+          <Button variant="ghost" className="h-12 px-8 text-vscode-text hover:bg-vscode-highlight rounded-sm font-bold tracking-wide flex items-center gap-2 group">
             VIEW WORK <span className="group-hover:translate-x-1 transition-transform">-&gt;</span>
           </Button>
         </Link>
@@ -310,90 +310,90 @@ const Home = () => {
       <div className="mb-24 space-y-12">
         {/* Technical Proficiency */}
         <div>
-          <h2 className="text-xl md:text-2xl font-bold mb-6 flex items-center text-white">
+          <h2 className="text-xl md:text-2xl font-bold mb-6 flex items-center text-vscode-text">
             <span className="text-vscode-accent mr-3">const</span>
             TECHNICAL_PROFICIENCY
             <span className="text-vscode-accent ml-3">=</span>
             <span className="text-vscode-text ml-3">{'{'}</span>
           </h2>
-          <div className="pl-6 md:pl-12 border-l border-[#333] ml-3 md:ml-6 space-y-4 font-mono text-sm leading-relaxed">
+          <div className="pl-6 md:pl-12 border-l border-vscode-border ml-3 md:ml-6 space-y-4 font-mono text-sm leading-relaxed">
             <div>
-              <span className="text-vscode-def">Languages:</span> <span className="text-[#ce9178]">['TypeScript', 'Rust', 'Solidity', 'Python', 'C++', 'Go']</span>,
+              <span className="text-vscode-def">Languages:</span> <span className="text-vscode-string">['TypeScript', 'Rust', 'Solidity', 'Python', 'C++', 'Go']</span>,
             </div>
             <div>
-              <span className="text-vscode-def">Blockchain:</span> <span className="text-[#ce9178]">['Smart Contracts', 'Web3.js', 'Ethereum', 'Bitcoin', 'Lightning']</span>,
+              <span className="text-vscode-def">Blockchain:</span> <span className="text-vscode-string">['Smart Contracts', 'Web3.js', 'Ethereum', 'Bitcoin', 'Lightning']</span>,
             </div>
             <div>
-              <span className="text-vscode-def">AI_ML_Data:</span> <span className="text-[#ce9178]">['Machine Learning', 'Deep Learning', 'Data Science', 'TensorFlow']</span>,
+              <span className="text-vscode-def">AI_ML_Data:</span> <span className="text-vscode-string">['Machine Learning', 'Deep Learning', 'Data Science', 'TensorFlow']</span>,
             </div>
             <div>
-              <span className="text-vscode-def">MERN_Stack:</span> <span className="text-[#ce9178]">['MongoDB', 'Express', 'React', 'Node', 'Next.js']</span>,
+              <span className="text-vscode-def">MERN_Stack:</span> <span className="text-vscode-string">['MongoDB', 'Express', 'React', 'Node', 'Next.js']</span>,
             </div>
             <div>
-              <span className="text-vscode-def">Backend_Cloud:</span> <span className="text-[#ce9178]">['Microservices', 'Docker', 'K8s', 'AWS', 'GCP', 'Supabase']</span>,
+              <span className="text-vscode-def">Backend_Cloud:</span> <span className="text-vscode-string">['Microservices', 'Docker', 'K8s', 'AWS', 'GCP', 'Supabase']</span>,
             </div>
           </div>
-          <h2 className="text-xl md:text-2xl font-bold mt-2 ml-3 text-white">
+          <h2 className="text-xl md:text-2xl font-bold mt-2 ml-3 text-vscode-text">
             <span className="text-vscode-text">{'}'};</span>
           </h2>
         </div>
 
         {/* Achievements */}
         <div>
-          <h2 className="text-xl md:text-2xl font-bold mb-6 flex items-center text-white">
+          <h2 className="text-xl md:text-2xl font-bold mb-6 flex items-center text-vscode-text">
             <span className="text-vscode-accent mr-3">const</span>
             ACHIEVEMENTS
             <span className="text-vscode-accent ml-3">=</span>
             <span className="text-vscode-text ml-3">[</span>
           </h2>
-          <div className="pl-6 md:pl-12 border-l border-[#333] ml-3 md:ml-6 space-y-2 font-mono text-sm">
+          <div className="pl-6 md:pl-12 border-l border-vscode-border ml-3 md:ml-6 space-y-2 font-mono text-sm">
             {resumeData.achievements.map((achievement, i) => (
-              <div key={i} className="text-[#888]">
-                <span className="text-[#ce9178]">"{achievement}"</span>,
+              <div key={i} className="text-vscode-text/80">
+                <span className="text-vscode-string">"{achievement}"</span>,
               </div>
             ))}
           </div>
-          <h2 className="text-xl md:text-2xl font-bold mt-2 ml-3 text-white">
+          <h2 className="text-xl md:text-2xl font-bold mt-2 ml-3 text-vscode-text">
             <span className="text-vscode-text">];</span>
           </h2>
         </div>
       </div>
 
-      <div className="select-none text-[#333] font-mono text-sm mb-12">
+      <div className="select-none text-vscode-text/60 font-mono text-sm mb-12">
         &lt;!-- Featured work --&gt;
       </div>
 
       {/* Work Experience Section */}
       <div className="mt-16 mb-24">
-        <h2 className="text-xl md:text-2xl font-bold mb-12 flex items-center text-white">
+        <h2 className="text-xl md:text-2xl font-bold mb-12 flex items-center text-vscode-text">
           <span className="text-vscode-accent mr-3">const</span>
           WORK_EXPERIENCE
           <span className="text-vscode-accent ml-3">=</span>
           <span className="text-vscode-text ml-3">[</span>
         </h2>
 
-        <div className="relative border-l border-[#333] ml-3 md:ml-6 space-y-12 pl-8 md:pl-12">
+        <div className="relative border-l border-vscode-border ml-3 md:ml-6 space-y-12 pl-8 md:pl-12">
           {resumeData.experience.map((exp, index) => (
             <div key={index} className="relative group">
               {/* Timeline Dot */}
-              <div className="absolute -left-[41px] md:-left-[57px] top-0 w-4 h-4 rounded-full bg-[#1F1F1F] border-2 border-[#333] group-hover:border-vscode-accent group-hover:bg-vscode-accent transition-all duration-300"></div>
+              <div className="absolute -left-[41px] md:-left-[57px] top-0 w-4 h-4 rounded-full bg-vscode-sidebar border-2 border-vscode-border group-hover:border-vscode-accent group-hover:bg-vscode-accent transition-all duration-300"></div>
 
               <div className="flex flex-col md:flex-row md:items-baseline justify-between mb-2">
-                <h3 className="text-xl font-bold text-white group-hover:text-vscode-accent transition-colors">
+                <h3 className="text-xl font-bold text-vscode-text group-hover:text-vscode-accent transition-colors">
                   {exp.company}
                 </h3>
-                <span className="text-sm font-mono text-[#666]">{exp.duration}</span>
+                <span className="text-sm font-mono text-vscode-text/60">{exp.duration}</span>
               </div>
 
-              <div className="text-md text-[#aaa] font-mono mb-4 flex items-center gap-2">
+              <div className="text-md text-vscode-text/70 font-mono mb-4 flex items-center gap-2">
                 <span>{exp.role}</span>
-                <span className="text-[#333]">•</span>
-                <span className="text-xs text-[#555]">{exp.location}</span>
+                <span className="text-vscode-text/40">•</span>
+                <span className="text-xs text-vscode-text/50">{exp.location}</span>
               </div>
 
               <ul className="space-y-2">
                 {exp.achievements.map((achievement, i) => (
-                  <li key={i} className="text-[#888] text-sm leading-relaxed flex items-start gap-3">
+                  <li key={i} className="text-vscode-text/80 text-sm leading-relaxed flex items-start gap-3">
                     <span className="text-vscode-accent mt-1.5 text-xs leading-none">{'//'}</span>
                     {achievement}
                   </li>
@@ -402,14 +402,14 @@ const Home = () => {
             </div>
           ))}
         </div>
-        <h2 className="text-xl md:text-2xl font-bold mt-8 ml-3 text-white">
+        <h2 className="text-xl md:text-2xl font-bold mt-8 ml-3 text-vscode-text">
           <span className="text-vscode-text">];</span>
         </h2>
       </div>
 
       {/* Organizations Section */}
       <div className="mt-16">
-        <h2 className="text-xl md:text-2xl font-bold mb-6">Organizations I Contributed In.</h2>
+        <h2 className="text-xl md:text-2xl font-bold mb-6 text-vscode-text">Organizations I Contributed In.</h2>
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-6">
           {orgHandles.map(handle => (
             <a
@@ -425,8 +425,9 @@ const Home = () => {
                 alt={`${handle} avatar`}
                 loading="lazy"
                 className="w-16 h-16 rounded-full border border-vscode-border group-hover:border-vscode-accent transition-colors"
+                style={{ backgroundColor: 'white' }}
               />
-              <span className="mt-2 text-xs text-vscode-text group-hover:text-white truncate max-w-16">@{handle}</span>
+              <span className="mt-2 text-xs text-vscode-text/80 group-hover:text-vscode-text truncate max-w-16">@{handle}</span>
             </a>
           ))}
         </div>
@@ -435,10 +436,10 @@ const Home = () => {
 
       {/* Graphs Section */}
       <div className="mt-16">
-        <h2 className="text-xl md:text-2xl font-bold mb-6 flex items-center"><Github size={24} className="mr-2" />Activity & Stats</h2>
+        <h2 className="text-xl md:text-2xl font-bold mb-6 flex items-center text-vscode-text"><Github size={24} className="mr-2" />Activity & Stats</h2>
         <div className="flex flex-col gap-6 max-w-2xl mx-auto">
-          <div className="w-full bg-[#0d1117] rounded-lg p-3 border border-vscode-border">
-            <h3 className="text-base font-semibold mb-2 text-white">GitHub Contributions</h3>
+          <div className="w-full bg-vscode-sidebar rounded-lg p-3 border border-vscode-border">
+            <h3 className="text-base font-semibold mb-2 text-vscode-text">GitHub Contributions</h3>
             <img
               src={`https://ghchart.rshah.org/${profileData.username}`}
               alt={`GitHub contribution graph for ${profileData.username}`}
@@ -446,8 +447,8 @@ const Home = () => {
               loading="lazy"
             />
           </div>
-          <div className="w-full bg-[#0d1117] rounded-lg p-3 border border-vscode-border">
-            <h3 className="text-base font-semibold mb-2 text-white">LeetCode Progress</h3>
+          <div className="w-full bg-vscode-sidebar rounded-lg p-3 border border-vscode-border">
+            <h3 className="text-base font-semibold mb-2 text-vscode-text">LeetCode Progress</h3>
             <img
               src={`https://leetcard.jacoblin.cool/${resumeData.personalInfo.leetcode}?theme=dark&font=Source%20Sans%20Pro&ext=heatmap`}
               alt={`LeetCode stats for ${resumeData.personalInfo.leetcode}`}

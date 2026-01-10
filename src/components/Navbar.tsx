@@ -4,29 +4,13 @@ import { Mail, Github, LinkedinIcon, BookOpen, FileDown, Menu, X } from 'lucide-
 import { Button } from "@/components/ui/button";
 
 const Navbar: React.FC = () => {
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') as 'dark' | 'light' | null;
-    if (savedTheme) {
-      setTheme(savedTheme);
-      document.documentElement.classList.toggle('dark', savedTheme === 'dark');
-    }
-  }, []);
 
   // Close mobile menu when route changes
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location]);
-
-  const toggleTheme = () => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
-  };
 
   const navLinks = [
     { to: "/about", label: "About", icon: Mail },
@@ -35,12 +19,12 @@ const Navbar: React.FC = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-[#181818] border-b border-vscode-border md:hidden">
+    <header className="sticky top-0 z-50 bg-vscode-sidebar border-b border-vscode-border md:hidden">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center space-x-2">
-              <span className="text-white font-mono font-bold text-xl underline">arien.dev</span>
+              <span className="text-vscode-text font-mono font-bold text-xl underline">arien.dev</span>
             </Link>
           </div>
 
@@ -51,7 +35,8 @@ const Navbar: React.FC = () => {
               <Link
                 key={link.to}
                 to={link.to}
-                className="nav-link flex items-center space-x-1 text-vscode-text hover:text-white transition-colors"
+                className="nav-link flex items-center space-x-1 text-vscode-text/70 hover:text-vscode-text transition-colors"
+              // Adjusted text colors for better contrast
               >
                 {link.icon && <link.icon size={18} />}
                 {link.image && <img src={link.image} alt="" height={20} width={20} />}
@@ -64,7 +49,7 @@ const Navbar: React.FC = () => {
                 href="https://github.com/gitsofaryan"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-vscode-text hover:text-white transition-colors"
+                className="text-vscode-text/70 hover:text-vscode-text transition-colors"
               >
                 <Github size={20} />
               </a>
@@ -72,7 +57,7 @@ const Navbar: React.FC = () => {
                 href="https://linkedin.com/in/aryan-jain07/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-vscode-text hover:text-white transition-colors"
+                className="text-vscode-text/70 hover:text-vscode-text transition-colors"
               >
                 <LinkedinIcon size={20} />
               </a>
@@ -92,7 +77,7 @@ const Navbar: React.FC = () => {
               variant="ghost"
               size="icon"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-vscode-text hover:text-white hover:bg-vscode-sidebar"
+              className="text-vscode-text hover:bg-vscode-highlight"
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </Button>
@@ -102,13 +87,13 @@ const Navbar: React.FC = () => {
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-16 left-0 w-full bg-[#181818] border-b border-vscode-border animate-in slide-in-from-top-5 duration-200 shadow-xl">
+        <div className="md:hidden absolute top-16 left-0 w-full bg-vscode-sidebar border-b border-vscode-border animate-in slide-in-from-top-5 duration-200 shadow-xl">
           <nav className="flex flex-col p-4 space-y-4">
             {navLinks.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
-                className="flex items-center space-x-3 text-vscode-text hover:text-white p-2 rounded-md hover:bg-vscode-sidebar transition-colors"
+                className="flex items-center space-x-3 text-vscode-text hover:text-vscode-text p-2 rounded-md hover:bg-vscode-highlight transition-colors"
               >
                 {link.icon && <link.icon size={18} />}
                 {link.image && <img src={link.image} alt="" height={18} width={18} />}
@@ -121,7 +106,7 @@ const Navbar: React.FC = () => {
                   href="https://github.com/gitsofaryan"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-vscode-text hover:text-white transition-colors flex items-center gap-2"
+                  className="text-vscode-text/70 hover:text-vscode-text transition-colors flex items-center gap-2"
                 >
                   <Github size={20} />
                   <span>GitHub</span>
@@ -130,7 +115,7 @@ const Navbar: React.FC = () => {
                   href="https://linkedin.com/in/aryan-jain07/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-vscode-text hover:text-white transition-colors flex items-center gap-2"
+                  className="text-vscode-text/70 hover:text-vscode-text transition-colors flex items-center gap-2"
                 >
                   <LinkedinIcon size={20} />
                   <span>LinkedIn</span>

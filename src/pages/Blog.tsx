@@ -89,20 +89,20 @@ const Blog = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-12 animate-fade-in font-mono text-gray-300">
+    <div className="max-w-5xl mx-auto px-6 py-12 animate-fade-in font-mono text-vscode-text/80">
 
       {!selectedArticle ? (
         <>
           {/* Header */}
           <section className="mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight flex items-center gap-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-vscode-text mb-6 tracking-tight flex items-center gap-4">
               <BookOpen size={40} className="text-vscode-accent" />
               <span>
                 <span className="text-vscode-function">stories</span>
                 <span className="text-vscode-class">.md</span>
               </span>
             </h1>
-            <p className="text-lg text-gray-400 max-w-2xl leading-relaxed">
+            <p className="text-lg text-vscode-text/60 max-w-2xl leading-relaxed">
               Thoughts on engineering, design drafts, and late-night debugging sessions. This is where I document the process.
             </p>
           </section>
@@ -126,7 +126,7 @@ const Blog = () => {
               {articles.map((article, index) => (
                 <Card
                   key={index}
-                  className="bg-[#1F1F1F] border-vscode-border hover:border-vscode-accent transition-all group cursor-pointer"
+                  className="bg-vscode-sidebar border-vscode-border hover:border-vscode-accent transition-all group cursor-pointer"
                   onClick={() => handleArticleClick(article)}
                 >
                   <CardContent className="p-6 md:p-8 flex flex-col md:flex-row gap-6">
@@ -141,11 +141,11 @@ const Blog = () => {
                         )}
                       </div>
 
-                      <h2 className="text-2xl font-bold text-white group-hover:text-vscode-accent transition-colors leading-tight">
+                      <h2 className="text-2xl font-bold text-vscode-text group-hover:text-vscode-accent transition-colors leading-tight">
                         {article.title}
                       </h2>
 
-                      <p className="text-gray-400 text-sm leading-relaxed line-clamp-2 md:line-clamp-3">
+                      <p className="text-vscode-text/60 text-sm leading-relaxed line-clamp-2 md:line-clamp-3">
                         {stripHtml(article.description)}
                       </p>
 
@@ -163,7 +163,7 @@ const Blog = () => {
         <>
           <button
             onClick={handleBackClick}
-            className="mb-8 flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm uppercase tracking-widest group"
+            className="mb-8 flex items-center gap-2 text-vscode-text/60 hover:text-vscode-text transition-colors text-sm uppercase tracking-widest group"
           >
             <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Library
           </button>
@@ -171,7 +171,7 @@ const Blog = () => {
           <article className="animate-in slide-in-from-bottom-4 duration-500">
             <header className="mb-12 pb-8 border-b border-vscode-border">
               <div className="flex items-center gap-4 text-sm text-vscode-comment mb-6">
-                <span className="flex items-center gap-2 bg-[#1F1F1F] px-3 py-1 rounded border border-vscode-border">
+                <span className="flex items-center gap-2 bg-vscode-sidebar px-3 py-1 rounded border border-vscode-border">
                   <Calendar size={14} /> {formatDate(selectedArticle.pubDate)}
                 </span>
                 {selectedArticle.categories?.map((cat, i) => (
@@ -181,27 +181,27 @@ const Blog = () => {
                 ))}
               </div>
 
-              <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight mb-8">
+              <h1 className="text-3xl md:text-5xl font-bold text-vscode-text leading-tight mb-8">
                 {selectedArticle.title}
               </h1>
             </header>
 
             <div
               className="prose prose-invert prose-lg max-w-none
-                    prose-headings:text-white prose-headings:font-bold prose-headings:tracking-tight
-                    prose-p:text-gray-300 prose-p:leading-relaxed prose-p:font-sans
+                    prose-headings:text-vscode-text prose-headings:font-bold prose-headings:tracking-tight
+                    prose-p:text-vscode-text/80 prose-p:leading-relaxed prose-p:font-sans
                     prose-a:text-vscode-accent prose-a:no-underline hover:prose-a:underline
-                    prose-strong:text-white prose-strong:font-semibold
-                    prose-code:text-vscode-accent prose-code:bg-[#151515] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-sm prose-code:border prose-code:border-[#333]
-                    prose-pre:bg-[#151515] prose-pre:border prose-pre:border-vscode-border prose-pre:rounded-lg
-                    prose-blockquote:border-l-4 prose-blockquote:border-vscode-accent prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:bg-[#1F1F1F] prose-blockquote:py-2 prose-blockquote:pr-4 prose-blockquote:rounded-r
-                    prose-ul:text-gray-300 prose-li:marker:text-vscode-accent
+                    prose-strong:text-vscode-text prose-strong:font-semibold
+                    prose-code:text-vscode-accent prose-code:bg-vscode-highlight/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-sm prose-code:border prose-code:border-vscode-border
+                    prose-pre:bg-vscode-sidebar prose-pre:border prose-pre:border-vscode-border prose-pre:rounded-lg
+                    prose-blockquote:border-l-4 prose-blockquote:border-vscode-accent prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:bg-vscode-sidebar prose-blockquote:py-2 prose-blockquote:pr-4 prose-blockquote:rounded-r prose-blockquote:text-vscode-text/80
+                    prose-ul:text-vscode-text/80 prose-li:marker:text-vscode-accent
                     prose-img:rounded-xl prose-img:border prose-img:border-vscode-border prose-img:shadow-lg"
               dangerouslySetInnerHTML={{ __html: selectedArticle.content }}
             />
 
             <div className="mt-16 pt-8 border-t border-vscode-border flex justify-between items-center">
-              <button onClick={handleBackClick} className="text-gray-400 hover:text-white transition-colors font-bold">
+              <button onClick={handleBackClick} className="text-vscode-text/60 hover:text-vscode-text transition-colors font-bold">
                 &larr; More Stories
               </button>
               <a href={selectedArticle.link} target="_blank" rel="noopener" className="flex items-center gap-2 text-vscode-accent hover:text-white transition-colors">

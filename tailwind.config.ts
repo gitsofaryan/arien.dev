@@ -1,5 +1,7 @@
-
 import type { Config } from "tailwindcss";
+import tailwindAnimate from "tailwindcss-animate";
+import tailwindScrollbar from "tailwind-scrollbar";
+import tailwindScrollbarHide from "tailwind-scrollbar-hide";
 
 export default {
 	darkMode: ["class"],
@@ -66,19 +68,20 @@ export default {
         // VS Code inspired theme colors
         // Zen Dark Theme Colors
         vscode: {
-          bg: '#050505',
-          sidebar: '#0a0a0a',
-          text: '#e5e5e5',
-          accent: '#ffffff', // White accent
-          highlight: '#262626',
-          border: '#262626',
+          bg: 'var(--vscode-bg)',
+          sidebar: 'var(--vscode-sidebar)',
+          text: 'var(--vscode-text)',
+          accent: 'var(--vscode-accent)',
+          highlight: 'var(--vscode-highlight)',
+          border: 'var(--vscode-border)',
           comment: '#808080',
           string: '#a3a3a3',
-          keyword: '#e5e5e5',
-          function: '#e5e5e5',
-          type: '#e5e5e5',
-          variable: '#e5e5e5'
+          keyword: 'var(--vscode-accent)',
+          function: 'var(--vscode-text)',
+          type: 'var(--vscode-text)',
+          variable: 'var(--vscode-text)'
         }
+
 			},
 			fontFamily: {
 				sans: ['Inter', 'sans-serif'],
@@ -107,13 +110,13 @@ export default {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-        'fade-in': 'fade-in 0.3s ease-out'
+				'fade-in': 'fade-in 0.3s ease-out'
 			}
 		}
 	},
 	plugins: [
-  require("tailwindcss-animate"),
-  require("tailwind-scrollbar"),
-  require("tailwind-scrollbar-hide"),
+  tailwindAnimate,
+  tailwindScrollbar,
+  tailwindScrollbarHide,
 ],
 } satisfies Config;
