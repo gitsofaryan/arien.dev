@@ -6,6 +6,8 @@ const STATIC_PLAYLIST = [
     { title: "Running Up That Hill", artist: "Kate Bush", album: "Hounds of Love", added: "1 week ago", duration: "4:58", file: "Running up that hill.m4a" },
     { title: "Every Breath You Take", artist: "The Police", album: "Synchronicity", added: "4 days ago", duration: "4:13", file: "Every Breath You Take Video.m4a" },
     { title: "Cornfield Chase", artist: "Hans Zimmer", album: "Interstellar", added: "1 week ago", duration: "2:06", file: "Cornfield Chase.m4a" },
+    { title: "Stranger Things Theme", artist: "Kyle Dixon & Michael Stein", album: "Stranger Things", added: "Recently", duration: "1:00", file: "Stranger Things.mp3" },
+    { title: "End of Beginning", artist: "Djo", album: "DECIDE", added: "Recently", duration: "2:39", file: "End of Beginning - Djo.mp3" },
     { title: "Love Me Not", artist: "Unknown", album: "Unknown", added: "Just now", duration: "3:00", file: "Love Me Not.m4a" }
 ];
 
