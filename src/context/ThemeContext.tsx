@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-type Theme = 'dark' | 'light' | 'retro' | 'markdown' | 'spatial';
+type Theme = 'dark' | 'light' | 'retro' | 'markdown' | 'spatial' | 'pixel';
 
 interface ThemeContextType {
     theme: Theme;

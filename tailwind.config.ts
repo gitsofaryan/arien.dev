@@ -86,7 +86,8 @@ export default {
 			fontFamily: {
 				sans: ['Inter', 'sans-serif'],
 				mono: ['Fira Code', 'monospace'],
-				code: ['Fira Code', 'monospace']
+				code: ['Fira Code', 'monospace'],
+        pixel: ['var(--font-pixel)', 'monospace']
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

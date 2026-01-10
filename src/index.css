@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -121,6 +123,32 @@
     --vscode-bg-size: 20px 20px;
   }
 
+  /* Pixel Theme (Pixelact UI) */
+  :root[data-theme='pixel'] {
+    --background: 260 20% 98%;
+    --foreground: 260 20% 10%;
+    --card: 260 20% 98%;
+    --card-foreground: 260 20% 10%;
+    --popover: 260 20% 98%;
+    --popover-foreground: 260 20% 10%;
+    --primary: 260 100% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 260 20% 90%;
+    --secondary-foreground: 260 20% 10%;
+    --muted: 260 10% 90%;
+    --muted-foreground: 260 10% 40%;
+    --accent: 260 20% 90%;
+    --accent-foreground: 260 20% 10%;
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 260 20% 10%;
+    --input: 260 20% 10%;
+    --ring: 260 100% 60%;
+    --radius: 0px;
+
+    --font-pixel: 'Press Start 2P', system-ui, sans-serif;
+  }
+
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
@@ -227,5 +255,61 @@
   /* Section Outlines - New utility for the 'outline' look */
   .zen-section {
     @apply border-y border-border py-12;
+  }
+
+  /* Pixel Utilities */
+  .pixel-border {
+    box-shadow:
+      -2px 0 0 0 var(--border),
+      2px 0 0 0 var(--border),
+      0 -2px 0 0 var(--border),
+      0 2px 0 0 var(--border);
+    margin: 2px;
+  }
+
+  /* Apply pixel font when theme is active */
+  [data-theme='pixel'] body {
+    overflow-x: hidden;
+  }
+
+  [data-theme='pixel'] * {
+    font-family: 'Press Start 2P', cursive !important;
+    letter-spacing: -1px;
+    border-width: 2px !important;
+  }
+
+  /* Specific typography adjustments for Pixel Theme to prevent "too big" text */
+  [data-theme='pixel'] p,
+  [data-theme='pixel'] span,
+  [data-theme='pixel'] a,
+  [data-theme='pixel'] button,
+  [data-theme='pixel'] div {
+    font-size: 0.7rem !important;
+    /* Scale down heavily as Press Start is huge */
+    line-height: 1.6 !important;
+  }
+
+  [data-theme='pixel'] h1 {
+    font-size: 1.5rem !important;
+    margin-bottom: 2rem !important;
+  }
+
+  [data-theme='pixel'] h2 {
+    font-size: 1.2rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  [data-theme='pixel'] h3 {
+    font-size: 1rem !important;
+  }
+
+  [data-theme='pixel'] h4 {
+    font-size: 0.9rem !important;
+  }
+
+  /* Center container adjustment for pixel theme */
+  [data-theme='pixel'] main>div>div {
+    max-width: 90% !important;
+    /* Force more margin on sides */
   }
 }

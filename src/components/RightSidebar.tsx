@@ -39,7 +39,7 @@ const RightSidebar = () => {
                     Themes
                 </h3>
                 <div className="flex flex-col gap-2">
-                    {['dark', 'retro', 'markdown', 'spatial'].map((t) => (
+                    {['dark', 'retro', 'markdown', 'spatial', 'pixel'].map((t) => (
                         <button
                             key={t}
                             onClick={() => setTheme(t as any)}
