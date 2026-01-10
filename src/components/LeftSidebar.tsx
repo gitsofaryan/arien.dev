@@ -28,62 +28,61 @@ const LeftSidebar = () => {
                 </p>
 
                 {/* Contact Info */}
-                <div className="flex flex-col gap-3 text-sm text-vscode-text/90">
-                    <div className="flex items-center gap-3">
-                        <MapPin size={16} className="text-vscode-accent" />
-                        <a
-                            href="https://www.google.com/maps/search/?api=1&query=Jabalpur,+Madhya+Pradesh,+India"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:text-vscode-accent transition-colors"
-                        >
-                            Jabalpur, MP, India
-                        </a>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <Mail size={16} className="text-vscode-accent" />
-                        <a href={`mailto:${resumeData.personalInfo.email}`} className="hover:text-vscode-accent transition-colors truncate">
-                            {resumeData.personalInfo.email}
-                        </a>
-                    </div>
+                <div className="flex flex-col gap-2 text-sm text-vscode-text opacity-90">
+                    <a
+                        href="https://www.google.com/maps/search/?api=1&query=Jabalpur,+Madhya+Pradesh,+India"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 p-2 rounded hover:bg-white/10 hover:text-white hover:translate-x-1 transition-all duration-300 group text-gray-300"
+                    >
+                        <MapPin size={16} className="text-vscode-accent group-hover:scale-110 transition-transform" />
+                        <span>Jabalpur, MP, India</span>
+                    </a>
+                    <a
+                        href={`mailto:${resumeData.personalInfo.email}`}
+                        className="flex items-center gap-3 p-2 rounded hover:bg-white/10 hover:text-white hover:translate-x-1 transition-all duration-300 group text-gray-300"
+                    >
+                        <Mail size={16} className="text-vscode-accent group-hover:scale-110 transition-transform" />
+                        <span className="truncate">{resumeData.personalInfo.email}</span>
+                    </a>
                 </div>
 
                 {/* Socials & Actions */}
                 <div className="flex flex-col gap-3 mt-auto">
                     <div className="flex flex-wrap gap-2 mb-2">
-                        <a href={`https://github.com/${resumeData.personalInfo.github}`} target="_blank" rel="noopener" className="p-2 bg-vscode-bg border border-vscode-border rounded hover:border-vscode-accent hover:text-vscode-accent transition-colors text-vscode-text" aria-label="GitHub">
+                        <a href={`https://github.com/${resumeData.personalInfo.github}`} target="_blank" rel="noopener" className="p-2 bg-vscode-bg border border-vscode-border rounded hover:border-vscode-accent hover:text-vscode-accent hover:scale-110 transition-all duration-300 text-vscode-text" aria-label="GitHub">
                             <Github size={18} />
                         </a>
-                        <a href={`https://linkedin.com/in/${resumeData.personalInfo.linkedin}`} target="_blank" rel="noopener" className="p-2 bg-vscode-bg border border-vscode-border rounded hover:border-vscode-accent hover:text-vscode-accent transition-colors text-vscode-text" aria-label="LinkedIn">
+                        <a href={`https://linkedin.com/in/${resumeData.personalInfo.linkedin}`} target="_blank" rel="noopener" className="p-2 bg-vscode-bg border border-vscode-border rounded hover:border-vscode-accent hover:text-vscode-accent hover:scale-110 transition-all duration-300 text-vscode-text" aria-label="LinkedIn">
                             <Linkedin size={18} />
                         </a>
-                        <a href={`https://twitter.com/${resumeData.personalInfo.twitter}`} target="_blank" rel="noopener" className="p-2 bg-vscode-bg border border-vscode-border rounded hover:border-vscode-accent hover:text-vscode-accent transition-colors text-vscode-text" aria-label="Twitter">
+                        <a href={`https://twitter.com/${resumeData.personalInfo.twitter}`} target="_blank" rel="noopener" className="p-2 bg-vscode-bg border border-vscode-border rounded hover:border-vscode-accent hover:text-vscode-accent hover:scale-110 transition-all duration-300 text-vscode-text" aria-label="Twitter">
                             <Twitter size={18} />
                         </a>
-                        <a href={`https://instagram.com/${resumeData.personalInfo.instagram}`} target="_blank" rel="noopener" className="p-2 bg-vscode-bg border border-vscode-border rounded hover:border-vscode-accent hover:text-vscode-accent transition-colors text-vscode-text" aria-label="Instagram">
+                        <a href={`https://instagram.com/${resumeData.personalInfo.instagram}`} target="_blank" rel="noopener" className="p-2 bg-vscode-bg border border-vscode-border rounded hover:border-vscode-accent hover:text-vscode-accent hover:scale-110 transition-all duration-300 text-vscode-text" aria-label="Instagram">
                             <Instagram size={18} />
                         </a>
                         {/* Discord */}
-                        <div className="group relative p-2 bg-vscode-bg border border-vscode-border rounded hover:border-vscode-accent hover:text-vscode-accent transition-colors text-vscode-text cursor-help" aria-label="Discord">
+                        <div className="group relative p-2 bg-vscode-bg border border-vscode-border rounded hover:border-vscode-accent hover:text-vscode-accent hover:scale-110 transition-all duration-300 text-vscode-text cursor-help" aria-label="Discord">
                             <MessageCircle size={18} />
                             <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs bg-black text-white border border-vscode-border rounded opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none transition-opacity z-50">
                                 Discord: {resumeData.personalInfo.discord}
                             </span>
                         </div>
-                        <a href={`https://t.me/${resumeData.personalInfo.telegram}`} target="_blank" rel="noopener" className="p-2 bg-vscode-bg border border-vscode-border rounded hover:border-vscode-accent hover:text-vscode-accent transition-colors text-vscode-text" aria-label="Telegram">
+                        <a href={`https://t.me/${resumeData.personalInfo.telegram}`} target="_blank" rel="noopener" className="p-2 bg-vscode-bg border border-vscode-border rounded hover:border-vscode-accent hover:text-vscode-accent hover:scale-110 transition-all duration-300 text-vscode-text" aria-label="Telegram">
                             <Send size={18} />
                         </a>
                     </div>
 
                     <a href="/resume.pdf" download="Aryan_Jain_Resume.pdf" target="_blank" rel="noopener noreferrer" className="w-full">
-                        <Button variant="outline" className="w-full gap-2 border-vscode-accent text-vscode-accent hover:bg-vscode-accent hover:text-vscode-bg transition-all">
+                        <Button variant="outline" className="w-full gap-2 bg-transparent border-vscode-accent text-vscode-accent hover:bg-vscode-accent hover:text-vscode-bg hover:scale-105 active:scale-95 transition-all duration-300 font-bold shadow-sm hover:shadow-vscode-accent/20">
                             <FileDown size={16} />
                             <span>Download CV</span>
                         </Button>
                     </a>
 
                     <a href={`mailto:${resumeData.personalInfo.email}`} className="w-full">
-                        <Button className="w-full gap-2 bg-vscode-text text-vscode-bg hover:bg-vscode-highlight hover:text-vscode-accent font-bold">
+                        <Button className="w-full gap-2 bg-vscode-text text-vscode-bg hover:bg-vscode-highlight hover:text-vscode-accent hover:scale-105 active:scale-95 transition-all duration-300 font-bold shadow-sm">
                             <Mail size={16} />
                             <span>Work with me</span>
                         </Button>
