@@ -22,40 +22,71 @@ const Blog = () => {
   const [articles, setArticles] = useState<MediumArticle[]>([]);
   const [selectedArticle, setSelectedArticle] = useState<MediumArticle | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
+  const fetchMediumArticles = async (pageNum: number = 1) => {
+    try {
+      const limit = 20;
+      const start = (pageNum - 1) * limit;
+      
+      const response = await fetch(
+        `https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@arien7&count=${limit * pageNum}`
+      );
+      const data = await response.json();
+
+      if (data.status === 'ok' && data.items) {
+        const newArticles = data.items;
+        
+        // Check if we have more articles to load
+        setHasMore(newArticles.length > (page * limit) || (pageNum === 1 && newArticles.length >= limit));
+        
+        if (pageNum === 1) {
+          setArticles(newArticles);
+        } else {
+          setArticles(prev => {
+            // Remove duplicates
+            const existingIds = new Set(prev.map(a => a.guid));
+            const uniqueNew = newArticles.filter(a => !existingIds.has(a.guid));
+            return [...prev, ...uniqueNew];
+          });
+        }
+
+        if (id && pageNum === 1) {
+          const article = newArticles.find((item: MediumArticle) =>
+            createSlug(item.title) === id
+          );
+          if (article) {
+            setSelectedArticle(article);
+          }
+        }
+      } else {
+        setError('Unable to load articles right now. Please try again in a moment.');
+      }
+    } catch (err) {
+      setError('Unable to fetch Medium articles right now.');
+      console.error(err);
+    } finally {
+      if (pageNum === 1) {
+        setIsLoading(false);
+      } else {
+        setIsLoadingMore(false);
+      }
+    }
+  };
 
   useEffect(() => {
-    const fetchMediumArticles = async () => {
-      try {
-        const response = await fetch(
-          'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@arien7'
-        );
-        const data = await response.json();
-
-        if (data.status === 'ok') {
-          setArticles(data.items);
-
-          if (id) {
-            const article = data.items.find((item: MediumArticle) =>
-              createSlug(item.title) === id
-            );
-            if (article) {
-              setSelectedArticle(article);
-            }
-          }
-        } else {
-          setError('Unable to load articles right now. Please try again in a moment.');
-        }
-      } catch (err) {
-        setError('Unable to fetch Medium articles right now.');
-        console.error(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchMediumArticles();
+    fetchMediumArticles(1);
   }, [id]);
+
+  const handleLoadMore = () => {
+    setIsLoadingMore(true);
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchMediumArticles(nextPage);
+  };
 
   const createSlug = (title: string) => {
     return title
@@ -125,6 +156,7 @@ const Blog = () => {
               <p>No articles published yet. New writing is on the way.</p>
             </div>
           ) : (
+            <>
             <div className="grid grid-cols-1 gap-6">
               {articles.map((article, index) => (
                 <RevealItem key={article.guid || index}>
@@ -175,6 +207,27 @@ const Blog = () => {
                 </RevealItem>
               ))}
             </div>
+
+            {/* Load More Button */}
+            {hasMore && articles.length > 0 && (
+              <div className="flex justify-center mt-12">
+                <button
+                  onClick={handleLoadMore}
+                  disabled={isLoadingMore}
+                  className="px-6 py-3 rounded-lg border border-vscode-border bg-vscode-sidebar hover:border-vscode-accent hover:bg-vscode-highlight/5 transition-all text-vscode-text font-bold text-sm uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  {isLoadingMore ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-vscode-accent"></div>
+                      Loading...
+                    </>
+                  ) : (
+                    <>Show More Stories</>
+                  )}
+                </button>
+              </div>
+            )}
+            </>
           )}
         </>
       ) : (
