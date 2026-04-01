@@ -5,6 +5,7 @@ import RightSidebar from './RightSidebar';
 import Navbar from './Navbar';
 import { GitBranch, Star, Layout, X, Menu, Music, Gamepad2, Keyboard, Tv, MessageCircle } from 'lucide-react';
 import MacDesktop from './mac/MacDesktop';
+import LatestStoryToast from './LatestStoryToast';
 import { useTheme } from '@/context/ThemeContext';
 import { useOS } from '@/context/OSContext';
 
@@ -47,7 +48,7 @@ const MobileMenu = () => {
 
             {/* Overlay */}
             {isOpen && (
-                <div className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm" onClick={() => setIsOpen(false)} />
+                <div className="fixed inset-0 z-[60] bg-vscode-bg/70 backdrop-blur-sm" onClick={() => setIsOpen(false)} />
             )}
 
             {/* Drawer */}
@@ -66,7 +67,7 @@ const MobileMenu = () => {
 
                     {/* Navigation */}
                     <nav className="space-y-4">
-                        <h3 className="text-xs uppercase tracking-wider text-gray-500 font-bold">Navigation</h3>
+                        <h3 className="text-xs uppercase tracking-wider text-vscode-text/50 font-bold">Navigation</h3>
                         {navItems.map(item => (
                             <button
                                 key={item.path}
@@ -84,7 +85,7 @@ const MobileMenu = () => {
 
                     {/* Apps */}
                     <div className="space-y-4">
-                        <h3 className="text-xs uppercase tracking-wider text-gray-500 font-bold">Apps</h3>
+                        <h3 className="text-xs uppercase tracking-wider text-vscode-text/50 font-bold">Apps</h3>
                         <div className="grid grid-cols-4 gap-2">
                             {[
                                 { id: 'spotify', label: 'Spotify', icon: Music, color: 'text-green-400' },
@@ -108,7 +109,7 @@ const MobileMenu = () => {
 
                     {/* Themes */}
                     <div className="space-y-4">
-                        <h3 className="text-xs uppercase tracking-wider text-gray-500 font-bold">Themes</h3>
+                        <h3 className="text-xs uppercase tracking-wider text-vscode-text/50 font-bold">Themes</h3>
                         <div className="grid grid-cols-2 gap-2">
                             {['dark', 'retro', 'markdown', 'spatial', 'pixel'].map((t) => (
                                 <button
@@ -256,7 +257,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                         <div className="flex items-center gap-6 text-xs font-medium tracking-wide text-vscode-text/80">
                             <div className="flex items-center gap-2 text-green-400 bg-green-400/10 px-3 py-1 rounded-full">
                                 <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></div>
-                                Open to new work
+                                Open to impactful roles
                             </div>
                             <div className="text-vscode-text/60 max-w-[100px] truncate">Jabalpur, India</div>
                             <div className="text-vscode-text/60 flex items-center gap-2 whitespace-nowrap">
@@ -284,7 +285,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                                     <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><path d="m18 16 4-4-4-4" /><path d="m6 8-4 4 4 4" /><path d="m14.5 4-5 16" /></svg>
                                 </div>
                                 <p className="text-sm font-mono">No files open</p>
-                                <p className="text-xs font-mono mt-2 text-vscode-text/40">Select a file from the sidebar explorer</p>
+                                <p className="text-xs font-mono mt-2 text-vscode-text/40">Pick a section from the sidebar to start exploring</p>
                             </div>
                         )}
                     </div>
@@ -298,6 +299,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
             {/* Global Mac Desktop Overlay */}
             <MacDesktop />
+
+            {/* Global Latest Story Prompt */}
+            <LatestStoryToast />
         </div>
     );
 };

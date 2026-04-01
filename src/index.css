@@ -1,7 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -55,6 +54,24 @@
 
   /* Dark Theme (Default) - VS Code Zen */
   :root[data-theme='dark'] {
+    --background: 0 0% 12%;
+    --foreground: 0 0% 90%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 90%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 90%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 10%;
+    --secondary: 0 0% 18%;
+    --secondary-foreground: 0 0% 90%;
+    --muted: 0 0% 18%;
+    --muted-foreground: 0 0% 68%;
+    --accent: 0 0% 20%;
+    --accent-foreground: 0 0% 95%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 0% 85%;
+
     --vscode-bg: #1F1F1F;
     --vscode-sidebar: #181818;
     --vscode-text: #e5e5e5;
@@ -67,6 +84,24 @@
 
   /* Light Theme */
   :root[data-theme='light'] {
+    --background: 0 0% 100%;
+    --foreground: 222 15% 18%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 15% 18%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 15% 18%;
+    --primary: 207 100% 40%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 20% 96%;
+    --secondary-foreground: 222 15% 20%;
+    --muted: 210 20% 96%;
+    --muted-foreground: 215 12% 46%;
+    --accent: 210 20% 94%;
+    --accent-foreground: 222 15% 20%;
+    --border: 214 22% 90%;
+    --input: 214 22% 90%;
+    --ring: 207 100% 40%;
+
     --vscode-bg: #ffffff;
     --vscode-sidebar: #f3f3f3;
     --vscode-text: #333333;
@@ -80,6 +115,24 @@
 
   /* Retro / Terminal Theme */
   :root[data-theme='retro'] {
+    --background: 220 42% 6%;
+    --foreground: 120 100% 60%;
+    --card: 220 45% 5%;
+    --card-foreground: 120 100% 60%;
+    --popover: 220 45% 5%;
+    --popover-foreground: 120 100% 60%;
+    --primary: 120 100% 50%;
+    --primary-foreground: 220 42% 6%;
+    --secondary: 219 35% 12%;
+    --secondary-foreground: 120 100% 62%;
+    --muted: 219 35% 12%;
+    --muted-foreground: 120 45% 70%;
+    --accent: 219 35% 12%;
+    --accent-foreground: 120 100% 62%;
+    --border: 215 18% 27%;
+    --input: 215 18% 27%;
+    --ring: 120 100% 50%;
+
     --vscode-bg: #0d1117;
     /* Very Dark Blue/Black */
     --vscode-sidebar: #010409;
@@ -94,6 +147,24 @@
 
   /* Markdown / Paper Theme */
   :root[data-theme='markdown'] {
+    --background: 0 0% 99%;
+    --foreground: 214 15% 18%;
+    --card: 0 0% 100%;
+    --card-foreground: 214 15% 18%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 214 15% 18%;
+    --primary: 352 64% 53%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 26% 96%;
+    --secondary-foreground: 214 15% 18%;
+    --muted: 210 26% 96%;
+    --muted-foreground: 214 10% 45%;
+    --accent: 210 26% 96%;
+    --accent-foreground: 214 15% 18%;
+    --border: 214 14% 88%;
+    --input: 214 14% 88%;
+    --ring: 352 64% 53%;
+
     --vscode-bg: #fdfdfd;
     /* Paper White */
     --vscode-sidebar: #f0f0f0;
@@ -108,6 +179,24 @@
 
   /* Spatial / Shopify BFCM Theme */
   :root[data-theme='spatial'] {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 88%;
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 88%;
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 88%;
+    --primary: 25 100% 50%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 88%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 62%;
+    --accent: 0 0% 12%;
+    --accent-foreground: 0 0% 88%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 25 100% 50%;
+
     --vscode-bg: #000000;
     --vscode-sidebar: #0a0a0a;
     --vscode-text: #e0e0e0;
@@ -196,7 +285,7 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Manrope', sans-serif;
   }
 
   /* Code block styling - Zen Minimal */
@@ -239,7 +328,12 @@
   }
 
   a {
-    @apply text-foreground hover:text-white underline-offset-4 hover:underline transition-all duration-200;
+    @apply underline-offset-4 hover:underline transition-all duration-200;
+    color: var(--vscode-text);
+  }
+
+  a:hover {
+    color: var(--vscode-accent);
   }
 
   /* Navigation Link - Minimal */

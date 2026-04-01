@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, ArrowLeft, BookOpen, ExternalLink, Hash, ChevronRight } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { RevealItem, StaggeredSection } from '@/components/ui/motion';
 
 interface MediumArticle {
   title: string;
@@ -43,10 +44,10 @@ const Blog = () => {
             }
           }
         } else {
-          setError('Failed to load articles');
+          setError('Unable to load articles right now. Please try again in a moment.');
         }
       } catch (err) {
-        setError('Failed to fetch Medium articles');
+        setError('Unable to fetch Medium articles right now.');
         console.error(err);
       } finally {
         setIsLoading(false);
@@ -89,23 +90,25 @@ const Blog = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 md:px-6 py-8 md:py-12 animate-fade-in font-mono text-vscode-text/80">
+    <StaggeredSection className="max-w-5xl mx-auto px-4 md:px-6 py-8 md:py-12 animate-fade-in font-mono text-vscode-text/80">
 
       {!selectedArticle ? (
         <>
           {/* Header */}
-          <section className="mb-10 md:mb-16">
-            <h1 className="text-3xl md:text-5xl font-bold text-vscode-text mb-4 md:mb-6 tracking-tight flex items-center gap-3 md:gap-4">
-              <BookOpen size={32} className="text-vscode-accent md:w-10 md:h-10" />
-              <span>
-                <span className="text-vscode-function">stories</span>
-                <span className="text-vscode-class">.md</span>
-              </span>
-            </h1>
-            <p className="text-lg text-vscode-text/60 max-w-2xl leading-relaxed">
-              Thoughts on engineering, design drafts, and late-night debugging sessions. This is where I document the process.
-            </p>
-          </section>
+          <RevealItem>
+            <section className="mb-10 md:mb-16">
+              <h1 className="text-3xl md:text-5xl font-bold text-vscode-text mb-4 md:mb-6 tracking-tight flex items-center gap-3 md:gap-4">
+                <BookOpen size={32} className="text-vscode-accent md:w-10 md:h-10" />
+                <span>
+                  <span className="text-vscode-function">stories</span>
+                  <span className="text-vscode-class">.md</span>
+                </span>
+              </h1>
+              <p className="text-lg text-vscode-text/60 max-w-2xl leading-relaxed">
+                Essays, engineering notes, and build logs from the field. I write about decisions, trade-offs, and lessons learned while shipping real systems.
+              </p>
+            </section>
+          </RevealItem>
 
           <hr className="border-vscode-border opacity-50 mb-16" />
 
@@ -119,55 +122,57 @@ const Blog = () => {
             </div>
           ) : articles.length === 0 ? (
             <div className="text-center py-12 text-vscode-comment">
-              <p>No articles found. Time to write something!</p>
+              <p>No articles published yet. New writing is on the way.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-6">
               {articles.map((article, index) => (
-                <Card
-                  key={index}
-                  className="bg-vscode-sidebar border-vscode-border hover:border-vscode-accent transition-all group cursor-pointer overflow-hidden"
-                  onClick={() => handleArticleClick(article)}
-                >
-                  <div className="flex flex-col md:flex-row h-full">
-                    {/* Thumbnail */}
-                    {article.thumbnail && (
-                      <div className="h-48 md:h-auto md:w-72 shrink-0 border-b md:border-b-0 md:border-r border-vscode-border relative overflow-hidden">
-                        <img
-                          src={article.thumbnail}
-                          alt={article.title}
-                          className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-105"
-                        />
-                      </div>
-                    )}
+                <RevealItem key={article.guid || index}>
+                  <Card
+                    key={index}
+                    className="bg-vscode-sidebar border-vscode-border hover:border-vscode-accent transition-all group cursor-pointer overflow-hidden"
+                    onClick={() => handleArticleClick(article)}
+                  >
+                    <div className="flex flex-col md:flex-row h-full">
+                      {/* Thumbnail */}
+                      {article.thumbnail && (
+                        <div className="h-48 md:h-auto md:w-72 shrink-0 border-b md:border-b-0 md:border-r border-vscode-border relative overflow-hidden">
+                          <img
+                            src={article.thumbnail}
+                            alt={article.title}
+                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-105"
+                          />
+                        </div>
+                      )}
 
-                    <CardContent className="p-4 md:p-8 flex flex-col gap-4 flex-grow justify-center">
-                      <div className="space-y-3">
-                        <div className="flex items-center gap-3 text-[10px] md:text-xs text-vscode-comment uppercase tracking-widest">
-                          <span className="flex items-center gap-1"><Calendar size={12} /> {formatDate(article.pubDate)}</span>
-                          {article.categories?.length > 0 && (
-                            <>
-                              <span>•</span>
-                              <span className="text-vscode-accent truncate">{article.categories[0]}</span>
-                            </>
-                          )}
+                      <CardContent className="p-4 md:p-8 flex flex-col gap-4 flex-grow justify-center">
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-3 text-[10px] md:text-xs text-vscode-comment uppercase tracking-widest">
+                            <span className="flex items-center gap-1"><Calendar size={12} /> {formatDate(article.pubDate)}</span>
+                            {article.categories?.length > 0 && (
+                              <>
+                                <span>•</span>
+                                <span className="text-vscode-accent truncate">{article.categories[0]}</span>
+                              </>
+                            )}
+                          </div>
+
+                          <h2 className="text-lg md:text-2xl font-bold text-vscode-text group-hover:text-vscode-accent transition-colors leading-tight">
+                            {article.title}
+                          </h2>
+
+                          <p className="text-vscode-text/60 text-xs md:text-sm leading-relaxed line-clamp-2 md:line-clamp-2">
+                            {stripHtml(article.description)}
+                          </p>
                         </div>
 
-                        <h2 className="text-lg md:text-2xl font-bold text-vscode-text group-hover:text-vscode-accent transition-colors leading-tight">
-                          {article.title}
-                        </h2>
-
-                        <p className="text-vscode-text/60 text-xs md:text-sm leading-relaxed line-clamp-2 md:line-clamp-2">
-                          {stripHtml(article.description)}
-                        </p>
-                      </div>
-
-                      <div className="pt-2 flex items-center text-vscode-accent text-xs md:text-sm font-bold group-hover:translate-x-1 transition-transform mt-auto md:mt-0">
-                        Read <ChevronRight size={14} className="md:w-4 md:h-4" />
-                      </div>
-                    </CardContent>
-                  </div>
-                </Card>
+                        <div className="pt-2 flex items-center text-vscode-accent text-xs md:text-sm font-bold group-hover:translate-x-1 transition-transform mt-auto md:mt-0">
+                          Read <ChevronRight size={14} className="md:w-4 md:h-4" />
+                        </div>
+                      </CardContent>
+                    </div>
+                  </Card>
+                </RevealItem>
               ))}
             </div>
           )}
@@ -217,7 +222,7 @@ const Blog = () => {
               <button onClick={handleBackClick} className="text-vscode-text/60 hover:text-vscode-text transition-colors font-bold">
                 &larr; More Stories
               </button>
-              <a href={selectedArticle.link} target="_blank" rel="noopener" className="flex items-center gap-2 text-vscode-accent hover:text-white transition-colors">
+              <a href={selectedArticle.link} target="_blank" rel="noopener" className="flex items-center gap-2 text-vscode-accent hover:text-vscode-text transition-colors">
                 Read on Medium <ExternalLink size={16} />
               </a>
             </div>
@@ -227,11 +232,11 @@ const Blog = () => {
 
       {/* Final Quote */}
       {!selectedArticle && (
-        <div className="text-center pt-20 pb-8 opacity-40 text-xs font-mono">
-          <p>"Documentation is the love letter you write to your future self."</p>
-        </div>
+        <RevealItem className="text-center pt-20 pb-8 opacity-40 text-xs font-mono">
+          <p>"Writing helps ideas survive first drafts."</p>
+        </RevealItem>
       )}
-    </div>
+    </StaggeredSection>
   );
 };
 

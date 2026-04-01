@@ -26,7 +26,7 @@ const RightSidebar = () => {
                             key={item.path}
                             to={item.path}
                             className={({ isActive }) =>
-                                `text-sm font-medium transition-colors hover:text-white ${isActive ? 'text-vscode-accent' : 'text-vscode-text'
+                                `text-sm font-medium transition-colors hover:text-vscode-accent ${isActive ? 'text-vscode-accent' : 'text-vscode-text'
                                 }`
                             }
                         >
@@ -48,7 +48,7 @@ const RightSidebar = () => {
                             className={`text-left text-sm font-medium transition-colors px-2 py-1 rounded
                                 ${theme === t
                                     ? 'bg-vscode-accent/10 text-vscode-accent border-l-2 border-vscode-accent'
-                                    : 'text-vscode-text hover:text-white hover:bg-vscode-highlight'
+                                    : 'text-vscode-text hover:text-vscode-accent hover:bg-vscode-highlight'
                                 }`}
                         >
                             <span className="capitalize">{t}</span>
@@ -71,7 +71,7 @@ const RightSidebar = () => {
                             key={app.id}
                             onClick={() => launchApp(app.id)}
                             title={app.label}
-                            className={`flex flex-col items-center justify-center p-2 rounded transition-colors text-vscode-text hover:text-white hover:bg-vscode-highlight aspect-square`}
+                            className={`flex flex-col items-center justify-center p-2 rounded transition-colors text-vscode-text hover:text-vscode-accent hover:bg-vscode-highlight aspect-square`}
                         >
                             <app.icon size={20} className={app.id === 'spotify' ? 'text-green-400' : app.id === 'games' ? 'text-purple-400' : app.id === 'speedmaster' ? 'text-yellow-400' : 'text-blue-400'} />
                         </button>

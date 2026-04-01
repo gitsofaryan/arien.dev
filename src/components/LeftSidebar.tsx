@@ -18,13 +18,13 @@ const LeftSidebar = () => {
                     </div>
                     <div>
                         <h2 className="text-xl font-bold text-vscode-text mb-1">{resumeData.personalInfo.name}</h2>
-                        <p className="text-vscode-accent font-mono text-sm">&lt;Software Engineer /&gt;</p>
+                        <p className="text-vscode-accent font-mono text-sm">&lt;Software Engineer & Protocol Builder /&gt;</p>
                     </div>
                 </div>
 
                 {/* Bio Snippet */}
                 <p className="text-vscode-text/80 text-sm leading-relaxed">
-                    I build high-performance systems and decentralized protocols. Transforming complex problems into elegant code.
+                    I design practical systems across backend, AI, and open source, with a focus on clarity, reliability, and real-world impact.
                 </p>
 
                 {/* Contact Info */}
@@ -33,14 +33,14 @@ const LeftSidebar = () => {
                         href="https://www.google.com/maps/search/?api=1&query=Jabalpur,+Madhya+Pradesh,+India"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-3 p-2 rounded hover:bg-white/10 hover:text-white hover:translate-x-1 transition-all duration-300 group text-gray-300"
+                        className="flex items-center gap-3 p-2 rounded hover:bg-vscode-highlight hover:text-vscode-text hover:translate-x-1 transition-all duration-300 group text-vscode-text/70"
                     >
                         <MapPin size={16} className="text-vscode-accent group-hover:scale-110 transition-transform" />
                         <span>Jabalpur, MP, India</span>
                     </a>
                     <a
                         href={`mailto:${resumeData.personalInfo.email}`}
-                        className="flex items-center gap-3 p-2 rounded hover:bg-white/10 hover:text-white hover:translate-x-1 transition-all duration-300 group text-gray-300"
+                        className="flex items-center gap-3 p-2 rounded hover:bg-vscode-highlight hover:text-vscode-text hover:translate-x-1 transition-all duration-300 group text-vscode-text/70"
                     >
                         <Mail size={16} className="text-vscode-accent group-hover:scale-110 transition-transform" />
                         <span className="truncate">{resumeData.personalInfo.email}</span>
@@ -65,7 +65,7 @@ const LeftSidebar = () => {
                         {/* Discord */}
                         <div className="group relative p-2 bg-vscode-bg border border-vscode-border rounded hover:border-vscode-accent hover:text-vscode-accent hover:scale-110 transition-all duration-300 text-vscode-text cursor-help" aria-label="Discord">
                             <MessageCircle size={18} />
-                            <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs bg-black text-white border border-vscode-border rounded opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none transition-opacity z-50">
+                            <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs bg-vscode-sidebar text-vscode-text border border-vscode-border rounded opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none transition-opacity z-50 shadow-lg">
                                 Discord: {resumeData.personalInfo.discord}
                             </span>
                         </div>
