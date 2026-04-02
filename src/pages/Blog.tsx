@@ -1,102 +1,78 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, ArrowLeft, BookOpen, ExternalLink, Hash, ChevronRight } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { RevealItem, StaggeredSection } from '@/components/ui/motion';
+import { fetchMediumItems, type MediumFeedItem } from '@/lib/medium-feed';
 
-interface MediumArticle {
-  title: string;
-  link: string;
-  pubDate: string;
-  description: string;
-  thumbnail: string;
-  content: string;
-  author: string;
-  categories: string[];
-  guid: string;
-}
+type MediumArticle = MediumFeedItem;
+const INITIAL_VISIBLE = 6;
+const LOAD_MORE_STEP = 6;
 
 const Blog = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [articles, setArticles] = useState<MediumArticle[]>([]);
+  const [allArticles, setAllArticles] = useState<MediumArticle[]>([]);
   const [selectedArticle, setSelectedArticle] = useState<MediumArticle | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(1);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
   const [hasMore, setHasMore] = useState(true);
 
-  const fetchMediumArticles = async (pageNum: number = 1) => {
+  const fetchMediumArticles = useCallback(async () => {
     try {
-      const limit = 20;
-      const mediumUser = 'arien7';
+      const fetchedArticles = await fetchMediumItems(100);
 
-      // Try fetching with cache busting
-      const cacheParam = new Date().getTime();
-      const response = await fetch(
-        `https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@${mediumUser}&count=${limit * pageNum}&_=${cacheParam}`
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('Medium API response:', data);
-
-      if (data.status === 'ok' && data.items && data.items.length > 0) {
-        const newArticles = data.items;
-
-        // Check if we have more articles to load
-        setHasMore(newArticles.length > (page * limit) || (pageNum === 1 && newArticles.length >= limit));
-
-        if (pageNum === 1) {
-          setArticles(newArticles);
-        } else {
-          setArticles(prev => {
-            // Remove duplicates
-            const existingIds = new Set(prev.map(a => a.guid));
-            const uniqueNew = newArticles.filter(a => !existingIds.has(a.guid));
-            return [...prev, ...uniqueNew];
-          });
-        }
-
-        if (id && pageNum === 1) {
-          const article = newArticles.find((item: MediumArticle) =>
-            createSlug(item.title) === id
-          );
-          if (article) {
-            setSelectedArticle(article);
-          }
-        }
+      if (fetchedArticles.length > 0) {
+        setAllArticles(fetchedArticles);
+        const initialCount = Math.min(INITIAL_VISIBLE, fetchedArticles.length);
+        setVisibleCount(initialCount);
+        setArticles(fetchedArticles.slice(0, initialCount));
+        setHasMore(fetchedArticles.length > initialCount);
         setError(null);
-      } else if (data.status !== 'ok') {
-        setError(`API Error: ${data.message || 'Unable to fetch articles. Please check the Medium profile.'}`);
       } else {
-        setError('No articles found. Start publishing on Medium to see them here.');
+        setAllArticles([]);
+        setArticles([]);
+        setHasMore(false);
+        setError('Unable to load articles right now. Please try again in a moment.');
       }
     } catch (err) {
       console.error('Fetch error:', err);
-      setError('Unable to fetch Medium articles. The API service may be temporarily unavailable.');
+      setAllArticles([]);
+      setArticles([]);
+      setHasMore(false);
+      setError('Unable to load articles right now. Please try again in a moment.');
     } finally {
-      if (pageNum === 1) {
-        setIsLoading(false);
-      } else {
-        setIsLoadingMore(false);
-      }
+      setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    fetchMediumArticles(1);
-  }, [id]);
+    fetchMediumArticles();
+  }, [fetchMediumArticles]);
+
+  useEffect(() => {
+    if (!id) {
+      setSelectedArticle(null);
+      return;
+    }
+
+    const article = allArticles.find((item) => createSlug(item.title) === id);
+    setSelectedArticle(article || null);
+  }, [id, allArticles]);
 
   const handleLoadMore = () => {
     setIsLoadingMore(true);
-    const nextPage = page + 1;
-    setPage(nextPage);
-    fetchMediumArticles(nextPage);
+    const nextVisibleCount = Math.min(visibleCount + LOAD_MORE_STEP, allArticles.length);
+
+    window.setTimeout(() => {
+      setVisibleCount(nextVisibleCount);
+      setArticles(allArticles.slice(0, nextVisibleCount));
+      setHasMore(allArticles.length > nextVisibleCount);
+      setIsLoadingMore(false);
+    }, 120);
   };
 
   const createSlug = (title: string) => {
@@ -132,7 +108,10 @@ const Blog = () => {
   };
 
   return (
-    <StaggeredSection className="max-w-5xl mx-auto px-4 md:px-6 py-8 md:py-12 animate-fade-in font-mono text-vscode-text/80">
+    <StaggeredSection
+      className="max-w-5xl mx-auto px-4 md:px-6 py-8 md:py-12 animate-fade-in font-mono text-vscode-text/80"
+      initial="visible"
+    >
 
       {!selectedArticle ? (
         <>
@@ -233,7 +212,7 @@ const Blog = () => {
                         Loading...
                       </>
                     ) : (
-                      <>Show More Stories</>
+                      <>Show More Stories ({Math.max(allArticles.length - visibleCount, 0)} left)</>
                     )}
                   </button>
                 </div>

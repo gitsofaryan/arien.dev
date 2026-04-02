@@ -2,15 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
+import { fetchMediumItems, type MediumFeedItem } from "@/lib/medium-feed";
 
-interface MediumFeedItem {
-    title: string;
-    link: string;
-    guid?: string;
-}
+type LatestStoryItem = Pick<MediumFeedItem, 'title' | 'link' | 'guid'>;
 
-const MEDIUM_FEED_URL = "https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@arien7";
-const MEDIUM_PROFILE_URL = "https://medium.com/@arien7";
 const TOAST_DISMISS_SESSION_KEY = "latest_story_toast_dismissed_session";
 
 const createSlug = (title: string) => {
@@ -21,7 +16,7 @@ const createSlug = (title: string) => {
 };
 
 const LatestStoryToast = () => {
-    const [latestStory, setLatestStory] = useState<MediumFeedItem | null>(null);
+    const [latestStory, setLatestStory] = useState<LatestStoryItem | null>(null);
     const [isVisible, setIsVisible] = useState(false);
     const [isDismissed, setIsDismissed] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
@@ -39,16 +34,8 @@ const LatestStoryToast = () => {
 
         const fetchLatestStory = async () => {
             try {
-                const response = await fetch(MEDIUM_FEED_URL, {
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-
-                if (!response.ok) throw new Error("Failed to fetch latest story");
-
-                const data = await response.json();
-                const latest = data?.items?.[0];
+                const items = await fetchMediumItems(1);
+                const latest = items[0];
 
                 if (!isMounted) return;
 
@@ -56,13 +43,10 @@ const LatestStoryToast = () => {
                     setLatestStory({
                         title: latest.title,
                         link: latest.link,
-                        guid: latest.guid
+                        guid: latest.guid || latest.link
                     });
                 } else {
-                    setLatestStory({
-                        title: "I publish practical engineering stories on Medium.",
-                        link: MEDIUM_PROFILE_URL,
-                    });
+                    setLatestStory(null);
                 }
 
                 setIsLoading(false);
@@ -74,10 +58,7 @@ const LatestStoryToast = () => {
                 console.error('Failed to fetch story:', error);
                 if (!isMounted) return;
 
-                setLatestStory({
-                    title: "I publish practical engineering stories on Medium.",
-                    link: MEDIUM_PROFILE_URL,
-                });
+                setLatestStory(null);
 
                 setIsLoading(false);
 
