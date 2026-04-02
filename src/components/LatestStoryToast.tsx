@@ -44,7 +44,7 @@ const LatestStoryToast = () => {
                         'Accept': 'application/json'
                     }
                 });
-                
+
                 if (!response.ok) throw new Error("Failed to fetch latest story");
 
                 const data = await response.json();
@@ -53,8 +53,8 @@ const LatestStoryToast = () => {
                 if (!isMounted) return;
 
                 if (latest?.title && latest?.link) {
-                    setLatestStory({ 
-                        title: latest.title, 
+                    setLatestStory({
+                        title: latest.title,
                         link: latest.link,
                         guid: latest.guid
                     });
@@ -66,7 +66,7 @@ const LatestStoryToast = () => {
                 }
 
                 setIsLoading(false);
-                
+
                 timer = window.setTimeout(() => {
                     if (isMounted) setIsVisible(true);
                 }, 800);
@@ -80,7 +80,7 @@ const LatestStoryToast = () => {
                 });
 
                 setIsLoading(false);
-                
+
                 timer = window.setTimeout(() => {
                     if (isMounted) setIsVisible(true);
                 }, 800);
@@ -116,37 +116,39 @@ const LatestStoryToast = () => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 20, scale: 0.92 }}
                     transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-                    className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[120] w-[85vw] max-w-sm"
+                    className="fixed bottom-4 left-4 right-4 md:left-1/2 md:-translate-x-1/2 z-[120] md:w-[85vw] md:max-w-sm"
                     role="status"
                     aria-live="polite"
                 >
-                    <div className="rounded-lg border border-vscode-border bg-vscode-sidebar/95 backdrop-blur-md shadow-lg px-3 py-2">
-                        <div className="flex items-center gap-2">
+                    <div className="rounded-lg border border-vscode-border bg-vscode-sidebar/95 backdrop-blur-md shadow-lg p-3 md:px-3 md:py-2">
+                        <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-2">
                             <div className="min-w-0 flex-1">
                                 <p className="text-[9px] uppercase tracking-[0.12em] text-vscode-accent mb-0.5 font-semibold">
                                     Medium
                                 </p>
-                                <p className="text-xs text-vscode-text/85 leading-snug line-clamp-1">
+                                <p className="text-xs text-vscode-text/85 leading-snug line-clamp-2 md:line-clamp-1">
                                     {title}
                                 </p>
                             </div>
 
-                            <Link
-                                to={`/blog/${latestStory ? createSlug(latestStory.title) : 'latest'}`}
-                                onClick={handleDismiss}
-                                className="flex-shrink-0 text-[9px] font-bold text-vscode-accent hover:text-vscode-text transition-colors whitespace-nowrap px-2 py-1 rounded border border-vscode-border hover:border-vscode-accent"
-                            >
-                                Read
-                            </Link>
+                            <div className="flex items-center gap-2 self-end md:self-center mt-2 md:mt-0 w-full md:w-auto">
+                                <Link
+                                    to={`/blog/${latestStory ? createSlug(latestStory.title) : 'latest'}`}
+                                    onClick={handleDismiss}
+                                    className="flex-1 md:flex-none text-[9px] font-bold text-center md:text-left text-vscode-accent hover:text-vscode-text transition-colors whitespace-nowrap px-3 py-1.5 md:px-2 md:py-1 rounded border border-vscode-border hover:border-vscode-accent"
+                                >
+                                    Read
+                                </Link>
 
-                            <button
-                                type="button"
-                                onClick={handleDismiss}
-                                className="flex-shrink-0 p-0.5 text-vscode-text/60 hover:text-vscode-text transition-colors"
-                                aria-label="Dismiss"
-                            >
-                                <X size={12} />
-                            </button>
+                                <button
+                                    type="button"
+                                    onClick={handleDismiss}
+                                    className="flex-shrink-0 p-1 md:p-0.5 text-vscode-text/60 hover:text-vscode-text transition-colors rounded hover:bg-vscode-highlight/20"
+                                    aria-label="Dismiss"
+                                >
+                                    <X size={14} className="md:w-3 md:h-3" />
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </motion.div>

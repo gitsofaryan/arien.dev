@@ -30,19 +30,27 @@ const Blog = () => {
   const fetchMediumArticles = async (pageNum: number = 1) => {
     try {
       const limit = 20;
-      const start = (pageNum - 1) * limit;
-      
-      const response = await fetch(
-        `https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@arien7&count=${limit * pageNum}`
-      );
-      const data = await response.json();
+      const mediumUser = 'arien7';
 
-      if (data.status === 'ok' && data.items) {
+      // Try fetching with cache busting
+      const cacheParam = new Date().getTime();
+      const response = await fetch(
+        `https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@${mediumUser}&count=${limit * pageNum}&_=${cacheParam}`
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('Medium API response:', data);
+
+      if (data.status === 'ok' && data.items && data.items.length > 0) {
         const newArticles = data.items;
-        
+
         // Check if we have more articles to load
         setHasMore(newArticles.length > (page * limit) || (pageNum === 1 && newArticles.length >= limit));
-        
+
         if (pageNum === 1) {
           setArticles(newArticles);
         } else {
@@ -62,12 +70,15 @@ const Blog = () => {
             setSelectedArticle(article);
           }
         }
+        setError(null);
+      } else if (data.status !== 'ok') {
+        setError(`API Error: ${data.message || 'Unable to fetch articles. Please check the Medium profile.'}`);
       } else {
-        setError('Unable to load articles right now. Please try again in a moment.');
+        setError('No articles found. Start publishing on Medium to see them here.');
       }
     } catch (err) {
-      setError('Unable to fetch Medium articles right now.');
-      console.error(err);
+      console.error('Fetch error:', err);
+      setError('Unable to fetch Medium articles. The API service may be temporarily unavailable.');
     } finally {
       if (pageNum === 1) {
         setIsLoading(false);
@@ -157,76 +168,76 @@ const Blog = () => {
             </div>
           ) : (
             <>
-            <div className="grid grid-cols-1 gap-6">
-              {articles.map((article, index) => (
-                <RevealItem key={article.guid || index}>
-                  <Card
-                    key={index}
-                    className="bg-vscode-sidebar border-vscode-border hover:border-vscode-accent transition-all group cursor-pointer overflow-hidden"
-                    onClick={() => handleArticleClick(article)}
-                  >
-                    <div className="flex flex-col md:flex-row h-full">
-                      {/* Thumbnail */}
-                      {article.thumbnail && (
-                        <div className="h-48 md:h-auto md:w-72 shrink-0 border-b md:border-b-0 md:border-r border-vscode-border relative overflow-hidden">
-                          <img
-                            src={article.thumbnail}
-                            alt={article.title}
-                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-105"
-                          />
-                        </div>
-                      )}
+              <div className="grid grid-cols-1 gap-6">
+                {articles.map((article, index) => (
+                  <RevealItem key={article.guid || index}>
+                    <Card
+                      key={index}
+                      className="bg-vscode-sidebar border-vscode-border hover:border-vscode-accent transition-all group cursor-pointer overflow-hidden"
+                      onClick={() => handleArticleClick(article)}
+                    >
+                      <div className="flex flex-col md:flex-row h-full">
+                        {/* Thumbnail */}
+                        {article.thumbnail && (
+                          <div className="h-48 md:h-auto md:w-72 shrink-0 border-b md:border-b-0 md:border-r border-vscode-border relative overflow-hidden">
+                            <img
+                              src={article.thumbnail}
+                              alt={article.title}
+                              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-105"
+                            />
+                          </div>
+                        )}
 
-                      <CardContent className="p-4 md:p-8 flex flex-col gap-4 flex-grow justify-center">
-                        <div className="space-y-3">
-                          <div className="flex items-center gap-3 text-[10px] md:text-xs text-vscode-comment uppercase tracking-widest">
-                            <span className="flex items-center gap-1"><Calendar size={12} /> {formatDate(article.pubDate)}</span>
-                            {article.categories?.length > 0 && (
-                              <>
-                                <span>•</span>
-                                <span className="text-vscode-accent truncate">{article.categories[0]}</span>
-                              </>
-                            )}
+                        <CardContent className="p-4 md:p-8 flex flex-col gap-4 flex-grow justify-center">
+                          <div className="space-y-3">
+                            <div className="flex items-center gap-3 text-[10px] md:text-xs text-vscode-comment uppercase tracking-widest">
+                              <span className="flex items-center gap-1"><Calendar size={12} /> {formatDate(article.pubDate)}</span>
+                              {article.categories?.length > 0 && (
+                                <>
+                                  <span>•</span>
+                                  <span className="text-vscode-accent truncate">{article.categories[0]}</span>
+                                </>
+                              )}
+                            </div>
+
+                            <h2 className="text-lg md:text-2xl font-bold text-vscode-text group-hover:text-vscode-accent transition-colors leading-tight">
+                              {article.title}
+                            </h2>
+
+                            <p className="text-vscode-text/60 text-xs md:text-sm leading-relaxed line-clamp-2 md:line-clamp-2">
+                              {stripHtml(article.description)}
+                            </p>
                           </div>
 
-                          <h2 className="text-lg md:text-2xl font-bold text-vscode-text group-hover:text-vscode-accent transition-colors leading-tight">
-                            {article.title}
-                          </h2>
-
-                          <p className="text-vscode-text/60 text-xs md:text-sm leading-relaxed line-clamp-2 md:line-clamp-2">
-                            {stripHtml(article.description)}
-                          </p>
-                        </div>
-
-                        <div className="pt-2 flex items-center text-vscode-accent text-xs md:text-sm font-bold group-hover:translate-x-1 transition-transform mt-auto md:mt-0">
-                          Read <ChevronRight size={14} className="md:w-4 md:h-4" />
-                        </div>
-                      </CardContent>
-                    </div>
-                  </Card>
-                </RevealItem>
-              ))}
-            </div>
-
-            {/* Load More Button */}
-            {hasMore && articles.length > 0 && (
-              <div className="flex justify-center mt-12">
-                <button
-                  onClick={handleLoadMore}
-                  disabled={isLoadingMore}
-                  className="px-6 py-3 rounded-lg border border-vscode-border bg-vscode-sidebar hover:border-vscode-accent hover:bg-vscode-highlight/5 transition-all text-vscode-text font-bold text-sm uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                >
-                  {isLoadingMore ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-vscode-accent"></div>
-                      Loading...
-                    </>
-                  ) : (
-                    <>Show More Stories</>
-                  )}
-                </button>
+                          <div className="pt-2 flex items-center text-vscode-accent text-xs md:text-sm font-bold group-hover:translate-x-1 transition-transform mt-auto md:mt-0">
+                            Read <ChevronRight size={14} className="md:w-4 md:h-4" />
+                          </div>
+                        </CardContent>
+                      </div>
+                    </Card>
+                  </RevealItem>
+                ))}
               </div>
-            )}
+
+              {/* Load More Button */}
+              {hasMore && articles.length > 0 && (
+                <div className="flex justify-center mt-12">
+                  <button
+                    onClick={handleLoadMore}
+                    disabled={isLoadingMore}
+                    className="px-6 py-3 rounded-lg border border-vscode-border bg-vscode-sidebar hover:border-vscode-accent hover:bg-vscode-highlight/5 transition-all text-vscode-text font-bold text-sm uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  >
+                    {isLoadingMore ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-vscode-accent"></div>
+                        Loading...
+                      </>
+                    ) : (
+                      <>Show More Stories</>
+                    )}
+                  </button>
+                </div>
+              )}
             </>
           )}
         </>
