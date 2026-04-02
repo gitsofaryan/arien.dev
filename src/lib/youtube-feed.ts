@@ -24,6 +24,30 @@ const isCsbsMarked = (title: string, description: string) => {
   return /\bcsbs\b/.test(text);
 };
 
+const isBlockedLegacyVideo = (title: string) => {
+  const normalized = title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  const blockedPhrases = [
+    "eventease mlh hacktheplan devpost",
+    "demon slayer anime fight",
+    "my ppt on nikola tesla",
+    "template shorts",
+    "only mithun daa bollywood",
+    "janvi kapoor brilliant",
+    "karliye btech",
+    "the main attraction",
+    "stop procastinating guys",
+    "desi shayri comedy",
+    "apna hi swag ha",
+  ];
+
+  return blockedPhrases.some((phrase) => normalized.includes(phrase));
+};
+
 const stripCdata = (value: string) =>
   value.replace(/^<!\[CDATA\[|\]\]>$/g, "").trim();
 
@@ -98,7 +122,8 @@ export const parseYouTubeXml = (xml: string): YouTubeFeedItem[] => {
     })
     .filter((item) => Boolean(item.videoId && item.title && item.link))
     .filter((item) => !isShort(item.title, item.description, item.link))
-    .filter((item) => !isCsbsMarked(item.title, item.description));
+    .filter((item) => !isCsbsMarked(item.title, item.description))
+    .filter((item) => !isBlockedLegacyVideo(item.title));
 };
 
 export const fetchYouTubeItems = async (

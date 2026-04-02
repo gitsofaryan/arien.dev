@@ -44,6 +44,30 @@ const isCsbsMarked = (title: string, description: string) => {
   return /\bcsbs\b/.test(text);
 };
 
+const isBlockedLegacyVideo = (title: string) => {
+  const normalized = title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  const blockedPhrases = [
+    "eventease mlh hacktheplan devpost",
+    "demon slayer anime fight",
+    "my ppt on nikola tesla",
+    "template shorts",
+    "only mithun daa bollywood",
+    "janvi kapoor brilliant",
+    "karliye btech",
+    "the main attraction",
+    "stop procastinating guys",
+    "desi shayri comedy",
+    "apna hi swag ha",
+  ];
+
+  return blockedPhrases.some((phrase) => normalized.includes(phrase));
+};
+
 const extractChannelIdFromHtml = (html: string) => {
   const browseIdMatch = html.match(/"browseId":"(UC[^"]+)"/);
   return browseIdMatch?.[1] || null;
@@ -332,6 +356,7 @@ const fetchRssFallback = async (
     .filter((item) => item.videoId && item.title && item.link)
     .filter((item) => !isShort(item.title, item.description, item.link))
     .filter((item) => !isCsbsMarked(item.title, item.description))
+    .filter((item) => !isBlockedLegacyVideo(item.title))
     .slice(0, count);
 };
 
@@ -382,6 +407,7 @@ export default async function handler(req: any, res: any) {
         if (dedupe.has(item.videoId)) continue;
         if (isShort(item.title, item.description, item.link)) continue;
         if (isCsbsMarked(item.title, item.description)) continue;
+        if (isBlockedLegacyVideo(item.title)) continue;
 
         dedupe.add(item.videoId);
         items.push(item);
