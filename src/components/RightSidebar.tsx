@@ -10,8 +10,9 @@ const RightSidebar = () => {
     const navItems = [
         { label: 'Home', path: '/' },
         { label: 'About', path: '/about' },
-        { label: 'Work', path: '/projects' },
-        { label: 'Stories', path: '/blog' },
+        { label: 'Projects', path: '/projects' },
+        { label: 'Blogs', path: '/blog' },
+        { label: 'Creations', path: '/creations' },
     ];
 
     return (
@@ -73,8 +74,8 @@ const RightSidebar = () => {
                                 onClick={() => isMinimized ? unminimizeApp(app.id) : launchApp(app.id)}
                                 title={app.label}
                                 className={`flex flex-col items-center justify-center p-2 rounded transition-all aspect-square ${isMinimized
-                                        ? `bg-vscode-highlight/70 border-2 border-vscode-accent ${app.color}`
-                                        : 'text-vscode-text hover:text-vscode-accent hover:bg-vscode-highlight'
+                                    ? `bg-vscode-highlight/70 border-2 border-vscode-accent ${app.color}`
+                                    : 'text-vscode-text hover:text-vscode-accent hover:bg-vscode-highlight'
                                     }`}
                             >
                                 <app.icon size={20} className={app.color} />

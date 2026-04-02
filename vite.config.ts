@@ -13,6 +13,11 @@ export default defineConfig(({ mode }) => ({
         changeOrigin: true,
         rewrite: () => "/feed/@arien7",
       },
+      "/youtube-feed": {
+        target: "https://www.youtube.com",
+        changeOrigin: true,
+        rewrite: () => "/feeds/videos.xml?channel_id=UCzEp5zLLp4BirsoJUogUY4A",
+      },
     },
   },
   plugins: [react()].filter(Boolean),

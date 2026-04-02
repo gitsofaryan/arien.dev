@@ -9,6 +9,7 @@ import MainLayout from "./components/MainLayout";
 import Home from "./pages/Home";
 import Blog from "./pages/Blog";
 import Projects from "./pages/Projects";
+import Creations from "./pages/Creations";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import { PageReveal } from "@/components/ui/motion";
@@ -28,6 +29,9 @@ const AnimatedRoutes = () => {
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<Blog />} />
           <Route path="/projects" element={<Projects />} />
+          <Route path="/projects/:id" element={<Projects />} />
+          <Route path="/creations" element={<Creations />} />
+          <Route path="/creations/:id" element={<Creations />} />
           <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

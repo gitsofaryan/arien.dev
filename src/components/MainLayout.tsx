@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import LeftSidebar from './LeftSidebar';
 import RightSidebar from './RightSidebar';
 import Navbar from './Navbar';
-import { GitBranch, Star, Layout, X, Menu, Music, Gamepad2, Keyboard, Tv, MessageCircle } from 'lucide-react';
+import { GitBranch, Star, Layout, X, Menu, Music, Gamepad2, Keyboard, Tv, MessageCircle, Youtube } from 'lucide-react';
 import MacDesktop from './mac/MacDesktop';
 import LatestStoryToast from './LatestStoryToast';
 import { useTheme } from '@/context/ThemeContext';
@@ -32,8 +32,9 @@ const MobileMenu = () => {
     const navItems = [
         { label: 'Home', path: '/', icon: Layout },
         { label: 'About', path: '/about', icon: Star },
-        { label: 'Work', path: '/projects', icon: GitBranch }, // Added icon for Work/Projects
-        { label: 'Stories', path: '/blog', icon: MessageCircle },
+        { label: 'Projects', path: '/projects', icon: GitBranch }, // Added icon for Work/Projects
+        { label: 'Creations', path: '/creations', icon: Youtube },
+        { label: 'Blogs', path: '/blog', icon: MessageCircle },
     ];
 
     return (
@@ -142,8 +143,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     const allTabs = [
         { id: 'home', label: 'home.tsx', paths: ['/'] },
         { id: 'about', label: 'aryan.info', paths: ['/about'] },
-        { id: 'work', label: 'work.done', paths: ['/projects'] },
-        { id: 'stories', label: 'stories.read', paths: ['/blog'] }
+        { id: 'projects', label: 'projects.built', paths: ['/projects'] },
+        { id: 'creations', label: 'creations.tube', paths: ['/creations'] },
+        { id: 'blogs', label: 'blogs.wrote', paths: ['/blog'] }
     ];
 
     // State for open tabs

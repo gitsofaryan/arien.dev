@@ -121,7 +121,7 @@ const Blog = () => {
               <h1 className="text-3xl md:text-5xl font-bold text-vscode-text mb-4 md:mb-6 tracking-tight flex items-center gap-3 md:gap-4">
                 <BookOpen size={32} className="text-vscode-accent md:w-10 md:h-10" />
                 <span>
-                  <span className="text-vscode-function">stories</span>
+                  <span className="text-vscode-function">blogs</span>
                   <span className="text-vscode-class">.md</span>
                 </span>
               </h1>

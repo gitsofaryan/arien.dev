@@ -1,390 +1,298 @@
-import { useState, useEffect } from 'react';
-import { ExternalLink, Github, Trophy, Rocket, Code, Star, GitBranch } from 'lucide-react';
+import { useState, useEffect, type CSSProperties } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { ArrowLeft, ExternalLink, Github, Loader2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { RevealItem, StaggeredSection } from '@/components/ui/motion';
-import { resumeData } from '@/data/resumeData';
+import { allProjects, UnifiedProject, getProjectById } from '@/data/allProjects';
+import { useGitHubReadme } from '@/hooks/useGitHubReadme';
 
-interface GitHubProject {
-  id: number;
-  name: string;
-  description: string | null;
-  url: string;
-  language: string | null;
-  stargazers_count: number;
-  forks_count: number;
-}
+const getTagColor = (tag: string) => {
+  const colors: Record<string, string> = {
+    opensource: 'bg-green-500/20 text-green-300 border-green-500/30',
+    github: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+    hackathon: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+    devpost: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
+    featured: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
+    ai: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
+    blockchain: 'bg-orange-500/20 text-orange-300 border-orange-500/30',
+  };
+  return colors[tag] || 'bg-vscode-highlight text-vscode-text border-vscode-border';
+};
 
-interface DevpostProject {
-  title: string;
-  tagline: string;
-  url: string;
-  submittedAt: string;
-  likeCount: number;
-  technologies: string[];
-}
+const renderMarkdown = (md: string) => {
+  if (!md) return '';
+
+  return md
+    .replace(/^### (.*?)$/gm, '<h3 class="text-lg font-semibold mt-6 mb-3 text-vscode-text">$1</h3>')
+    .replace(/^## (.*?)$/gm, '<h2 class="text-2xl font-bold mt-8 mb-4 text-vscode-text">$1</h2>')
+    .replace(/^# (.*?)$/gm, '<h1 class="text-3xl font-bold mt-10 mb-5 text-vscode-text">$1</h1>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-vscode-text">$1</strong>')
+    .replace(/__(.*?)__/g, '<strong class="font-bold text-vscode-text">$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em class="italic text-vscode-text/90">$1</em>')
+    .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 underline">$1</a>')
+    .replace(/`(.*?)`/g, '<code class="bg-vscode-highlight px-1.5 py-0.5 rounded text-xs font-mono text-vscode-text">$1</code>')
+    .replace(/```([\w]*)\n([\s\S]*?)```/g, '<pre class="bg-black/50 border border-vscode-border p-4 rounded my-4 overflow-x-auto"><code class="text-sm font-mono text-vscode-text/80">$2</code></pre>')
+    .split('\n\n')
+    .map(p => p.trim() ? `<p class="mb-4 text-vscode-text/80 leading-relaxed">${p.replace(/\n/g, '<br>')}</p>` : '')
+    .join('');
+};
 
 const Projects = () => {
-  const [githubProjects, setGithubProjects] = useState<GitHubProject[]>([]);
-  const [devpostProjects, setDevpostProjects] = useState<DevpostProject[]>([]);
-  const [isLoadingGithub, setIsLoadingGithub] = useState(true);
-  const [isLoadingDevpost, setIsLoadingDevpost] = useState(true);
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
 
+  const [selectedProject, setSelectedProject] = useState<UnifiedProject | null>(null);
+
+  const { readme, isLoading: isLoadingReadme, error: readmeError } = useGitHubReadme(
+    selectedProject?.owner || '',
+    selectedProject?.repo || ''
+  );
+
+  // Handle project selection via URL
   useEffect(() => {
-    // Use mock data directly since API isn't working
-    const mockDevpostProjects: DevpostProject[] = [
-      {
-        title: 'BitQuine — Lightning-Fast Bitcoin Trading AI',
-        tagline: 'A high-speed Bitcoin AI assistant powered by Groq and Llama3 that delivers real-time BTC analysis, trading insights, and BUY/SELL/HOLD signals',
-        url: 'https://devpost.com/software/bitquine',
-        submittedAt: '2024',
-        likeCount: 4,
-        technologies: ['AI', 'Bitcoin', 'Groq', 'Llama3']
-      },
-      {
-        title: 'AI & Jobs: OECD Wellbeing Impact Dashboard',
-        tagline: 'Interactive dashboard analyzing AI\'s impact on jobs, income, work-life balance, and wellbeing across OECD countries using AI-driven insights',
-        url: 'https://devpost.com/software/ai-jobs-oecd',
-        submittedAt: '2024',
-        likeCount: 8,
-        technologies: ['AI', 'Data Visualization', 'Dashboard', 'Analytics']
-      },
-      {
-        title: 'Echo',
-        tagline: 'Create lifelike AI avatars of loved ones to preserve their voice, personality, and memories forever. Connect through video, chat, and voice interactions',
-        url: 'https://devpost.com/software/echo',
-        submittedAt: '2024',
-        likeCount: 4,
-        technologies: ['AI', 'Voice Tech', 'Avatar', 'ML']
-      },
-      {
-        title: 'InSignia',
-        tagline: 'Bridging Silence, Empowering Voices! Indian Sign Language translator for real-time communication',
-        url: 'https://devpost.com/software/insignia',
-        submittedAt: '2024',
-        likeCount: 6,
-        technologies: ['Python', 'CNN', 'Flask', 'OpenCV', 'Mediapipe']
-      },
-      {
-        title: 'Hope.ai',
-        tagline: 'Hope is your digital companion, dedicated to fostering mental wellness, championing accessibility, and sparking imaginative journeys through personalized experiences',
-        url: 'https://devpost.com/software/hope-ai',
-        submittedAt: '2024',
-        likeCount: 4,
-        technologies: ['AI', 'Mental Health', 'Accessibility', 'React']
-      },
-      {
-        title: 'Deepfake Detection',
-        tagline: 'Beneath the Mask: Revealing the Hidden Danger of Deepfakes',
-        url: 'https://devpost.com/software/deepfake-detection',
-        submittedAt: '2024',
-        likeCount: 5,
-        technologies: ['AI', 'Computer Vision', 'Security', 'Deep Learning']
-      },
-      {
-        title: 'EarthView AI',
-        tagline: 'An AI-powered perspective on regional climatic shifts on Earth',
-        url: 'https://devpost.com/software/earthview-ai',
-        submittedAt: '2024',
-        likeCount: 6,
-        technologies: ['AI', 'Climate', 'Data Analysis', 'Visualization']
-      },
-      {
-        title: 'the codespace',
-        tagline: 'code, collaborate, draw and chat - A real-time collaborative code editor',
-        url: 'https://devpost.com/software/the-codespace',
-        submittedAt: '2024',
-        likeCount: 1,
-        technologies: ['React', 'Socket.io', 'Node.js', 'Collaboration']
-      }
-    ];
-
-    setDevpostProjects(mockDevpostProjects);
-    setIsLoadingDevpost(false);
-  }, []);
-
-  // Fetch GitHub Top Projects with fallback
-  useEffect(() => {
-    const fetchGitHubProjects = async () => {
-      try {
-        const response = await fetch(
-          'https://api.github.com/users/gitsofaryan/repos?sort=stars&per_page=10&type=owner'
-        );
-        if (!response.ok) throw new Error('Failed to fetch GitHub projects');
-        const repos = await response.json();
-        const filteredRepos = repos
-          .filter((repo: { fork: boolean }) => !repo.fork)
-          .slice(0, 5)
-          .map((repo: GitHubProject & { fork: boolean }) => ({
-            id: repo.id,
-            name: repo.name,
-            description: repo.description,
-            url: `https://github.com/gitsofaryan/${repo.name}`,
-            language: repo.language,
-            stargazers_count: repo.stargazers_count,
-            forks_count: repo.forks_count,
-          }));
-        setGithubProjects(filteredRepos);
-      } catch (error) {
-        console.error('Failed to fetch GitHub projects:', error);
-        // Fallback to mock GitHub projects
-        const mockGithubProjects: GitHubProject[] = [
-          {
-            id: 1,
-            name: 'finlitera',
-            description: 'AI Financial Assistant providing guidance, investment tips, and portfolio analysis',
-            url: 'https://github.com/gitsofaryan/finlitera',
-            language: 'TypeScript',
-            stargazers_count: 42,
-            forks_count: 12
-          },
-          {
-            id: 2,
-            name: 'ats100',
-            description: 'AI Resume Analyzer with ATS scores and detailed feedback',
-            url: 'https://github.com/gitsofaryan/ats100',
-            language: 'React',
-            stargazers_count: 38,
-            forks_count: 9
-          },
-          {
-            id: 3,
-            name: 'codespace',
-            description: 'Real-time collaborative code editor with chat and notifications',
-            url: 'https://github.com/gitsofaryan/codespace',
-            language: 'TypeScript',
-            stargazers_count: 56,
-            forks_count: 15
-          },
-          {
-            id: 4,
-            name: 'insignia',
-            description: 'Indian Sign Language translator for real-time communication',
-            url: 'https://github.com/gitsofaryan/insignia',
-            language: 'Python',
-            stargazers_count: 71,
-            forks_count: 22
-          },
-          {
-            id: 5,
-            name: 'agentdb',
-            description: 'Decentralized memory layer for AI agents with UCAN delegation',
-            url: 'https://github.com/gitsofaryan/agentdb',
-            language: 'TypeScript',
-            stargazers_count: 89,
-            forks_count: 18
-          }
-        ];
-        setGithubProjects(mockGithubProjects);
-      } finally {
-        setIsLoadingGithub(false);
-      }
-    };
-    fetchGitHubProjects();
-  }, []);
-
-  const formatDate = (dateString: string) => {
-    if (dateString.includes('-')) {
-      return new Date(dateString).toLocaleDateString('en-US', {
-        month: 'short',
-        year: 'numeric'
-      });
+    if (!id) {
+      setSelectedProject(null);
+      return;
     }
-    return dateString;
+    const project = getProjectById(id);
+    setSelectedProject(project || null);
+  }, [id]);
+
+  const handleProjectClick = (project: UnifiedProject) => {
+    // Only open detail view if it has a repo (Github projects)
+    if (project.owner && project.repo) {
+      navigate(`/projects/${project.id}`);
+      setSelectedProject(project);
+    } else {
+      // External projects open in new tab
+      window.open(project.link, '_blank');
+    }
   };
 
-  return (
-    <StaggeredSection className="max-w-6xl mx-auto px-6 py-12 animate-fade-in font-mono text-vscode-text/80 relative">
-      <div className="pointer-events-none absolute -top-28 right-0 w-72 h-72 rounded-full bg-vscode-accent/10 blur-3xl" />
+  const handleBackClick = () => {
+    navigate('/projects');
+    setSelectedProject(null);
+  };
 
+  // Irregular masonry pattern: alternating square and rectangle cards with varied heights.
+  const getMasonryClass = (index: number) => {
+    const patterns = [
+      'min-h-[250px] md:min-h-[300px]',
+      'min-h-[300px] md:min-h-[390px]',
+      'min-h-[230px] md:min-h-[290px]',
+      'min-h-[320px] md:min-h-[470px]',
+      'min-h-[260px] md:min-h-[350px]',
+      'min-h-[290px] md:min-h-[430px]',
+      'min-h-[240px] md:min-h-[320px]',
+      'min-h-[310px] md:min-h-[510px]',
+    ];
+
+    return `col-span-1 ${patterns[index % patterns.length]}`;
+  };
+
+  const getCardShapeStyle = (index: number): CSSProperties => {
+    const shapes = [
+      { borderRadius: '28px 10px 24px 14px' },
+      { borderRadius: '14px 30px 12px 26px' },
+      { borderRadius: '24px 16px 30px 10px' },
+      { borderRadius: '12px 26px 18px 32px' },
+      { borderRadius: '32px 12px 22px 16px' },
+      { borderRadius: '18px 28px 10px 24px' },
+      { borderRadius: '22px 14px 28px 12px' },
+      { borderRadius: '10px 24px 16px 30px' },
+    ];
+
+    return shapes[index % shapes.length];
+  };
+
+  if (selectedProject && selectedProject.owner && selectedProject.repo) {
+    return (
+      <StaggeredSection className="max-w-5xl mx-auto px-4 md:px-6 py-8 md:py-12 animate-fade-in font-mono text-vscode-text/80">
+        <button
+          onClick={handleBackClick}
+          className="mb-8 flex items-center gap-2 text-vscode-text/60 hover:text-vscode-text transition-colors text-sm uppercase tracking-widest group"
+        >
+          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Projects
+        </button>
+
+        <article className="animate-in slide-in-from-bottom-4 duration-500">
+          <header className="mb-12 pb-8 border-b border-vscode-border">
+            <div className="flex flex-wrap gap-2 mb-4">
+              {selectedProject.tags.map(tag => (
+                <span
+                  key={tag}
+                  className={`text-xs px-2 py-1 rounded border ${getTagColor(tag)} uppercase tracking-wider font-semibold`}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            <h1 className="text-4xl md:text-5xl font-bold text-vscode-text leading-tight mb-4">
+              {selectedProject.title}
+            </h1>
+            <p className="text-lg text-vscode-text/60 mb-6">
+              {selectedProject.description}
+            </p>
+            <div className="flex flex-wrap gap-2 mb-6">
+              {selectedProject.tech?.map(tag => (
+                <span
+                  key={tag}
+                  className="text-xs px-3 py-1 bg-vscode-highlight rounded border border-vscode-border text-vscode-text"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <a
+              href={selectedProject.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-vscode-accent text-vscode-editor rounded hover:bg-vscode-accent/90 transition-colors font-bold"
+            >
+              <Github size={16} /> View on GitHub
+            </a>
+          </header>
+
+          {isLoadingReadme && (
+            <div className="flex items-center justify-center py-20">
+              <Loader2 className="animate-spin mr-2" />
+              <span className="text-vscode-text/60">Loading README...</span>
+            </div>
+          )}
+
+          {readmeError && (
+            <div className="p-8 bg-yellow-500/10 border border-yellow-500/30 rounded">
+              <p className="text-yellow-300 font-semibold text-lg mb-3">Can't fetch README</p>
+              <p className="text-vscode-text/60 text-sm mb-4">Unable to load the README file. View the full repository on GitHub:</p>
+              <a
+                href={selectedProject.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-500/20 border border-yellow-500/50 text-yellow-300 rounded hover:bg-yellow-500/30 transition-colors font-semibold text-sm"
+              >
+                <Github size={16} /> Visit Repository on GitHub
+                <ExternalLink size={14} />
+              </a>
+            </div>
+          )}
+
+          {readme && !isLoadingReadme && (
+            <div
+              className="prose prose-invert max-w-none"
+              dangerouslySetInnerHTML={{
+                __html: renderMarkdown(readme),
+              }}
+            />
+          )}
+
+          {!readme && !isLoadingReadme && !readmeError && (
+            <div className="text-center py-12">
+              <p className="text-vscode-text/60">No README content available</p>
+            </div>
+          )}
+        </article>
+      </StaggeredSection>
+    );
+  }
+
+  return (
+    <StaggeredSection className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12 animate-fade-in font-mono text-vscode-text/80">
       {/* Header */}
       <RevealItem>
         <section className="mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-vscode-text mb-6 tracking-tight flex items-center gap-4">
-            <Rocket size={40} className="text-vscode-accent" />
             <span>
-              <span className="text-vscode-function">work</span>
-              <span className="text-vscode-class">.done</span>
+              <span className="text-vscode-function">projects</span>
+              <span className="text-vscode-class">.built</span>
             </span>
           </h1>
           <p className="text-lg text-vscode-text/60 max-w-2xl leading-relaxed">
-            A curated set of products built from first principles to production. Each project solves a concrete problem and reflects how I design, ship, and iterate in the real world.
+            A curated set of products, hackathon wins, and open-source contributions built from first principles. Click any GitHub project to view its README.
           </p>
         </section>
       </RevealItem>
 
       <hr className="border-vscode-border opacity-50 mb-16" />
 
-      {/* Main Projects Section */}
+      {/* Masonry Grid */}
       <RevealItem>
-        <section className="mb-20">
-          <h2 className="text-3xl font-bold text-vscode-text mb-10 flex items-center gap-3">
-            <GitBranch size={28} className="text-vscode-accent" />
-            Featured Deployments
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {resumeData.projects.map((project, idx) => (
-              <Card key={idx} className="bg-vscode-sidebar border-vscode-border hover:border-vscode-accent transition-all group h-full">
-                <CardContent className="pt-6 h-full flex flex-col">
-                  <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-xl font-bold text-vscode-text group-hover:text-vscode-accent transition-colors">{project.title}</h3>
-                    <a href={project.link} target="_blank" rel="noopener" className="text-vscode-text/60 hover:text-vscode-text transition-colors p-1 hover:bg-vscode-highlight rounded"><Github size={20} /></a>
+        <div className="columns-1 md:columns-2 gap-5 md:gap-6 mb-12">
+          {allProjects.map((project, index) => (
+            <div
+              key={project.id}
+              className={`${getMasonryClass(index)} break-inside-avoid mb-5 md:mb-6 group cursor-pointer`}
+              onClick={() => handleProjectClick(project)}
+            >
+              <Card
+                style={getCardShapeStyle(index)}
+                className="bg-vscode-sidebar border-vscode-border hover:border-vscode-accent transition-all overflow-hidden group-hover:shadow-lg group-hover:-translate-y-1"
+              >
+                <CardContent className="p-6 h-full flex flex-col group-hover:bg-vscode-highlight/5 transition-colors">
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-1.5 mb-4">
+                    {project.tags.map(tag => (
+                      <span
+                        key={tag}
+                        className={`text-[10px] px-2 py-0.5 rounded border ${getTagColor(tag)} uppercase tracking-wider font-bold`}
+                      >
+                        {tag}
+                      </span>
+                    ))}
                   </div>
-                  <p className="text-sm text-vscode-text/60 mb-6 flex-grow leading-relaxed">
+
+                  {/* Title and Description */}
+                  <h3 className="text-xl md:text-2xl font-bold text-vscode-text group-hover:text-vscode-accent transition-colors mb-3 line-clamp-2">
+                    {project.title}
+                  </h3>
+
+                  <p className="text-sm text-vscode-text/60 leading-relaxed mb-6 flex-grow line-clamp-3 md:line-clamp-4">
                     {project.description}
                   </p>
-                  <div className="flex flex-wrap gap-2 mt-auto">
-                    {project.tech.slice(0, 6).map(t => (
-                      <span key={t} className="text-[10px] px-2 py-1 bg-vscode-bg border border-vscode-border rounded text-vscode-text uppercase tracking-wider">{t}</span>
+
+                  {/* Tech Tags */}
+                  <div className="flex flex-wrap gap-1.5 mb-6">
+                    {project.tech.slice(0, 3).map(tech => (
+                      <span
+                        key={tech}
+                        className="text-[10px] px-2 py-1 bg-vscode-highlight/50 rounded border border-vscode-border/50 text-vscode-text/80"
+                      >
+                        {tech}
+                      </span>
                     ))}
+                    {project.tech.length > 3 && (
+                      <span className="text-[10px] px-2 py-1 text-vscode-text/40">
+                        +{project.tech.length - 3}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Stats Footer */}
+                  <div className="pt-4 border-t border-vscode-border/30 flex items-center justify-between text-xs text-vscode-text/50">
+                    <div className="flex gap-3">
+                      {project.stats?.stars && (
+                        <span>⭐ {project.stats.stars}</span>
+                      )}
+                      {project.stats?.forks && (
+                        <span>🍴 {project.stats.forks}</span>
+                      )}
+                      {project.stats?.likes && (
+                        <span>❤️ {project.stats.likes}</span>
+                      )}
+                    </div>
+                    <ExternalLink size={14} className="group-hover:text-vscode-accent transition-colors" />
                   </div>
                 </CardContent>
               </Card>
-            ))}
-          </div>
-        </section>
+            </div>
+          ))}
+        </div>
       </RevealItem>
 
-      {/* GitHub Projects Section */}
-      <RevealItem>
-        <section className="mb-20">
-          <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
-            <h2 className="text-3xl font-bold text-vscode-text flex items-center gap-3">
-              <Github size={28} className="text-vscode-accent" />
-              Top GitHub Repositories
-            </h2>
-            <a
-              href="https://github.com/gitsofaryan"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-vscode-accent hover:text-vscode-text transition-colors text-sm font-bold bg-vscode-sidebar px-4 py-2 rounded border border-vscode-border"
-            >
-              View all on GitHub <ExternalLink size={14} />
-            </a>
-          </div>
-
-          {isLoadingGithub ? (
-            <div className="flex justify-center my-10">
-              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-vscode-accent"></div>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-              {githubProjects.map((project) => (
-                <Card key={project.id} className="bg-vscode-sidebar border-vscode-border hover:border-vscode-accent transition-all group h-full">
-                  <CardContent className="pt-6 h-full flex flex-col">
-                    <div className="flex justify-between items-start mb-3">
-                      <h3 className="text-lg font-bold text-vscode-text group-hover:text-vscode-accent transition-colors line-clamp-1" title={project.name}>{project.name}</h3>
-                      {project.stargazers_count > 0 && (
-                        <span className="flex items-center gap-1 text-xs text-vscode-comment bg-vscode-bg px-2 py-1 rounded">
-                          <Star size={10} className="fill-vscode-accent text-vscode-accent" /> {project.stargazers_count}
-                        </span>
-                      )}
-                    </div>
-
-                    <p className="text-xs text-vscode-text/60 mb-4 line-clamp-3 leading-relaxed flex-grow">
-                      {project.description || 'No description available'}
-                    </p>
-
-                    <div className="space-y-4 mt-auto">
-                      <div className="flex flex-wrap gap-1.5">
-                        {project.language && (
-                          <span className="text-[10px] px-1.5 py-0.5 bg-vscode-bg border border-vscode-border rounded text-vscode-text">
-                            {project.language}
-                          </span>
-                        )}
-                        {project.forks_count > 0 && (
-                          <span className="text-[10px] px-1.5 py-0.5 bg-vscode-bg border border-vscode-border rounded text-vscode-text">
-                            🍴 {project.forks_count}
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="flex items-center justify-end pt-3 border-t border-vscode-border">
-                        <a href={project.url} target="_blank" rel="noopener" className="text-xs font-bold text-vscode-accent hover:text-vscode-text flex items-center gap-1">
-                          View Repository <ExternalLink size={10} />
-                        </a>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </section>
+      {/* Footer */}
+      <RevealItem className="text-center pt-8 opacity-40 text-xs font-mono">
+        <p>Explore projects, view READMEs, and discover what I've built. Each story is a lesson in shipping.</p>
       </RevealItem>
-
-      {/* Devpost / Hackathons Section */}
-      <RevealItem>
-        <section className="mb-20">
-          <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
-            <h2 className="text-3xl font-bold text-vscode-text flex items-center gap-3">
-              <Trophy size={28} className="text-yellow-500" />
-              Hackathon Builds
-            </h2>
-            <a
-              href="https://devpost.com/gitsofaryan"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-vscode-accent hover:text-vscode-text transition-colors text-sm font-bold bg-vscode-sidebar px-4 py-2 rounded border border-vscode-border"
-            >
-              View full history on Devpost <ExternalLink size={14} />
-            </a>
-          </div>
-
-          {isLoadingDevpost ? (
-            <div className="flex justify-center my-10">
-              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-vscode-accent"></div>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {devpostProjects.map((project, index) => (
-                <Card key={index} className="bg-vscode-sidebar border-vscode-border hover:border-vscode-accent transition-all group h-full">
-                  <CardContent className="pt-6 h-full flex flex-col">
-                    <div className="flex justify-between items-start mb-3">
-                      <h3 className="text-lg font-bold text-vscode-text group-hover:text-vscode-accent transition-colors line-clamp-1" title={project.title}>{project.title}</h3>
-                      {project.likeCount > 0 && (
-                        <span className="flex items-center gap-1 text-xs text-vscode-comment bg-vscode-bg px-2 py-1 rounded">
-                          <Star size={10} className="fill-vscode-accent text-vscode-accent" /> {project.likeCount}
-                        </span>
-                      )}
-                    </div>
-
-                    <p className="text-xs text-vscode-text/60 mb-4 line-clamp-3 leading-relaxed flex-grow">
-                      {project.tagline}
-                    </p>
-
-                    <div className="space-y-4 mt-auto">
-                      <div className="flex flex-wrap gap-1.5">
-                        {project.technologies.slice(0, 3).map((tech, i) => (
-                          <span key={i} className="text-[10px] px-1.5 py-0.5 bg-vscode-bg border border-vscode-border rounded text-vscode-text">
-                            {tech}
-                          </span>
-                        ))}
-                        {project.technologies.length > 3 && (
-                          <span className="text-[10px] px-1.5 py-0.5 text-vscode-comment">+{project.technologies.length - 3}</span>
-                        )}
-                      </div>
-
-                      <div className="flex items-center justify-between pt-3 border-t border-vscode-border">
-                        <span className="text-[10px] text-vscode-comment">{formatDate(project.submittedAt)}</span>
-                        <a href={project.url} target="_blank" rel="noopener" className="text-xs font-bold text-vscode-accent hover:text-vscode-text flex items-center gap-1">
-                          Check it out <ExternalLink size={10} />
-                        </a>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </section>
-      </RevealItem>
-
-      {/* Final Quote */}
-      <RevealItem className="text-center pt-12 pb-8 opacity-40 text-xs font-mono">
-        <p>"The best products are conversations between users, feedback, and relentless iteration."</p>
-      </RevealItem>
-
     </StaggeredSection>
   );
 };
