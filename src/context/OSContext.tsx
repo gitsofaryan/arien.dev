@@ -7,10 +7,13 @@ export type AppId = 'finder' | 'calculator' | 'calendar' | 'notes' | 'terminal' 
 interface OSContextType {
     openApps: string[];
     focusedApp: string | null;
+    minimizedApps: string[];
     launchApp: (appId: string) => void;
     closeApp: (appId: string) => void;
     focusApp: (appId: string) => void;
     toggleApp: (appId: string) => void;
+    minimizeApp: (appId: string) => void;
+    unminimizeApp: (appId: string) => void;
 }
 
 const OSContext = createContext<OSContextType | undefined>(undefined);
@@ -18,6 +21,7 @@ const OSContext = createContext<OSContextType | undefined>(undefined);
 export const OSProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [openApps, setOpenApps] = useState<string[]>([]);
     const [focusedApp, setFocusedApp] = useState<string | null>(null);
+    const [minimizedApps, setMinimizedApps] = useState<string[]>([]);
 
     const launchApp = (appId: string) => {
         if (!openApps.includes(appId)) {
@@ -61,8 +65,24 @@ export const OSProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         }
     };
 
+    const minimizeApp = (appId: string) => {
+        if (openApps.includes(appId)) {
+            setMinimizedApps(prev => [...prev, appId]);
+            if (focusedApp === appId) {
+                const remaining = openApps.filter(id => id !== appId || minimizedApps.includes(id));
+                const visible = remaining.filter(id => !minimizedApps.includes(id) && id !== appId);
+                setFocusedApp(visible.length > 0 ? visible[visible.length - 1] : null);
+            }
+        }
+    };
+
+    const unminimizeApp = (appId: string) => {
+        setMinimizedApps(prev => prev.filter(id => id !== appId));
+        setFocusedApp(appId);
+    };
+
     return (
-        <OSContext.Provider value={{ openApps, focusedApp, launchApp, closeApp, focusApp, toggleApp }}>
+        <OSContext.Provider value={{ openApps, focusedApp, minimizedApps, launchApp, closeApp, focusApp, toggleApp, minimizeApp, unminimizeApp }}>
             {children}
         </OSContext.Provider>
     );

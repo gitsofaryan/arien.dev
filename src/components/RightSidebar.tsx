@@ -6,7 +6,7 @@ import { Monitor, Music, Gamepad2, Keyboard, Tv } from 'lucide-react';
 
 const RightSidebar = () => {
     const { theme, setTheme } = useTheme();
-    const { launchApp } = useOS();
+    const { launchApp, minimizedApps, unminimizeApp } = useOS();
     const navItems = [
         { label: 'Home', path: '/' },
         { label: 'About', path: '/about' },
@@ -61,21 +61,27 @@ const RightSidebar = () => {
                 </h3>
                 <div className="grid grid-cols-4 gap-2">
                     {[
-                        // { id: 'computer', label: 'My Computer', icon: Monitor },
-                        { id: 'spotify', label: 'Spotify', icon: Music },
-                        { id: 'games', label: 'Tic-Tac-Toe', icon: Gamepad2 },
-                        { id: 'speedmaster', label: 'SpeedMaster', icon: Keyboard },
-                        { id: 'hawkins', label: 'Hawkins', icon: Tv }
-                    ].map((app) => (
-                        <button
-                            key={app.id}
-                            onClick={() => launchApp(app.id)}
-                            title={app.label}
-                            className={`flex flex-col items-center justify-center p-2 rounded transition-colors text-vscode-text hover:text-vscode-accent hover:bg-vscode-highlight aspect-square`}
-                        >
-                            <app.icon size={20} className={app.id === 'spotify' ? 'text-green-400' : app.id === 'games' ? 'text-purple-400' : app.id === 'speedmaster' ? 'text-yellow-400' : 'text-blue-400'} />
-                        </button>
-                    ))}
+                        { id: 'spotify', label: 'Spotify', icon: Music, color: 'text-green-400' },
+                        { id: 'games', label: 'Games', icon: Gamepad2, color: 'text-purple-400' },
+                        { id: 'speedmaster', label: 'SpeedMaster', icon: Keyboard, color: 'text-yellow-400' },
+                        { id: 'hawkins', label: 'Hawkins', icon: Tv, color: 'text-red-400' }
+                    ].map((app) => {
+                        const isMinimized = minimizedApps.includes(app.id);
+                        return (
+                            <button
+                                key={app.id}
+                                onClick={() => isMinimized ? unminimizeApp(app.id) : launchApp(app.id)}
+                                title={app.label}
+                                className={`flex flex-col items-center justify-center p-2 rounded transition-all aspect-square ${
+                                    isMinimized 
+                                        ? `bg-vscode-highlight/70 border-2 border-vscode-accent ${app.color}` 
+                                        : 'text-vscode-text hover:text-vscode-accent hover:bg-vscode-highlight'
+                                }`}
+                            >
+                                <app.icon size={20} className={app.color} />
+                            </button>
+                        );
+                    })}
                 </div>
             </div>
 

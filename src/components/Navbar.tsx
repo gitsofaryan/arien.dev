@@ -36,7 +36,6 @@ const Navbar: React.FC = () => {
                 key={link.to}
                 to={link.to}
                 className="nav-link flex items-center space-x-1 text-vscode-text/70 hover:text-vscode-text transition-colors"
-              // Adjusted text colors for better contrast
               >
                 {link.icon && <link.icon size={18} />}
                 {link.image && <img src={link.image} alt="" height={20} width={20} />}
@@ -44,14 +43,14 @@ const Navbar: React.FC = () => {
               </Link>
             ))}
 
-            <div className="flex items-center space-x-4 ml-4 border-l border-vscode-border pl-4">
-              <a
-                href="https://github.com/gitsofaryan"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-vscode-text/70 hover:text-vscode-text transition-colors"
-              >
-                <Github size={20} />
+            {/* Minimized Apps Tabs */}
+            {minimizedApps.length > 0 && (
+              <div className="flex items-center space-x-2 ml-4 border-l border-vscode-border pl-4">
+                {minimizedApps.map((appId) => {
+                  const app = appIcons[appId];
+                  if (!app) return null;
+                  return (
+                    <button
               </a>
               <a
                 href="https://linkedin.com/in/aryan-jain07/"
@@ -100,26 +99,27 @@ const Navbar: React.FC = () => {
                 <span className="text-sm font-medium">{link.label}</span>
               </Link>
             ))}
-            <div className="border-t border-vscode-border pt-4 mt-2 flex flex-col space-y-4">
-              <div className="flex items-center space-x-4 px-2">
-                <a
-                  href="https://github.com/gitsofaryan"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-vscode-text/70 hover:text-vscode-text transition-colors flex items-center gap-2"
-                >
-                  <Github size={20} />
-                  <span>GitHub</span>
-                </a>
-                <a
-                  href="https://linkedin.com/in/aryan-jain07/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-vscode-text/70 hover:text-vscode-text transition-colors flex items-center gap-2"
-                >
-                  <LinkedinIcon size={20} />
-                  <span>LinkedIn</span>
-                </a>
+
+            {/* Minimized Apps Section in Mobile Menu */}
+            {minimizedApps.length > 0 && (
+              <div className="border-t border-vscode-border pt-4 mt-2">
+                <div className="text-xs font-semibold text-vscode-text/50 mb-2 px-2">MINIMIZED APPS</div>
+                <div className="flex flex-col space-y-2">
+                  {minimizedApps.map((appId) => {
+                    const app = appIcons[appId];
+                    if (!app) return null;
+                    return (
+                      <button
+                        key={appId}
+                        onClick={() => unminimizeApp(appId)}
+                        className={`flex items-center gap-3 text-vscode-text p-2 rounded-md hover:bg-vscode-highlight transition-colors text-sm font-medium ${app.color}`}
+                      >
+                        {app.icon}
+                        <span>{app.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
               <a href="/resume.pdf" download="Resume.pdf" target="_blank" rel="noopener noreferrer" className="w-full">
                 <Button variant="outline" className="w-full gap-2 border-border justify-center">
@@ -131,7 +131,7 @@ const Navbar: React.FC = () => {
           </nav>
         </div>
       )}
-    </header >
+    </header>
   );
 };
 

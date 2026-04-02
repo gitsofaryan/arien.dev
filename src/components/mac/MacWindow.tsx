@@ -7,6 +7,7 @@ interface MacWindowProps {
     title: string;
     isOpen: boolean;
     onClose: () => void;
+    onMinimize?: () => void;
     children: React.ReactNode;
     defaultPosition?: { x: number; y: number };
     defaultSize?: { width: number | string; height: number | string };
@@ -15,7 +16,7 @@ interface MacWindowProps {
     onClick?: () => void;
 }
 
-const MacWindow: React.FC<MacWindowProps> = ({ title, isOpen, onClose, children, defaultPosition = { x: 50, y: 50 }, defaultSize = { width: 600, height: 400 }, icon, zIndex = 50, onClick }) => {
+const MacWindow: React.FC<MacWindowProps> = ({ title, isOpen, onClose, onMinimize, children, defaultPosition = { x: 50, y: 50 }, defaultSize = { width: 600, height: 400 }, icon, zIndex = 50, onClick }) => {
     const nodeRef = useRef(null);
 
     if (!isOpen) return null;
@@ -50,7 +51,11 @@ const MacWindow: React.FC<MacWindowProps> = ({ title, isOpen, onClose, children,
                             >
                                 <X size={6} className="opacity-0 group-hover:opacity-100 text-black/60 md:w-2 md:h-2" />
                             </button>
-                            <button className="w-3 h-3 md:w-3 md:h-3 rounded-full bg-[#FFBD2E] hover:bg-[#FFBD2E]/80 flex items-center justify-center transition-colors shadow-inner">
+                            <button 
+                                onClick={(e) => { e.stopPropagation(); onMinimize?.(); }}
+                                onTouchEnd={(e) => { e.stopPropagation(); onMinimize?.(); }}
+                                className="w-3 h-3 md:w-3 md:h-3 rounded-full bg-[#FFBD2E] hover:bg-[#FFBD2E]/80 flex items-center justify-center transition-colors shadow-inner"
+                            >
                                 <Minus size={6} className="opacity-0 group-hover:opacity-100 text-black/60 md:w-2 md:h-2" />
                             </button>
                             <button className="w-3 h-3 md:w-3 md:h-3 rounded-full bg-[#27C93F] hover:bg-[#27C93F]/80 flex items-center justify-center transition-colors shadow-inner">
