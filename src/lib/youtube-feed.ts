@@ -105,21 +105,21 @@ export const fetchYouTubeItems = async (
   count = 100,
   handle = "arien_jain",
 ): Promise<YouTubeFeedItem[]> => {
-  if (import.meta.env.PROD) {
-    const response = await fetch(
-      `/api/youtube?count=${count}&handle=${handle}`,
-      {
-        headers: { Accept: "application/json" },
-      },
-    );
+  // Prefer server endpoint in all envs (supports pagination and richer filtering).
+  try {
+    const response = await fetch(`/api/youtube?count=${count}&handle=${handle}`, {
+      headers: { Accept: "application/json" },
+    });
 
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
+    if (response.ok) {
+      const data = await response.json();
+      const items = Array.isArray(data?.items) ? data.items : [];
+      if (items.length > 0) {
+        return items.slice(0, count);
+      }
     }
-
-    const data = await response.json();
-    const items = Array.isArray(data?.items) ? data.items : [];
-    return items.slice(0, count);
+  } catch {
+    // Fall through to dev RSS proxy fallback.
   }
 
   const response = await fetch(YOUTUBE_DEV_PROXY_PATH, {

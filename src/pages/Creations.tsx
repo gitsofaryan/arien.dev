@@ -21,7 +21,7 @@ const Creations = () => {
     useEffect(() => {
         const loadVideos = async () => {
             try {
-                const items = await fetchYouTubeItems(100, "arien_jain");
+                const items = await fetchYouTubeItems(300, "arien_jain");
                 setVideos(items);
                 setError(null);
             } catch (err) {
