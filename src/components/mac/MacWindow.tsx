@@ -51,7 +51,7 @@ const MacWindow: React.FC<MacWindowProps> = ({ title, isOpen, onClose, onMinimiz
                             >
                                 <X size={6} className="opacity-0 group-hover:opacity-100 text-black/60 md:w-2 md:h-2" />
                             </button>
-                            <button 
+                            <button
                                 onClick={(e) => { e.stopPropagation(); onMinimize?.(); }}
                                 onTouchEnd={(e) => { e.stopPropagation(); onMinimize?.(); }}
                                 className="w-3 h-3 md:w-3 md:h-3 rounded-full bg-[#FFBD2E] hover:bg-[#FFBD2E]/80 flex items-center justify-center transition-colors shadow-inner"

@@ -68,40 +68,41 @@ const Navbar: React.FC = () => {
                 </Button>
               </a>
             </div>
-          </nav>
+      </nav>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-vscode-text hover:bg-vscode-highlight"
-            >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </Button>
-          </div>
-        </div>
+      {/* Mobile Menu Button */}
+      <div className="md:hidden">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="text-vscode-text hover:bg-vscode-highlight"
+        >
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </Button>
       </div>
+    </div>
+      </div >
 
-      {/* Mobile Menu Overlay */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-16 left-0 w-full bg-vscode-sidebar border-b border-vscode-border animate-in slide-in-from-top-5 duration-200 shadow-xl">
-          <nav className="flex flex-col p-4 space-y-4">
-            {navLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className="flex items-center space-x-3 text-vscode-text hover:text-vscode-text p-2 rounded-md hover:bg-vscode-highlight transition-colors"
-              >
-                {link.icon && <link.icon size={18} />}
-                {link.image && <img src={link.image} alt="" height={18} width={18} />}
-                <span className="text-sm font-medium">{link.label}</span>
-              </Link>
-            ))}
+  {/* Mobile Menu Overlay */ }
+{
+  isMobileMenuOpen && (
+    <div className="md:hidden absolute top-16 left-0 w-full bg-vscode-sidebar border-b border-vscode-border animate-in slide-in-from-top-5 duration-200 shadow-xl">
+      <nav className="flex flex-col p-4 space-y-4">
+        {navLinks.map((link) => (
+          <Link
+            key={link.to}
+            to={link.to}
+            className="flex items-center space-x-3 text-vscode-text hover:text-vscode-text p-2 rounded-md hover:bg-vscode-highlight transition-colors"
+          >
+            {link.icon && <link.icon size={18} />}
+            {link.image && <img src={link.image} alt="" height={18} width={18} />}
+            <span className="text-sm font-medium">{link.label}</span>
+          </Link>
+        ))}
 
-            {/* Minimized Apps Section in Mobile Menu */}
-            {minimizedApps.length > 0 && (
+        {/* Minimized Apps Section in Mobile Menu */}
+        {minimizedApps.length > 0 && (
               <div className="border-t border-vscode-border pt-4 mt-2">
                 <div className="text-xs font-semibold text-vscode-text/50 mb-2 px-2">MINIMIZED APPS</div>
                 <div className="flex flex-col space-y-2">
@@ -128,10 +129,11 @@ const Navbar: React.FC = () => {
                 </Button>
               </a>
             </div>
-          </nav>
-        </div>
-      )}
-    </header>
+          </nav >
+        </div >
+      )
+}
+    </header >
   );
 };
 
