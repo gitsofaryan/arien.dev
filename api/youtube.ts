@@ -47,6 +47,11 @@ const isShort = (title: string, description: string, link: string) => {
   );
 };
 
+const isCsbsMarked = (title: string, description: string) => {
+  const text = `${title} ${description}`.toLowerCase();
+  return /\bcsbs\b/.test(text);
+};
+
 export default async function handler(req: any, res: any) {
   if (req.method !== "GET") {
     res.setHeader("Allow", "GET");
@@ -125,6 +130,7 @@ export default async function handler(req: any, res: any) {
       })
       .filter((item) => item.videoId && item.title && item.link)
       .filter((item) => !isShort(item.title, item.description, item.link))
+      .filter((item) => !isCsbsMarked(item.title, item.description))
       .slice(0, count);
 
     return res.status(200).json({ status: "ok", channelId, items });

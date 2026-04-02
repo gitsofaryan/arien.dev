@@ -184,7 +184,7 @@ const Creations = () => {
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {videos.slice(0, visibleCount).map((video) => (
-              <RevealItem key={video.videoId}>
+              <div key={video.videoId}>
                 <Card
                   className="bg-vscode-sidebar border-vscode-border hover:border-vscode-accent transition-all overflow-hidden cursor-pointer"
                   onClick={() => navigate(`/creations/${video.videoId}`)}
@@ -217,7 +217,7 @@ const Creations = () => {
                     </p>
                   </CardContent>
                 </Card>
-              </RevealItem>
+              </div>
             ))}
           </div>
 

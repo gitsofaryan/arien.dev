@@ -19,6 +19,11 @@ const isShort = (title: string, description: string, link: string) => {
   );
 };
 
+const isCsbsMarked = (title: string, description: string) => {
+  const text = `${title} ${description}`.toLowerCase();
+  return /\bcsbs\b/.test(text);
+};
+
 const stripCdata = (value: string) =>
   value.replace(/^<!\[CDATA\[|\]\]>$/g, "").trim();
 
@@ -92,7 +97,8 @@ export const parseYouTubeXml = (xml: string): YouTubeFeedItem[] => {
       };
     })
     .filter((item) => Boolean(item.videoId && item.title && item.link))
-    .filter((item) => !isShort(item.title, item.description, item.link));
+    .filter((item) => !isShort(item.title, item.description, item.link))
+    .filter((item) => !isCsbsMarked(item.title, item.description));
 };
 
 export const fetchYouTubeItems = async (
