@@ -12,7 +12,7 @@ import { resumeData } from "@/data/resumeData";
 const fallbackProfileData = {
   username: "gitsofaryan",
   avatar: "https://avatars.githubusercontent.com/u/12345678?v=4",
-  bio: "Software engineer building resilient AI and protocol-driven systems.",
+  bio: "Learning to build. Exploring backend, AI, and open source.",
   followers: 150,
   following: 80,
   publicRepos: 45,

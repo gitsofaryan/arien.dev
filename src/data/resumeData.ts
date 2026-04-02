@@ -14,7 +14,7 @@ export const resumeData = {
     discord: "thecosmicnerd",
     telegram: "arienjain",
     tagline: "Software Engineer | Dev Tools and AI Infra Builder",
-    bio: "I build developer tools, AI infrastructure, and backend systems that are practical, reliable, and production-ready. I am especially interested in agent memory architectures, delegated authority models, and model evaluation workflows that make AI systems safer and more useful.",
+    bio: "I'm into building developer tools and AI infrastructure that actually work. Currently exploring the intersection of web3 and AI—agent memory systems, delegation models, and how to make autonomous systems more trustworthy and measurable. Shipping reliable systems is what matters to me.",
   },
 
   technicalSkills: {
@@ -194,6 +194,10 @@ export const resumeData = {
   ],
 
   focus: [
+    {
+      title: "Web3 x AI Systems",
+      desc: "Exploring how decentralized systems can enable more transparent, autonomous AI agents. Building at the intersection of blockchain protocols and ML infrastructure.",
+    },
     {
       title: "Developer Tools and AI Infra",
       desc: "I am focused on building tools and infrastructure that help teams ship AI products faster, with better observability, reliability, and developer experience.",

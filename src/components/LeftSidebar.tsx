@@ -18,13 +18,13 @@ const LeftSidebar = () => {
                     </div>
                     <div>
                         <h2 className="text-xl font-bold text-vscode-text mb-1">{resumeData.personalInfo.name}</h2>
-                        <p className="text-vscode-accent font-mono text-sm">&lt;Software Engineer & Protocol Builder /&gt;</p>
+                        <p className="text-vscode-accent font-mono text-sm">&lt;Software Engineer & Product Thinker /&gt;</p>
                     </div>
                 </div>
 
                 {/* Bio Snippet */}
                 <p className="text-vscode-text/80 text-sm leading-relaxed">
-                    I design practical systems across backend, AI, and open source, with a focus on clarity, reliability, and real-world impact.
+                    Learning to build things with code. Exploring backend, AI infrastructure, web3 systems, and open source. Passionate about shipping things that actually work.
                 </p>
 
                 {/* Contact Info */}
