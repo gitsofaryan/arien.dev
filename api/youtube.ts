@@ -15,10 +15,16 @@ const MAX_PAGES = 20;
 const getTextFromRuns = (value: unknown): string => {
   if (!value || typeof value !== "object") return "";
 
-  const candidate = value as { simpleText?: string; runs?: Array<{ text?: string }> };
+  const candidate = value as {
+    simpleText?: string;
+    runs?: Array<{ text?: string }>;
+  };
   if (candidate.simpleText) return candidate.simpleText;
   if (Array.isArray(candidate.runs)) {
-    return candidate.runs.map((run) => run?.text || "").join("").trim();
+    return candidate.runs
+      .map((run) => run?.text || "")
+      .join("")
+      .trim();
   }
 
   return "";
@@ -53,7 +59,10 @@ const extractConfigFromHtml = (html: string) => {
   return { apiKey, clientVersion, visitorData };
 };
 
-const extractJsonObjectAfterMarker = (source: string, marker: string): unknown => {
+const extractJsonObjectAfterMarker = (
+  source: string,
+  marker: string,
+): unknown => {
   const markerIndex = source.indexOf(marker);
   if (markerIndex < 0) return null;
 
@@ -112,7 +121,9 @@ const findRichGridContents = (node: unknown): unknown[] => {
 
   const obj = node as Record<string, unknown>;
 
-  const maybeRichGrid = obj.richGridRenderer as { contents?: unknown[] } | undefined;
+  const maybeRichGrid = obj.richGridRenderer as
+    | { contents?: unknown[] }
+    | undefined;
   if (maybeRichGrid?.contents && Array.isArray(maybeRichGrid.contents)) {
     return maybeRichGrid.contents;
   }
@@ -146,7 +157,8 @@ const parseVideoRenderer = (videoRenderer: unknown): YouTubeItem | null => {
 
   let thumbnail = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
   const thumbs =
-    (vr.thumbnail as { thumbnails?: Array<{ url?: string }> } | undefined)?.thumbnails || [];
+    (vr.thumbnail as { thumbnails?: Array<{ url?: string }> } | undefined)
+      ?.thumbnails || [];
   if (Array.isArray(thumbs) && thumbs.length > 0) {
     const last = thumbs[thumbs.length - 1];
     if (last?.url) thumbnail = last.url;
@@ -172,17 +184,25 @@ const collectVideosAndContinuation = (items: unknown[]) => {
 
     const obj = item as Record<string, unknown>;
     const videoRenderer =
-      (obj.richItemRenderer as { content?: { videoRenderer?: unknown } } | undefined)?.content
-        ?.videoRenderer ||
-      (obj.videoRenderer as unknown);
+      (
+        obj.richItemRenderer as
+          | { content?: { videoRenderer?: unknown } }
+          | undefined
+      )?.content?.videoRenderer || (obj.videoRenderer as unknown);
 
     const parsed = parseVideoRenderer(videoRenderer);
     if (parsed) videos.push(parsed);
 
     const token =
-      (obj.continuationItemRenderer as {
-        continuationEndpoint?: { continuationCommand?: { token?: string } };
-      } | undefined)?.continuationEndpoint?.continuationCommand?.token || null;
+      (
+        obj.continuationItemRenderer as
+          | {
+              continuationEndpoint?: {
+                continuationCommand?: { token?: string };
+              };
+            }
+          | undefined
+      )?.continuationEndpoint?.continuationCommand?.token || null;
 
     if (token) continuation = token;
   }
@@ -216,17 +236,26 @@ const extractContinuationItems = (payload: unknown): unknown[] => {
   }
 
   const fromContinuationContents =
-    (root.continuationContents as { richGridContinuation?: { contents?: unknown[] } } | undefined)
-      ?.richGridContinuation?.contents || [];
+    (
+      root.continuationContents as
+        | { richGridContinuation?: { contents?: unknown[] } }
+        | undefined
+    )?.richGridContinuation?.contents || [];
 
-  if (Array.isArray(fromContinuationContents) && fromContinuationContents.length > 0) {
+  if (
+    Array.isArray(fromContinuationContents) &&
+    fromContinuationContents.length > 0
+  ) {
     return fromContinuationContents;
   }
 
   return [];
 };
 
-const fetchRssFallback = async (channelId: string, count: number): Promise<YouTubeItem[]> => {
+const fetchRssFallback = async (
+  channelId: string,
+  count: number,
+): Promise<YouTubeItem[]> => {
   const stripCdata = (value: string) =>
     value.replace(/^<!\[CDATA\[|\]\]>$/g, "").trim();
 
@@ -246,7 +275,10 @@ const fetchRssFallback = async (channelId: string, count: number): Promise<YouTu
   };
 
   const getAttrValue = (input: string, tag: string, attr: string) => {
-    const pattern = new RegExp(`<${tag}[^>]*${attr}=["']([^"']+)["'][^>]*>`, "i");
+    const pattern = new RegExp(
+      `<${tag}[^>]*${attr}=["']([^"']+)["'][^>]*>`,
+      "i",
+    );
     const match = input.match(pattern);
     return match?.[1] || "";
   };
@@ -280,12 +312,22 @@ const fetchRssFallback = async (channelId: string, count: number): Promise<YouTu
         getAttrValue(entry, "link", "href") ||
         (videoId ? `https://www.youtube.com/watch?v=${videoId}` : "");
       const description =
-        getTagValue(entry, "media:description") || getTagValue(entry, "content") || "";
+        getTagValue(entry, "media:description") ||
+        getTagValue(entry, "content") ||
+        "";
       const thumbnail =
         getAttrValue(entry, "media:thumbnail", "url") ||
         (videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : "");
 
-      return { videoId, title, link, published, description, thumbnail, author };
+      return {
+        videoId,
+        title,
+        link,
+        published,
+        description,
+        thumbnail,
+        author,
+      };
     })
     .filter((item) => item.videoId && item.title && item.link)
     .filter((item) => !isShort(item.title, item.description, item.link))
@@ -296,7 +338,9 @@ const fetchRssFallback = async (channelId: string, count: number): Promise<YouTu
 export default async function handler(req: any, res: any) {
   if (req.method !== "GET") {
     res.setHeader("Allow", "GET");
-    return res.status(405).json({ status: "error", message: "Method not allowed" });
+    return res
+      .status(405)
+      .json({ status: "error", message: "Method not allowed" });
   }
 
   try {
@@ -324,7 +368,10 @@ export default async function handler(req: any, res: any) {
     }
 
     const html = await channelResponse.text();
-    const channelId = extractChannelIdFromHtml(html) || channelIdFromQuery || FALLBACK_CHANNEL_ID;
+    const channelId =
+      extractChannelIdFromHtml(html) ||
+      channelIdFromQuery ||
+      FALLBACK_CHANNEL_ID;
     const initialData = extractInitialData(html);
 
     const items: YouTubeItem[] = [];
@@ -381,7 +428,8 @@ export default async function handler(req: any, res: any) {
         break;
       }
 
-      const continuationPayload = (await continuationResponse.json()) as unknown;
+      const continuationPayload =
+        (await continuationResponse.json()) as unknown;
       const continuationItems = extractContinuationItems(continuationPayload);
       const parsed = collectVideosAndContinuation(continuationItems);
 

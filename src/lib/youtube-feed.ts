@@ -107,9 +107,12 @@ export const fetchYouTubeItems = async (
 ): Promise<YouTubeFeedItem[]> => {
   // Prefer server endpoint in all envs (supports pagination and richer filtering).
   try {
-    const response = await fetch(`/api/youtube?count=${count}&handle=${handle}`, {
-      headers: { Accept: "application/json" },
-    });
+    const response = await fetch(
+      `/api/youtube?count=${count}&handle=${handle}`,
+      {
+        headers: { Accept: "application/json" },
+      },
+    );
 
     if (response.ok) {
       const data = await response.json();
