@@ -103,16 +103,6 @@ export const resumeData = {
         "Built a React and Flask visualization platform for Lightning Network message flows and extended LNPrototest with BOLT #1 message support, reducing debugging time by 25%.",
       ],
     },
-    {
-      company: "Google Summer of Code 2025",
-      location: "Remote",
-      role: "Open Source Contributor",
-      duration: "Nov 2024 - Mar 2025",
-      achievements: [
-        "Migrated CircuitVerse modules to TypeScript, upgraded Node.js to v22, and helped achieve 100% unit test coverage with 24 merged PRs.",
-        "Contributed CI/CD, testing, and refactoring improvements across CircuitVerse, PalisaDoes Foundation, and GeNN.",
-      ],
-    },
   ],
 
   leadership: [
