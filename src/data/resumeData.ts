@@ -106,7 +106,6 @@ export const resumeData = {
         "Architected a full-stack visualization platform (React, Flask, Python, WebSockets) to stream and render Lightning message flows in real time, reducing protocol debugging cycle time.",
       ],
     },
-<<<<<<< HEAD
     {
       company: "Open Source Contributor",
       location: "Remote",
@@ -115,7 +114,8 @@ export const resumeData = {
       achievements: [
         "Drove frontend modernization across CircuitVerse and Palisadoes by migrating legacy codebases to Vue 3 + TypeScript and shipping a native desktop version via Tauri (Rust), improving test coverage across 37+ merged PRs.",
         "Ranked Top 10 (3x) in GitLab global OSS hackathons; delivered high-impact contributions to documentation, testing infrastructure, and developer experience.",
-=======
+      ],
+    },
   ],
 
   leadership: [
@@ -145,7 +145,6 @@ export const resumeData = {
       year: "2025",
       achievements: [
         "Led community events and mentoring focused on automation, product thinking, and practical implementation.",
->>>>>>> 79bda6662161fa5382eb588d3e6fdf50939affb6
       ],
     },
   ],
@@ -197,6 +196,55 @@ export const resumeData = {
       degree: "Class XII (Physics, Chemistry & Mathematics)",
       duration: "2021 - 2022",
       grade: "Percentage: 92%",
+    },
+  ],
+
+  openSource: [
+    {
+      title: "CircuitVerse",
+      link: "https://github.com/CircuitVerse",
+      role: "Core Contributor",
+      duration: "Oct 2024 - Present",
+      desc: [
+        "Migrated legacy codebase to Vue 3 + TypeScript",
+        "Shipped native desktop version via Tauri (Rust)",
+        "Improved test coverage across 37+ merged PRs",
+      ],
+    },
+    {
+      title: "Palisadoes Foundation",
+      link: "https://github.com/PalisadoesFoundation",
+      role: "Contributor & Mentor",
+      duration: "2024 - Present",
+      desc: [
+        "Drove frontend modernization projects",
+        "Mentored students on open source best practices",
+      ],
+    },
+    {
+      title: "GitLab",
+      link: "https://gitlab.com",
+      role: "OSS Contributor",
+      duration: "2024 - Present",
+      desc: [
+        "Ranked Top 10 (3x) in global OSS hackathons",
+        "Delivered high-impact contributions to testing infrastructure",
+      ],
+    },
+  ],
+
+  focus: [
+    {
+      title: "Distributed Systems",
+      desc: "Architecting low-latency, fault-tolerant systems and decentralized networks.",
+    },
+    {
+      title: "AI Infrastructure",
+      desc: "Building observability and orchestration pipelines for autonomous AI agents.",
+    },
+    {
+      title: "Developer Tooling",
+      desc: "Creating high-performance CLI tools and visualization platforms for developers.",
     },
   ],
 };

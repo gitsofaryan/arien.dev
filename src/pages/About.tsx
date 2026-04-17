@@ -302,7 +302,7 @@ const About: React.FC = () => {
           </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            {resumeData.openSource.map((item) => (
+            {(resumeData.openSource || []).map((item) => (
               <Card key={item.title} className="bg-vscode-sidebar border-vscode-border">
                 <CardHeader className="pb-2">
                   <CardTitle className="flex items-center justify-between text-vscode-text text-lg">
@@ -314,7 +314,7 @@ const About: React.FC = () => {
                   <p className="text-xs text-vscode-comment">{item.role} • {item.duration}</p>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm text-vscode-text/80">
-                  {item.desc.map((d, i) => (
+                  {(item.desc || []).map((d, i) => (
                     <p key={i}>• {d}</p>
                   ))}
                 </CardContent>
@@ -401,6 +401,7 @@ const About: React.FC = () => {
                   <p key={item.title} className="text-xs text-vscode-text/70">• {item.desc}</p>
                 ))}
               </div>
+
             </CardContent>
           </Card>
         </section>
