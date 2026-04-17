@@ -106,6 +106,7 @@ export const resumeData = {
         "Architected a full-stack visualization platform (React, Flask, Python, WebSockets) to stream and render Lightning message flows in real time, reducing protocol debugging cycle time.",
       ],
     },
+<<<<<<< HEAD
     {
       company: "Open Source Contributor",
       location: "Remote",
@@ -114,6 +115,37 @@ export const resumeData = {
       achievements: [
         "Drove frontend modernization across CircuitVerse and Palisadoes by migrating legacy codebases to Vue 3 + TypeScript and shipping a native desktop version via Tauri (Rust), improving test coverage across 37+ merged PRs.",
         "Ranked Top 10 (3x) in GitLab global OSS hackathons; delivered high-impact contributions to documentation, testing infrastructure, and developer experience.",
+=======
+  ],
+
+  leadership: [
+    {
+      organization: "Google Developer Student Clubs",
+      location: "Global and Campus Communities",
+      role: "Founder and Lead Organizer",
+      year: "2024 - 2026",
+      achievements: [
+        "Built and led a community ecosystem spanning GDSC initiatives, mentoring 1000+ students across hands-on sessions, project cohorts, and hackathons.",
+        "Scaled community participation to 5000+ members through consistent programming, partnerships, and student-led leadership pipelines.",
+      ],
+    },
+    {
+      organization: "Microsoft Learn Student Ambassadors",
+      location: "Global Student Network",
+      role: "Community Leader and Mentor",
+      year: "2025",
+      achievements: [
+        "Organized technical sessions and mentorship tracks focused on practical software engineering, AI, and cloud fundamentals.",
+      ],
+    },
+    {
+      organization: "UiPath Student Developer Community",
+      location: "India",
+      role: "Lead Organizer",
+      year: "2025",
+      achievements: [
+        "Led community events and mentoring focused on automation, product thinking, and practical implementation.",
+>>>>>>> 79bda6662161fa5382eb588d3e6fdf50939affb6
       ],
     },
   ],
