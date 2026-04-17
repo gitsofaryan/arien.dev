@@ -40,22 +40,19 @@ export const allProjects: UnifiedProject[] = [
   },
   {
     id: "lightning-event-viewer",
-    title: "Lightning Event Viewer",
     description:
-      "Real-time protocol monitor for Lightning Network visualization during Summer of Bitcoin 2025",
+      "Full-stack visualization platform (React, Flask, Python, WebSockets) to stream and render Lightning message flows in real time, reducing protocol debugging cycle time.",
     owner: "gitsofaryan",
     repo: "lightning-event-viewer",
     link: "https://github.com/gitsofaryan/lightning-event-viewer",
-    tech: ["TypeScript", "React", "Visualization"],
+    tech: ["React", "Flask", "Python", "WebSockets"],
     tags: ["opensource", "github"],
     stats: { stars: 24, forks: 5 },
     size: "medium",
   },
   {
-    id: "codespace",
-    title: "CodeSpace",
     description:
-      "Real-time collaborative code editor with WebSocket support, room-based sessions, and multi-user synchronization",
+      "Real-time collaborative coding platform supporting concurrent multi-user editing via WebSockets, sustaining 50+ simultaneous users with low-latency synchronization.",
     owner: "gitsofaryan",
     repo: "codespace",
     link: "https://github.com/gitsofaryan/codespace",
@@ -68,11 +65,11 @@ export const allProjects: UnifiedProject[] = [
     id: "ats100",
     title: "ATS100",
     description:
-      "AI-powered resume analyzer providing ATS scores, keyword gap analysis, and practical improvement suggestions",
+      "AI-powered resume analyzer evaluating ATS compatibility and keyword gaps. Scaled to 5,000+ users via a serverless architecture on Puter.js.",
     owner: "gitsofaryan",
     repo: "ats100",
     link: "https://github.com/gitsofaryan/ats100",
-    tech: ["React", "TypeScript", "Tailwind CSS", "PDF.js"],
+    tech: ["React", "TypeScript", "Tailwind CSS", "Puter.js"],
     tags: ["opensource", "github", "featured", "ai"],
     stats: { stars: 38, forks: 9 },
     size: "medium",
@@ -115,6 +112,19 @@ export const allProjects: UnifiedProject[] = [
     tags: ["opensource", "github", "blockchain", "ai"],
     stats: { stars: 28, forks: 7 },
     size: "small",
+  },
+  {
+    id: "duo-trace",
+    title: "Duo Trace",
+    description:
+      "Observability system for autonomous AI agents capturing end-to-end decision traces, enabling auditability and debugging for multi-agent workflows.",
+    owner: "gitsofaryan",
+    repo: "duo-trace",
+    link: "https://devpost.com/software/duo-strace-auditing-ai-agents",
+    tech: ["GitLab", "YAML", "AI Agents", "Python"],
+    tags: ["hackathon", "devpost", "ai", "featured"],
+    stats: { stars: 15, forks: 4 },
+    size: "medium",
   },
 
   // Hackathon Projects from Devpost

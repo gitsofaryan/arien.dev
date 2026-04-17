@@ -13,8 +13,8 @@ export const resumeData = {
     instagram: "arien_jain",
     discord: "thecosmicnerd",
     telegram: "arienjain",
-    tagline: "Software Engineer | Dev Tools and AI Infra Builder",
-    bio: "I'm into building developer tools and AI infrastructure that actually work. Currently exploring the intersection of web3 and AI—agent memory systems, delegation models, and how to make autonomous systems more trustworthy and measurable. Shipping reliable systems is what matters to me.",
+    tagline: "Software Engineer | Distributed Systems & AI Infra",
+    bio: "Full-stack engineer with a stronger focus on backend systems, distributed architectures, and real-time data processing. Built systems across decentralized networks, low-latency infrastructure, and AI-powered applications through hands-on, real-world projects. Focused on understanding system internals and translating complex ideas into practical, scalable solutions.",
   },
 
   technicalSkills: {
@@ -41,10 +41,9 @@ export const resumeData = {
     blockchain_ai: [
       "LangChain",
       "LangGraph",
+      "Hugging Face",
+      "Fine-tuning",
       "LLM Agents",
-      "RAG Pipelines",
-      "Multi-Agent Workflows",
-      "Vector Databases",
       "Context Management",
       "PyTorch",
       "OpenCV",
@@ -64,8 +63,10 @@ export const resumeData = {
       "Supabase",
       "Firebase",
       "Docker",
+      "Kubernetes",
       "CI/CD",
       "GitHub Actions",
+      "GitLab CI",
       "AWS",
       "GCP",
       "Git",
@@ -74,13 +75,15 @@ export const resumeData = {
 
   experience: [
     {
-      company: "Protocol Labs (PLDG)",
+      company: "Protocol Labs",
       location: "Remote",
-      role: "Open Source Mentee and Protocol Engineer",
+      role: "Open Source Mentee & Protocol Engineer",
       duration: "Jan 2026 - Mar 2026",
       achievements: [
-        "Architected and built AgentDB, a peer-to-peer decentralized memory protocol for AI agents with encrypted cross-agent state transfer, delegated authority via UCANs, and device-agnostic recovery using IPFS and IPNS.",
-        "Built a UCAN delegation visualizer to improve token traceability and debugging for decentralized authorization flows, and integrated Akave O3 with PyTorch for decentralized model training pipelines.",
+        "Engineered production contributions across PLDG Cohort 6 including a React console toolkit, CID upload service, and Guppy (Go CLI) for the Storacha ecosystem, directly improving developer onboarding workflows.",
+        "Architected a UCAN-based delegation token system enabling fine-grained secure data access control, extending its design to support AI agent authorization use cases in decentralized environments.",
+        "Orchestrated libp2p networking primitives (peer discovery, circuit relays, gossip protocols, P2P messaging) to ship a serverless real-time collaborative editor with zero backend infrastructure.",
+        "Served as core maintainer for O3–PyTorch (decentralized ML training on IPFS), implementing dataset streaming, CID-based checkpointing, multi-worker caching, and fault-tolerant handling of rate limiting and partial downloads.",
       ],
     },
     {
@@ -89,59 +92,28 @@ export const resumeData = {
       role: "Backend Trainee Engineer",
       duration: "Jul 2025 - Aug 2025",
       achievements: [
-        "Integrated BitGet REST and WebSocket APIs for real-time L1 and L2 market data, improving order book synchronization accuracy by 35% for algorithmic strategies.",
-        "Built and optimized low-latency trading modules for BitGet using C# within an OEMS v4 architecture, achieving sub-millisecond order execution.",
+        "Spearheaded development of real-time trading infrastructure during a high-frequency trading bootcamp, engineering low-latency modules in C# targeting sub-millisecond execution pipelines.",
+        "Integrated Bitget REST & WebSocket APIs to ingest live L1/L2 market data and order book updates; optimized synchronization logic within OEMS v4, achieving <1ms order execution latency.",
       ],
     },
     {
-      company: "Summer of Bitcoin",
+      company: "Summer of Bitcoin 2025",
       location: "Remote",
-      role: "Mentee and Open Source Contributor",
+      role: "Open Source Mentee @ LNPrototest",
       duration: "May 2025 - Aug 2025",
       achievements: [
-        "Selected among the top 2% of global applicants to contribute to Bitcoin and Lightning Network core tooling.",
-        "Built a React and Flask visualization platform for Lightning Network message flows and extended LNPrototest with BOLT #1 message support, reducing debugging time by 25%.",
+        "Selected for Summer of Bitcoin 2025 (~2% acceptance rate); implemented and extended BOLT #1 message handling within LNPrototest to deepen protocol conformance testing coverage for the Lightning Network.",
+        "Architected a full-stack visualization platform (React, Flask, Python, WebSockets) to stream and render Lightning message flows in real time, reducing protocol debugging cycle time.",
       ],
     },
     {
-      company: "Google Summer of Code 2025",
+      company: "Open Source Contributor",
       location: "Remote",
-      role: "Open Source Contributor",
-      duration: "Nov 2024 - Mar 2025",
+      role: "@CircuitVerse, @Palisadoes, @GitLab",
+      duration: "Oct 2024 - Present",
       achievements: [
-        "Migrated CircuitVerse modules to TypeScript, upgraded Node.js to v22, and helped achieve 100% unit test coverage with 24 merged PRs.",
-        "Contributed CI/CD, testing, and refactoring improvements across CircuitVerse, PalisaDoes Foundation, and GeNN.",
-      ],
-    },
-  ],
-
-  leadership: [
-    {
-      organization: "Google Developer Student Clubs",
-      location: "Global and Campus Communities",
-      role: "Founder and Lead Organizer",
-      year: "2024 - 2026",
-      achievements: [
-        "Built and led a community ecosystem spanning GDSC initiatives, mentoring 1000+ students across hands-on sessions, project cohorts, and hackathons.",
-        "Scaled community participation to 5000+ members through consistent programming, partnerships, and student-led leadership pipelines.",
-      ],
-    },
-    {
-      organization: "Microsoft Learn Student Ambassadors",
-      location: "Global Student Network",
-      role: "Community Leader and Mentor",
-      year: "2025",
-      achievements: [
-        "Organized technical sessions and mentorship tracks focused on practical software engineering, AI, and cloud fundamentals.",
-      ],
-    },
-    {
-      organization: "UiPath Student Developer Community",
-      location: "India",
-      role: "Lead Organizer",
-      year: "2025",
-      achievements: [
-        "Led community events and mentoring focused on automation, product thinking, and practical implementation.",
+        "Drove frontend modernization across CircuitVerse and Palisadoes by migrating legacy codebases to Vue 3 + TypeScript and shipping a native desktop version via Tauri (Rust), improving test coverage across 37+ merged PRs.",
+        "Ranked Top 10 (3x) in GitLab global OSS hackathons; delivered high-impact contributions to documentation, testing infrastructure, and developer experience.",
       ],
     },
   ],
@@ -150,90 +122,49 @@ export const resumeData = {
     {
       title: "CodeSpace - Real-Time Collaborative Code Editor",
       description:
-        "Built a scalable collaborative code editor where multiple users can write, compile, and execute code in real time over WebSockets. Implemented secure authentication, room-based session management, and a remote execution engine for multi-language support.",
+        "Engineered a real-time collaborative coding platform supporting concurrent multi-user editing via WebSockets, sustaining 50+ simultaneous users with low-latency state synchronization and conflict-free session management.",
       tech: ["React.js", "Node.js", "WebSockets", "MongoDB"],
       link: "https://github.com/gitsofaryan/codespace",
     },
     {
-      title: "Naomi - AI Fashion Stylist",
-      description:
-        "Developed an AI-powered virtual stylist with real-time AR try-on using MediaPipe pose detection and Three.js rendering. Integrated OpenAI-powered recommendations and built a digital wardrobe for personalized outfit planning.",
-      tech: ["Next.js", "TypeScript", "Three.js", "OpenAI", "MediaPipe"],
-      link: "https://github.com/gitsofaryan/naomi",
-    },
-    {
       title: "ATS100 - AI Resume Analyzer",
       description:
-        "Built an AI resume analysis platform that computes ATS scores, identifies keyword gaps, and generates practical improvement suggestions. Designed a type-safe React and TypeScript frontend with PDF.js parsing and real-time analysis workflows.",
-      tech: ["React.js", "TypeScript", "Tailwind CSS", "PDF.js", "Vite"],
+        "Architected an AI-powered resume analyzer that evaluates ATS compatibility, surfaces keyword gaps, and generates prioritized improvement suggestions. Scaled to 5,000+ users by deploying a fully serverless architecture via Puter.js.",
+      tech: ["React.js", "TypeScript", "Tailwind CSS", "Puter.js"],
       link: "https://github.com/gitsofaryan/ats100",
     },
-  ],
-
-  openSource: [
     {
-      title: "Protocol Labs",
-      role: "Protocol Engineer",
-      duration: "Jan 2026 - Mar 2026",
-      link: "https://github.com/protocol",
-      desc: [
-        "Built AgentDB, a decentralized memory layer for AI agents using UCAN, IPFS, and IPNS.",
-        "Created developer tooling to inspect delegation flows and improve authorization debugging in distributed environments.",
-      ],
-    },
-    {
-      title: "CircuitVerse",
-      role: "Maintainer",
-      duration: "2024 - 2025",
-      link: "https://github.com/CircuitVerse/CircuitVerse",
-      desc: [
-        "Migrated core simulator modules to TypeScript and modernized Node.js infrastructure to v22.",
-        "Contributed test coverage, CI/CD reliability improvements, and refactoring work across active modules.",
-      ],
-    },
-  ],
-
-  focus: [
-    {
-      title: "Web3 x AI Systems",
-      desc: "Exploring how decentralized systems can enable more transparent, autonomous AI agents. Building at the intersection of blockchain protocols and ML infrastructure.",
-    },
-    {
-      title: "Developer Tools and AI Infra",
-      desc: "I am focused on building tools and infrastructure that help teams ship AI products faster, with better observability, reliability, and developer experience.",
-    },
-    {
-      title: "Agent Memory and Delegation Systems",
-      desc: "I am actively exploring decentralized memory layers for AI agents, including UCAN-based delegation authority, secure state transfer, and recovery across devices.",
-    },
-    {
-      title: "Model Evaluation and Applied Research",
-      desc: "I care deeply about AI model evaluation, testing frameworks, and practical benchmarks that keep model behavior measurable and trustworthy in production.",
+      title: "Duo Trace - AI Agent Observability & Audit System",
+      description:
+        "Built an observability system for autonomous AI agents capturing end-to-end decision traces (tool calls, file access, reasoning), enabling auditability, debugging, and reproducibility in multi-agent orchestration pipelines.",
+      tech: ["GitLab", "YAML", "AI Agents", "DevOps"],
+      link: "https://devpost.com/software/duo-strace-auditing-ai-agents",
     },
   ],
 
   achievements: [
-    "Co-inventor on 3 AI and software patents.",
-    "Top 5 contributor in 3 consecutive GitLab open-source hackathons.",
+    "Co-inventor on 3 AI and software patents (pending/granted) in intelligent automation and distributed systems.",
+    "Ranked Top 10 contributor (3x) in GitLab global open-source hackathons.",
     "Global Rank 1528 in Meta Hacker Cup 2025.",
-    "Solved 500+ DSA problems across C++, Python, and SQL.",
-    "Selected for Solana Dev Fellowship.",
-    "Top 10 Startup at Cisco ThingQbator.",
-    "Top 50 at Eureka 2025.",
-    "Selected for Amazon ML Summer School 2025.",
-    "Founder and lead organizer across GDSC, MLSA, and UiPath student communities.",
-    "Mentored 1000+ students and helped build a 5000+ member global community.",
-    "Participated in 80+ hackathons globally with multiple finalist and podium finishes.",
-    "Maintained 1000+ GitHub contributions across open-source projects.",
+    "Solved 500+ DSA problems across LeetCode and related platforms.",
+    "Selected for Solana Dev Fellowship and Amazon ML Summer School 2025.",
+    "Top 10 Startup at Cisco ThingQbator and Top 50 at Eureka 2025.",
+    "Mentored 1000+ students and grew a 5000+ member global community through GDSC, MLSA, and UiPath.",
+    "Competed in 80+ hackathons globally with multiple finalist and podium finishes.",
   ],
 
   education: [
     {
-      institution: "Gyan Ganga Institute of Technology and Sciences, Jabalpur",
-      degree:
-        "Bachelor of Technology in Computer Science and Business System (CSBS)",
+      institution: "Gyan Ganga Institute of Technology and Sciences",
+      degree: "Bachelor of Technology in Computer Science and Business System (CSBS)",
       duration: "2022 - 2026",
       grade: "CGPA: 8.4",
+    },
+    {
+      institution: "Ajay Satya Prakash Public School",
+      degree: "Class XII (Physics, Chemistry & Mathematics)",
+      duration: "2021 - 2022",
+      grade: "Percentage: 92%",
     },
   ],
 };
